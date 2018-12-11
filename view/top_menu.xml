@@ -1,0 +1,10 @@
+<odoo>
+	<!-- This Root Menu -->
+	<menuitem id="payment_menu_root" name="Parkir"/>
+
+	<!-- This Menu Group Payment -->
+	<menuitem id="payment_menu_group" parent="payment_menu_root" name="Payment"  sequence="1"/>
+		<menuitem	id="menu_transaction_payment"	name="Transaction" parent="payment_menu_group"	action="act_request_trans_stiker" />
+		<menuitem	id="menu_transaction_stiker"	name="Transaction Stiker" parent="payment_menu_group"	action="act_trans_stiker" />
+
+</odoo>

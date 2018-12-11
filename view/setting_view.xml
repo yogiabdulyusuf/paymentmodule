@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Inherit Form View to Modify it -->
+       <record id="res_company_settings" model="ir.ui.view">
+           <field name="name">Res Company Settings</field>
+           <field name="model">res.company</field>
+           <field name="inherit_id" ref="base.view_company_form"/>
+           <field name="arch" type="xml">
+
+               <xpath expr="//notebook" position="inside">
+                   <!-- Add your fields or attributes here -->
+                   <page string="Settings">
+                        <group>
+                            <group>
+                                <field name="langganan_baru_ids" />
+                                <field name="perpanjang_ids" />
+                                <field name="beli_stiker_ids" />
+                                <field name="ganti_nopol_ids" />
+                                <field name="kartu_hilang_ids" />
+                            </group>
+                        </group>
+                    </page>
+
+               </xpath>
+
+           </field>
+       </record>
+
+
+
+    </data>
+</odoo>

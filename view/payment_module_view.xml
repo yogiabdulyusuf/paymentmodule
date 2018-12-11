@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- REQUEST TRANSACTION STIKER -->
+        <record id="request_transaction_form_view" model="ir.ui.view">
+            <field name="name">Request Transaction</field>
+            <field name="model">request.transstiker</field>
+            <field name="arch" type="xml">
+                <form string="Request Transaction Stiker Form">
+                    <sheet>
+                        <label for="unit_kerja" class="oe_edit_only" string="Unit Kerja" />
+                        <h1>
+                            <field name="unit_kerja"/>
+                        </h1>
+                        <label for="sticker_id" class="oe_edit_only" string="No Transaction" />
+                        <h1>
+                            <field name="sticker_id"/>
+                        </h1>
+                        <group>
+                            <group><field name="baru" /></group>
+                        </group>
+                        <group string="Description" attrs="{'invisible': [('baru','!=', True), ]}" >
+                            <group>
+                                <field name="jenis_transaksi"  />
+                                <field name="name" attrs="{'readonly': [('jenis_transaksi','!=','langganan_baru')], 'required': [('baru','!=', False)], }" />
+                                <field name="no_id" attrs="{'readonly': [('jenis_transaksi','!=','langganan_baru')], 'required': [('baru','!=', False)], }" />
+                                <field name="duration" attrs="{'invisible': [('jenis_transaksi','!=','langganan_baru'), ('jenis_transaksi','!=','perpanjang'),]}" />
+                                <field name="val_awal" attrs="{'invisible': [('jenis_transaksi','!=','langganan_baru'), ('jenis_transaksi','!=','perpanjang')], 'readonly': [('jenis_transaksi','!=','langganan_baru')] }" />
+                                <field name="val_akhir" attrs="{'invisible': [('jenis_transaksi','!=','langganan_baru'), ('jenis_transaksi','!=','perpanjang')], 'readonly': [('jenis_transaksi','!=','langganan_baru')]}" />
+                                <field name="val_harga"/>
+                                <field name="tanggal"/>
+                                <field name="adm"/>
+                            </group>
+                            <group>
+                                <field name="val_cara_bayar" attrs="{'readonly': [('jenis_transaksi','!=','langganan_baru')], 'invisible': [('jenis_transaksi','!=','langganan_baru'), ('jenis_transaksi','!=','perpanjang'),]}" />
+                                <field name="nopol" attrs="{'readonly': [('jenis_transaksi','!=','langganan_baru')]}" />
+                                <field name="jenis_mobil" attrs="{'readonly': [('jenis_transaksi','!=','langganan_baru')]}" />
+                                <field name="jenis_member" attrs="{'readonly': [('jenis_transaksi','!=','langganan_baru')]}"/>
+                                <field name="merk_kendaraan" attrs="{'readonly': [('jenis_transaksi','!=','langganan_baru')]}" />
+                                <field name="val_tipe" attrs="{'readonly': [('jenis_transaksi','!=','langganan_baru')]}" />
+                                <field name="val_tahun" attrs="{'readonly': [('jenis_transaksi','!=','langganan_baru')]}" />
+                                <field name="val_color" attrs="{'readonly': [('jenis_transaksi','!=','langganan_baru')]}" />
+                            </group>
+                        </group>
+                        <group>
+                            <field name="beli_stiker" />
+                        </group>
+                        <group attrs="{'invisible': [('beli_stiker','!=', True), ]}" >
+                            <group>
+                                <field name="harga_beli_stiker" />
+                            </group>
+                        </group>
+                        <group>
+                            <field name="ganti_nopol" />
+                        </group>
+                        <group  attrs="{'invisible': [('ganti_nopol','!=', True), ]}" >
+                            <group>
+                                <field name="harga_ganti_nopol"/>
+                            </group>
+                        </group>
+                        <group>
+                            <field name="kartu_hilang" />
+                        </group>
+                        <group attrs="{'invisible': [('kartu_hilang','!=', True), ]}" >
+                            <group>
+                                <field name="harga_kartu_hilang"  />
+                            </group>
+                        </group>
+
+                        <label for="amount" class="oe_edit_only" string="TOTAL" />
+                        <h1>
+                            <field name="amount"/>
+                        </h1>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="request_transaction_stiker_tree_view" model="ir.ui.view">
+            <field name="name">Request Transaction Stiker Tree</field>
+            <field name="model">request.transstiker</field>
+            <field name="arch" type="xml">
+                <tree string="request_transaction_stiker_tree">
+                    <field name="unit_kerja"/>
+                    <field name="sticker_id"/>
+                    <field name="name"/>
+                    <field name="val_awal"/>
+                    <field name="val_akhir"/>
+                    <field name="val_harga"/>
+                    <field name="harga_beli_stiker"/>
+                    <field name="harga_kartu_hilang"/>
+                    <field name="harga_ganti_nopol"/>
+                    <field name="amount"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="act_request_trans_stiker" model="ir.actions.act_window">
+            <field name="name">Request Transaction Stiker</field>
+            <field name="res_model">request.transstiker</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        <!-- END REQUEST TRANSACTION STIKER -->
+
+
+        <!-- TRANSACTION STIKER -->
+        <record id="transaction_stiker_form_view" model="ir.ui.view">
+            <field name="name">Transaction Stiker Form</field>
+            <field name="model">trans.stiker</field>
+            <field name="arch" type="xml">
+                <form string="transaction_stiker_form" create="false" edit="true" delete="false">
+                    <sheet>
+                        <div class="oe_title">
+                            <label for="notrans" class="oe_edit_only" string="Unit Kerja" />
+                            <h1>
+                                <field name="unit_kerja"/>
+                            </h1>
+                            <label for="notrans" class="oe_edit_only" string="No Transaction" />
+                            <h1>
+                                <field name="notrans"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group string="Sticker Information">
+                                <field name="name"/>
+                                <field name="alamat"/>
+                                <field name="telphone"/>
+                                <field name="tanggal"/>
+                                <field name="jenis_transaksi"/>
+                                <field name="operator"/>
+                                <field name="jenis_stiker"/>
+                                <field name="jenis_langganan"/>
+                            </group>
+                            <group string="Vehicle Information">
+                                <field name="no_id"/>
+                                <field name="awal"/>
+                                <field name="akhir"/>
+                                <field name="harga"/>
+                                <field name="maks"/>
+                                <field name="no_induk"/>
+                                <field name="hari_ke"/>
+                                <field name="keterangan"/>
+                            </group>
+                            <group>
+                                <field name="exit_pass"/>
+                                <field name="no_kuitansi"/>
+                                <field name="tgl_edited"/>
+                                <field name="tipe_exit_pass"/>
+                                <field name="seq_code"/>
+                                <field name="unitno"/>
+                                <field name="area"/>
+                                <field name="reserved"/>
+                                <field name="cara_bayar"/>
+                                <field name="stasiun_kerja_id" />
+                            </group>
+                            <field name="detail_ids">
+                                <tree string="Detail Transaction Stiker" create="false" edit="false" delete="false">
+                                    <field name="nopol"/>
+                                    <field name="jenis_mobil"/>
+                                    <field name="adm"/>
+                                    <field name="kategori"/>
+                                    <field name="jenis_member"/>
+                                    <field name="akses"/>
+                                    <field name="akses_out"/>
+                                </tree>
+                            </field>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="transaction_stiker_tree_view" model="ir.ui.view">
+            <field name="name">Transaction Stiker Tree</field>
+            <field name="model">trans.stiker</field>
+            <field name="arch" type="xml">
+                <tree string="transaction_stiker_tree" create="false" edit="false" delete="false">
+                    <field name="name"/>
+                    <field name="alamat"/>
+                    <field name="telphone"/>
+                    <field name="tanggal"/>
+                    <field name="jenis_transaksi"/>
+                    <field name="operator"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="act_trans_stiker" model="ir.actions.act_window">
+            <field name="name">Transaction Stiker</field>
+            <field name="res_model">trans.stiker</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        <!-- END TRANSACTION STIKER -->
+
+        <!-- DETAIL TRANSACTION STIKER -->
+        <record id="detail_transaction_stiker_form_view" model="ir.ui.view">
+            <field name="name">Detail Transaction Stiker Form</field>
+            <field name="model">detail.transstiker</field>
+            <field name="arch" type="xml">
+                <form string="Detail Transaksi Stiker Form">
+                    <sheet>
+                        <group>
+                            <group string="Vehicle Information">
+                                <field name="nopol"/>
+                                <field name="jenis_mobil"/>
+                                <field name="adm"/>
+                                <field name="kategori"/>
+                                <field name="jenis_member"/>
+                                <field name="akses"/>
+                                <field name="akses_out"/>
+                            </group>
+                            <group>
+                                <field name="status"/>
+                                <field name="merk"/>
+                                <field name="tipe"/>
+                                <field name="tahun"/>
+                                <field name="warna"/>
+                                <field name="keterangan"/>
+                            </group>
+                        </group>
+
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <!-- END DETAIL TRANSACTION stiker -->
+
+
+    </data>
+</odoo>
