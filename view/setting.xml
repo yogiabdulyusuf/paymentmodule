@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="setting" model="ir.ui.view">
+            <field name="name">setting.harga</field>
+            <field name="model">setting.harga</field>
+            <field name="arch" type="xml">
+                <tree string="">
+                    <field name="name"/>
+                    <field name="amount"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="act_setting" model="ir.actions.act_window">
+            <field name="name">setting.harga act</field>
+            <field name="res_model">setting.harga</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+    </data>
+</odoo>
