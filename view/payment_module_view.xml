@@ -7,6 +7,10 @@
             <field name="model">request.transstiker</field>
             <field name="arch" type="xml">
                 <form string="Request Transaction Stiker Form">
+                    <header>
+                        <button name="trans_paid" string="Done Payment" type="object" class="oe_highlight" confirm="has the customer paid?" states="payment" />
+                        <field name="state" widget="statusbar" statusbar_visible="open,payment,done"/>
+                    </header>
                     <sheet>
                         <label for="unit_kerja" class="oe_edit_only" string="Unit Kerja" />
                         <h1>
@@ -40,6 +44,10 @@
                                 <field name="val_tipe" attrs="{'readonly': [('jenis_transaksi','!=','langganan_baru')]}" />
                                 <field name="val_tahun" attrs="{'readonly': [('jenis_transaksi','!=','langganan_baru')]}" />
                                 <field name="val_color" attrs="{'readonly': [('jenis_transaksi','!=','langganan_baru')]}" />
+                            </group>
+                            <group>
+                                <field name="start_date"/>
+                                <field name="end_date"/>
                             </group>
                         </group>
                         <group>
@@ -85,8 +93,7 @@
                     <field name="sticker_id"/>
                     <field name="name"/>
                     <field name="val_awal"/>
-                    <field name="val_akhir"/>
-                    <field name="val_harga"/>
+                    <field name="tanggal"/>
                     <field name="harga_beli_stiker"/>
                     <field name="harga_kartu_hilang"/>
                     <field name="harga_ganti_nopol"/>

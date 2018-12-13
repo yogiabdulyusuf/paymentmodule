@@ -118,14 +118,40 @@ class RequestTransStiker(models.Model):
         total = self.val_harga + self.harga_beli_stiker + self.harga_ganti_nopol + self.harga_kartu_hilang
         self.amount = total
 
-    @api.onchange('duration')
-    def update_startdate_enddate(self):
-        month = self.duration
-        val_day = 30 * month
-        enddate = self.val_akhir + timedelta(days=val_day)
 
-        self.val_awal = self.val_akhir
-        self.val_akhir = enddate
+    @api.onchange('duration')
+    @api.depends('val_awal', 'duration')
+    def _get_end_date(self):
+        for r in self:
+            # Pengecekan jika field duration & start_date tidak diisi, maka field end_date akan di update sama seperti field start_date
+            if not (r.val_awal and r.duration):
+                r.val_akhir = r.val_awal
+                continue
+
+            # Membuat variable start yang isinya tanggal dari field start_date
+            start_date = fields.Datetime.from_string(r.val_akhir)
+
+            # Membuat variable duration yang isinya durasi hari dari field duration
+            # Durasi hari dikurangi 1 detik agar start_date masuk kedalam durasi hari , seconds=-1
+            val_day = 30 * r.duration
+            duration = timedelta(days=val_day)
+
+            # Mengupdate field end_date dari perhitungan variabel start ditambah variabel duration
+            r.start_date = start_date
+            r.end_date = start_date + duration
+
+
+    @api.one
+    def update_startdate_enddate(self):
+        for v in self:
+            if v.baru == True:
+                if v.jenis_transaksi == "perpanjang":
+                    args = [('id', '=', v.sticker_id.id)]
+                    res = self.env['trans.stiker'].search(args).write({'awal': v.start_date, 'akhir': v.end_date})
+
+    @api.one
+    def trans_payment(self):
+        self.state = "payment"
 
     @api.model
     def create(self, vals):
@@ -134,9 +160,9 @@ class RequestTransStiker(models.Model):
         res._change_harga_langganan()
         res._change_harga_beli_stiker()
         res.calculate_rts()
-        if self.baru == True:
-            if self.jenis_transaksi == "perpanjang":
-                res.update_startdate_enddate()
+        res._get_end_date()
+        res.update_startdate_enddate()
+        res.trans_payment()
         return res
 
     unit_kerja = fields.Many2one('stasiun.kerja','Unit Kerja #', required=True)
@@ -146,6 +172,8 @@ class RequestTransStiker(models.Model):
     duration = fields.Integer('Duration', default=1, required=False)
     val_awal = fields.Date(string="Start Date", required=False, )
     val_akhir = fields.Date(string="End Date", required=False, )
+    start_date = fields.Date(string="New Start Date", required=False, readonly=True,)
+    end_date = fields.Date(string="New End Date", required=False, readonly=True,)
     val_harga = fields.Integer(string="Harga Perpanjang/Baru", required=False, readonly=True, )
     tanggal = fields.Date(string="Date", required=False, readonly=True, default=datetime.now())
     adm = fields.Char(string="Adm", required=False, readonly=True, )
@@ -173,7 +201,7 @@ class RequestTransStiker(models.Model):
     harga_beli_stiker = fields.Integer(string="Harga Beli Stiker", required=False, readonly=True)
     harga_kartu_hilang = fields.Integer(string="Harga Kartu Hilang", required=False, readonly=True)
     harga_ganti_nopol = fields.Integer(string="Harga Ganti NOPOL", required=False, readonly=True)
-    state = fields.Selection(string="state", selection=[('open', 'Open'), ('close', 'Close'), ], required=False, )
+    state = fields.Selection(string="state", selection=[('open', 'Open'),('payment','Payment Process'), ('done', 'Done'), ], required=False, default="open",)
 
 class StasiunKerja(models.Model):
     _name = 'stasiun.kerja'
