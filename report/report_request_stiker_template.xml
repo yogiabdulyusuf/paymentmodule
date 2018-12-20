@@ -1,0 +1,88 @@
+<odoo>
+    <data>
+    
+    <template id="report_request_stiker">
+        
+        <!-- <t t-call="report.external_layout"> -->
+            <div class="page">
+                <div class="oe_structure"/>
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <center><h2>PAYMENT RECEIPT</h2></center>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-sm-4">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <h3>Nomor: <span t-field="o.trans_stiker_id"/></h3>
+                            </div>
+                            <div class="col-sm-8">
+                                <table>
+                                    <tr><td>Unit #</td><td><span t-field="o.unit_kerja"/></td></tr>
+                                    <tr><td>No Trans</td><td> <span t-field="o.sticker_id"/> </td></tr>
+                                    <tr><td>Date</td><td> <span t-field="o.tanggal"/></td></tr>
+                                    <tr><td>Nopol</td><td> <span t-field="o.nopol"/></td></tr>
+                                    <tr><td>Paymen Method</td><td> <span t-field="o.val_cara_bayar"/></td></tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-sm-4">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="container">
+                        <div class="row">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center">DESCRIPTION</th>
+                                        <th class="text-right">AMOUNT</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr> <!--  t-foreach="o.spm_line_ids" t-as="l"   -->
+                                        <td>Kartu Hilang</td>
+                                        <td class="text-right"><span t-field="o.amount" /></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <div class="row">
+                                <div class="col-xs-4 pull-right">
+                                    <table class="table table-condensed">
+                                        <tr class="border-black">
+                                            <td><strong>Total </strong></td>
+                                            <td class="text-right">
+                                                <span t-field="o.amount" />
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <!-- </t> -->
+
+    </template>
+
+    <template id="report_requeststiker">
+        <t t-call="report.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="paymentmodule.report_request_stiker"/>
+            </t>
+        </t>
+    </template>
+    </data>
+</odoo>

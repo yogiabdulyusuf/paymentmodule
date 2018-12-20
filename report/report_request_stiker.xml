@@ -1,0 +1,12 @@
+<odoo>
+    <data>
+        <report
+            string="Request Stiker"
+            id="report_paymentmodule_requeststiker"
+            model="request.transstiker"
+            report_type="qweb-pdf"
+            name="paymentmodule.report_requeststiker"
+            file="paymentmodule.report_requeststiker"
+        />
+    </data>
+</odoo>
