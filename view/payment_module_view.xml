@@ -8,18 +8,28 @@
             <field name="arch" type="xml">
                 <form string="Request Transaction Stiker Form">
                     <header>
-                        <button name="trans_paid" string="Done Payment" type="object" class="oe_highlight" confirm="has the customer paid?" states="payment" />
+                        <button name="update_startdate_enddate" string="Done Payment" type="object" class="oe_highlight" confirm="has the customer paid?" states="payment" />
                         <field name="state" widget="statusbar" statusbar_visible="open,payment,done"/>
                     </header>
                     <sheet>
-                        <label for="unit_kerja" class="oe_edit_only" string="Unit Kerja" />
-                        <h1>
-                            <field name="unit_kerja"/>
-                        </h1>
-                        <label for="sticker_id" class="oe_edit_only" string="No Transaction" />
-                        <h1>
-                            <field name="sticker_id"/>
-                        </h1>
+                        <group string="Request Trans Stiker ID">
+                            <label for="unit_trans_stiker_id" class="oe_edit_only" string="Request Trans Stiker ID" />
+                            <h1>
+                                <field name="trans_stiker_id"/>
+                            </h1>
+                        </group>
+                        <group string="Unit Kerja">
+                            <label for="unit_kerja" class="oe_edit_only" string="Unit Kerja" />
+                            <h1>
+                                <field name="unit_kerja"/>
+                            </h1>
+                        </group>
+                        <group string="No Transaction">
+                            <label for="sticker_id" class="oe_edit_only" string="No Transaction" />
+                            <h1>
+                                <field name="sticker_id"/>
+                            </h1>
+                        </group>
                         <group>
                             <group><field name="baru" /></group>
                         </group>
@@ -62,6 +72,26 @@
                             <field name="ganti_nopol" />
                         </group>
                         <group  attrs="{'invisible': [('ganti_nopol','!=', True), ]}" >
+                            <group string="DATA NOPOL">
+                                <field name="val_cara_bayar" attrs="{'readonly': [('ganti_nopol','=', True)]}" />
+                                <field name="nopol"  />
+                                <field name="jenis_mobil" />
+                                <field name="jenis_member" />
+                                <field name="merk_kendaraan"  />
+                                <field name="val_tipe"  />
+                                <field name="val_tahun"  />
+                                <field name="val_color" />
+                            </group>
+                            <group string="New NOPOL">
+                                <field name="new_val_cara_bayar"/>
+                                <field name="new_nopol" />
+                                <field name="new_jenis_mobil" />
+                                <field name="new_jenis_member"/>
+                                <field name="new_merk_kendaraan" />
+                                <field name="new_val_tipe" />
+                                <field name="new_val_tahun" />
+                                <field name="new_val_color" />
+                            </group>
                             <group>
                                 <field name="harga_ganti_nopol"/>
                             </group>
@@ -89,15 +119,16 @@
             <field name="model">request.transstiker</field>
             <field name="arch" type="xml">
                 <tree string="request_transaction_stiker_tree">
+                    <field name="trans_stiker_id"/>
                     <field name="unit_kerja"/>
                     <field name="sticker_id"/>
                     <field name="name"/>
-                    <field name="val_awal"/>
                     <field name="tanggal"/>
-                    <field name="harga_beli_stiker"/>
+                    <field name="val_harga"/>
                     <field name="harga_kartu_hilang"/>
                     <field name="harga_ganti_nopol"/>
                     <field name="amount"/>
+                    <field name="state"/>
                 </tree>
             </field>
         </record>

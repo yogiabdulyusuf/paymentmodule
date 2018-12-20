@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <openerp>
 	<data>
+
+		<record id="seq_trans_stiker" model="ir.sequence">
+			<field name="name">Request Trans Stiker</field>
+			<field name="code">request.transstiker</field>
+			<field name="prefix">RTS%(year)s%(month)s</field>
+			<field name="padding">3</field>
+			<field name="next_number_actual">1</field>
+			<field name="number_increment">1</field>
+			<field name="implementation">standard</field>
+		</record>
+
 		<!-- UP
 		<record id="trans_number" model="ir.sequence.type">
 			<field name="name">Loan Trans</field>
@@ -86,37 +97,6 @@
 			<field name="implementation">standard</field>
 		</record>
 -->
-		<!-- Cashflow
-		<record id="seq_type_cashflow" model="ir.sequence.type">
-			<field name="name">Cashflow Type</field>
-			<field name="code">anggaran.cashflow</field>
-		</record>	
 		
-		<record id="seq_cashflow" model="ir.sequence">
-			<field name="name">Cashflow</field>
-			<field name="code">anggaran.cashflow</field>
-			<field name="prefix">CF/%(year)s/%(month)s/</field>
-			<field name="padding">3</field>
-			<field name="next_number_actual">1</field>
-			<field name="number_increment">1</field>
-			<field name="implementation">standard</field>
-		</record>
--->
-		<!-- Investasi
-		<record id="seq_type_investasi" model="ir.sequence.type">
-			<field name="name">Investasi Type</field>
-			<field name="code">anggaran.investasi</field>
-		</record>	
-		
-		<record id="seq_investasi" model="ir.sequence">
-			<field name="name">Investasi</field>
-			<field name="code">anggaran.investasi</field>
-			<field name="prefix">INV/%(year)s/%(month)s/</field>
-			<field name="padding">3</field>
-			<field name="next_number_actual">1</field>
-			<field name="number_increment">1</field>
-			<field name="implementation">standard</field>
-		</record>
-		-->
 	</data>
 </openerp>

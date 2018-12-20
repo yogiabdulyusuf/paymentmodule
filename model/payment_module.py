@@ -1,10 +1,6 @@
 from odoo import api, fields, models
 from datetime import datetime, timedelta
 from odoo.exceptions import ValidationError, Warning
-import logging
-
-_logger = logging.getLogger(__name__)
-
 
 
 class RequestTransStiker(models.Model):
@@ -148,6 +144,7 @@ class RequestTransStiker(models.Model):
                 if v.jenis_transaksi == "perpanjang":
                     args = [('id', '=', v.sticker_id.id)]
                     res = self.env['trans.stiker'].search(args).write({'awal': v.start_date, 'akhir': v.end_date})
+                    v.state = "done"
 
     @api.one
     def trans_payment(self):
@@ -155,16 +152,17 @@ class RequestTransStiker(models.Model):
 
     @api.model
     def create(self, vals):
+        vals['trans_stiker_id'] = self.env['ir.sequence'].next_by_code('request.transstiker')
         res = super(RequestTransStiker, self).create(vals)
         res._get_stiker()
-        res._change_harga_langganan()
         res._change_harga_beli_stiker()
+        res._change_harga_langganan()
         res.calculate_rts()
         res._get_end_date()
-        res.update_startdate_enddate()
         res.trans_payment()
         return res
 
+    trans_stiker_id = fields.Char(string="Transaksi ID", readonly=True)
     unit_kerja = fields.Many2one('stasiun.kerja','Unit Kerja #', required=True)
     sticker_id = fields.Many2one('trans.stiker','Stiker #', required=True, )
     name = fields.Char(string="Nama", )
@@ -201,7 +199,16 @@ class RequestTransStiker(models.Model):
     harga_beli_stiker = fields.Integer(string="Harga Beli Stiker", required=False, readonly=True)
     harga_kartu_hilang = fields.Integer(string="Harga Kartu Hilang", required=False, readonly=True)
     harga_ganti_nopol = fields.Integer(string="Harga Ganti NOPOL", required=False, readonly=True)
-    state = fields.Selection(string="state", selection=[('open', 'Open'),('payment','Payment Process'), ('done', 'Done'), ], required=False, default="open",)
+    new_val_cara_bayar = fields.Selection(string="Cara Pembayaran",
+                                  selection=[('billing', 'Billing'), ('non_billing', 'Non Billing'), ], required=False, )
+    new_nopol = fields.Char(string="No Polisi", required=False, )
+    new_jenis_mobil = fields.Char(string="Jenis Mobil", required=False, )
+    new_jenis_member = fields.Char(string="Jenis Member", required=False, )
+    new_merk_kendaraan = fields.Char(string="Merk Mobil", required=False, )
+    new_val_tipe = fields.Char(string="Tipe Mobil", required=False, )
+    new_val_tahun = fields.Char(string="Tahun", required=False, )
+    new_val_color = fields.Char(string="Warna", required=False, )
+    state = fields.Selection(string="state", selection=[('open', 'Open'),('payment','Waiting Payment'), ('done', 'Done'), ], required=False, default="open",)
 
 class StasiunKerja(models.Model):
     _name = 'stasiun.kerja'
