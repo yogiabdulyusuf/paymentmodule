@@ -3,6 +3,7 @@
 	"version": "10.0.1.0",
 	"depends": [
 		"base",
+		"mail",
 		"report",
 	],
 	"author": "jakc-labs",

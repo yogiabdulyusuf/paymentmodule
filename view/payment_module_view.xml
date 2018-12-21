@@ -12,23 +12,15 @@
                         <field name="state" widget="statusbar" statusbar_visible="open,payment,done"/>
                     </header>
                     <sheet>
-                        <group string="Request Trans Stiker ID">
-                            <label for="unit_trans_stiker_id" class="oe_edit_only" string="Request Trans Stiker ID" />
-                            <h1>
-                                <field name="trans_stiker_id"/>
-                            </h1>
+                        <label for="unit_trans_stiker_id" class="oe_edit_only" string="Request Trans Stiker ID" />
+                        <h1>
+                            <field name="trans_stiker_id"/>
+                        </h1>
+                        <group>
+                            <field name="unit_kerja"/>
                         </group>
-                        <group string="Unit Kerja">
-                            <label for="unit_kerja" class="oe_edit_only" string="Unit Kerja" />
-                            <h1>
-                                <field name="unit_kerja"/>
-                            </h1>
-                        </group>
-                        <group string="No Transaction">
-                            <label for="sticker_id" class="oe_edit_only" string="No Transaction" />
-                            <h1>
-                                <field name="sticker_id"/>
-                            </h1>
+                        <group>
+                            <field name="sticker_id"/>
                         </group>
                         <group>
                             <group><field name="baru" /></group>
@@ -110,6 +102,10 @@
                             <field name="amount"/>
                         </h1>
                     </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
                 </form>
             </field>
         </record>

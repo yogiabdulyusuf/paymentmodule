@@ -5,6 +5,7 @@ from odoo.exceptions import ValidationError, Warning
 
 class RequestTransStiker(models.Model):
     _name = 'request.transstiker'
+    _inherit = ['mail.thread']
     _description = 'Request Transaction Stiker'
 
     @api.onchange('unit_kerja')
@@ -148,6 +149,7 @@ class RequestTransStiker(models.Model):
 
     @api.one
     def trans_payment(self):
+        self.message_post("Transaction already paid")
         self.state = "payment"
 
     @api.model
