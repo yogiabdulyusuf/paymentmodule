@@ -13,96 +13,135 @@
                             </div>
                         </div>
                     </div>
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-sm-4">
-                            </div>
-                        </div>
-                    </div>
+                    <br/>
+                    <br/>
+                    <br/>
+                    <br/>
+                    <br/>
                     <div class="container">
                         <div class="row">
                             <div class="col-sm-4">
                                 <h3>Nomor: <span t-field="o.trans_stiker_id"/></h3>
                             </div>
+                        </div>
+                    </div>
+                    <br/>
+                    <br/>
+                    <div class="container">
+                        <div class="row">
                             <div class="col-sm-8">
-                                <table>
-                                    <tr><td>Unit #</td><td><span t-field="o.unit_kerja"/></td></tr>
-                                    <tr><td>No Trans</td><td> <span t-field="o.sticker_id"/> </td></tr>
-                                    <tr><td>Date</td><td> <span t-field="o.tanggal"/></td></tr>
-                                    <tr><td>Plate Number</td><td> <span t-field="o.nopol"/></td></tr>
-                                    <tr><td>Paymen Method</td><td> <span t-field="o.val_cara_bayar"/></td></tr>
+                                <table style="width: 536px;">
+                                    <tbody>
+                                    <tr style="height: 25px;">
+                                    <td style="width: 130.983px; height: 25px;">Unit #</td>
+                                    <td style="width: 403.017px; height: 25px;"><span t-field="o.unit_kerja"/></td>
+                                    </tr>
+                                    <tr style="height: 25px;">
+                                    <td style="width: 130.983px; height: 25px;">No Trans</td>
+                                    <td style="width: 403.017px; height: 25px;"><span t-field="o.sticker_id"/></td>
+                                    </tr>
+                                    <tr style="height: 25px;">
+                                    <td style="width: 130.983px; height: 25px;">Date</td>
+                                    <td style="width: 403.017px; height: 25px;"><span t-field="o.tanggal"/></td>
+                                    </tr>
+                                    <tr style="height: 25px;">
+                                    <td style="width: 130.983px; height: 25px;">Plate Number</td>
+                                    <td style="width: 403.017px; height: 25px;"><span t-field="o.nopol"/></td>
+                                    </tr>
+                                    <tr style="height: 25px;">
+                                    <td style="width: 130.983px; height: 25px;">Payment Method</td>
+                                    <td style="width: 403.017px; height: 25px;"><span t-field="o.val_cara_bayar"/></td>
+                                    </tr>
+                                    </tbody>
                                 </table>
                             </div>
                         </div>
                     </div>
+                    <br/>
+                    <br/>
+                    <br/>
                     <div class="container">
                         <div class="row">
-                            <div class="col-sm-4">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="container">
-                        <div class="row">
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th class="text-center">DESCRIPTION</th>
-                                        <th class="text-right">AMOUNT</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <t t-if="o.perpanjang == true">
-                                        <tr> <!--  t-foreach="o.spm_line_ids" t-as="l"   -->
-                                            <td>Langganan</td>
-                                            <td class="text-right"><span t-field="o.amount" /></td>
+                            <div class="col-sm-4 pull-center">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center">DESCRIPTION</th>
+                                            <th class="text-right">AMOUNT</th>
                                         </tr>
-                                    </t>
-                                    <t t-if="o.beli_stiker == true">
-                                        <tr> <!--  t-foreach="o.spm_line_ids" t-as="l"   -->
-                                            <td>Stiker</td>
-                                            <td class="text-right"><span t-field="o.harga_beli_stiker" /></td>
-                                        </tr>
-                                    </t>
-                                    <t t-if="o.ganti_nopol == true">
-                                        <tr> <!--  t-foreach="o.spm_line_ids" t-as="l"   -->
-                                            <td>Pergantian Nomor Polisi</td>
-                                            <td class="text-right"><span t-field="o.harga_ganti_nopol" /></td>
-                                        </tr>
-                                    </t>
-                                    <t t-if="o.kartu_hilang == true">
-                                        <tr> <!--  t-foreach="o.spm_line_ids" t-as="l"   -->
-                                            <td>Kartu Hilang</td>
-                                            <td class="text-right"><span t-field="o.harga_kartu_hilang" /></td>
-                                        </tr>
-                                    </t>
-                                </tbody>
-                            </table>
-
-                            <div class="row">
-                                <div class="col-xs-4 pull-right">
-                                    <table class="table table-condensed">
-                                        <tr class="border-black">
-                                            <td><strong>Total </strong></td>
-                                            <td class="text-right">
-                                                <span t-field="o.amount" />
-                                            </td>
-                                        </tr>
-                                    </table>
+                                    </thead>
+                                    <tbody>
+                                        <t t-if="o.perpanjang == true">
+                                            <tr> <!--  t-foreach="o.spm_line_ids" t-as="l"   -->
+                                                <td>Langganan</td>
+                                                <td class="text-right"><span t-field="o.amount" /></td>
+                                            </tr>
+                                        </t>
+                                        <t t-if="o.beli_stiker == true">
+                                            <tr> <!--  t-foreach="o.spm_line_ids" t-as="l"   -->
+                                                <td>Stiker</td>
+                                                <td class="text-right"><span t-field="o.harga_beli_stiker" /></td>
+                                            </tr>
+                                        </t>
+                                        <t t-if="o.ganti_nopol == true">
+                                            <tr> <!--  t-foreach="o.spm_line_ids" t-as="l"   -->
+                                                <td>Pergantian Nomor Polisi</td>
+                                                <td class="text-right"><span t-field="o.harga_ganti_nopol" /></td>
+                                            </tr>
+                                        </t>
+                                        <t t-if="o.kartu_hilang == true">
+                                            <tr> <!--  t-foreach="o.spm_line_ids" t-as="l"   -->
+                                                <td>Kartu Hilang</td>
+                                                <td class="text-right"><span t-field="o.harga_kartu_hilang" /></td>
+                                            </tr>
+                                        </t>
+                                    </tbody>
+                                </table>
+                                <div class="row">
+                                    <div class="col-xs-4 pull-right">
+                                        <table class="table table-condensed">
+                                            <tr class="border-black">
+                                                <td><strong>Total </strong></td>
+                                                <td class="text-right">
+                                                    <span t-field="o.amount" />
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="col-sm-8 pull-center">
-                                    <table>
-                                        <tr><td>Resident</td><td>Front Office</td><td>Cashier</td></tr>
-                                        <tr><td> </td><td> </td><td> </td></tr>
-                                    </table>
-                                </div>
-                            </div>
+                            <br/>
+                            <br/>
+                            <br/>
+                            <br/>
+                            <br/>
+                            <br/>
+                            <br/>
                         </div>
                     </div>
+                
+                    <table style="width: 590.467px;" class="table table-condensed">
+                    <tbody>
+                    <tr>
+                    <td style="width: 196px; text-align: center;"><strong>Resident</strong></td>
+                    <td style="width: 192px; text-align: center;"><strong>Front Office</strong></td>
+                    <td style="width: 194.467px; text-align: center;"><strong>Cashier</strong></td>
+                    </tr>
+                    <tr>
+                    <td style="width: 196px;"><br /><br /><br /><br /><br /><br /><br /></td>
+                    <td style="width: 192px;"></td>
+                    <td style="width: 194.467px;"></td>
+                    </tr>
+                    <tr>
+                    <td style="width: 196px; text-align: center;">.........................</td>
+                    <td style="width: 192px; text-align: center;">.........................</td>
+                    <td style="width: 194.467px; text-align: center;">.........................</td>
+                    </tr>
+                    </tbody>
+                    </table>
                 </div>
             <!-- </t> -->
-
+                
     </template>
 
     <template id="report_requeststiker">
