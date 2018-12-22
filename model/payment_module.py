@@ -145,7 +145,13 @@ class RequestTransStiker(models.Model):
                 if v.jenis_transaksi == "perpanjang":
                     args = [('id', '=', v.sticker_id.id)]
                     res = self.env['trans.stiker'].search(args).write({'awal': v.start_date, 'akhir': v.end_date})
-                    v.state = "done"
+
+            if v.ganti_nopol == True:
+                args = [('id', '=', v.sticker_id.id)]
+                res = self.env['trans.stiker'].search(args).write({'nopol': v.new_nopol, 'jenis_mobil': v.new_jenis_mobil,
+                                                                   'jenis_member': v.new_jenis_member, 'merk_kendaraan': v.new_merk_kendaraan,
+                                                                   'val_tipe': v.new_val_tipe, 'val_tahun': v.new_val_tahun, 'val_color': v.new_val_color, })
+            v.state = "done"
 
     @api.one
     def trans_payment(self):

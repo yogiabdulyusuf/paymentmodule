@@ -64,18 +64,7 @@
                             <field name="ganti_nopol" />
                         </group>
                         <group  attrs="{'invisible': [('ganti_nopol','!=', True), ]}" >
-                            <group string="DATA NOPOL">
-                                <field name="val_cara_bayar" attrs="{'readonly': [('ganti_nopol','=', True)]}" />
-                                <field name="nopol"  />
-                                <field name="jenis_mobil" />
-                                <field name="jenis_member" />
-                                <field name="merk_kendaraan"  />
-                                <field name="val_tipe"  />
-                                <field name="val_tahun"  />
-                                <field name="val_color" />
-                            </group>
                             <group string="New NOPOL">
-                                <field name="new_val_cara_bayar"/>
                                 <field name="new_nopol" />
                                 <field name="new_jenis_mobil" />
                                 <field name="new_jenis_member"/>
