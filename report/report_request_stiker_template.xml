@@ -8,6 +8,13 @@
                 <div class="oe_structure"/>
                     <div class="container">
                         <div class="row">
+                            <div style="float: left;">
+                                <img src='/web/binary/company_logo' style="width:100%"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="container">
+                        <div class="row">
                             <div class="col-sm-12">
                                 <center><h2>PAYMENT RECEIPT</h2></center>
                             </div>
@@ -133,9 +140,9 @@
                     <td style="width: 194.467px;"></td>
                     </tr>
                     <tr>
-                    <td style="width: 196px; text-align: center;">.........................</td>
-                    <td style="width: 192px; text-align: center;">.........................</td>
-                    <td style="width: 194.467px; text-align: center;">.........................</td>
+                    <td style="width: 196px; text-align: center;"></td>
+                    <td style="width: 192px; text-align: center;"></td>
+                    <td style="width: 194.467px; text-align: center;"></td>
                     </tr>
                     </tbody>
                     </table>
