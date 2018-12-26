@@ -110,6 +110,7 @@
                     <field name="name"/>
                     <field name="tanggal"/>
                     <field name="val_harga"/>
+                    <field name="harga_beli_stiker" />
                     <field name="harga_kartu_hilang"/>
                     <field name="harga_ganti_nopol"/>
                     <field name="amount"/>

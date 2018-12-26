@@ -63,20 +63,29 @@ class RequestTransStiker(models.Model):
     @api.onchange('baru', 'jenis_transaksi')
     def _change_harga_langganan(self):
         if self.baru == True:
-            if self.jenis_transaksi == "langganan_baru":
-                langganan_baru_id = self.env.user.company_id.langganan_baru_ids
-                if not langganan_baru_id:
-                    raise ValidationError("Price Langganan Baru not defined,  please define on company information!")
 
-                self.val_harga = langganan_baru_id
+            jenis_member_st_ids = self.env.user.company_id.jenis_member_st
+            jenis_member_nd_ids = self.env.user.company_id.jenis_member_nd
+            if not jenis_member_nd_ids:
+                raise ValidationError("Price 2nd Membership not defined,  please define on company information!")
+            jenis_member_rd_ids = self.env.user.company_id.jenis_member_rd
+            if not jenis_member_rd_ids:
+                raise ValidationError("Price 3rd Membership not defined,  please define on company information!")
+            jenis_member_th_ids = self.env.user.company_id.jenis_member_th
+            if not jenis_member_th_ids:
+                raise ValidationError("Price 4th Membership not defined,  please define on company information!")
 
+            if self.jenis_member == "1st":
+                self.val_harga = jenis_member_st_ids
+            elif self.jenis_member == "2nd":
+                self.val_harga = jenis_member_nd_ids
+            elif self.jenis_member == "3rd":
+                self.val_harga = jenis_member_rd_ids
+            elif self.jenis_member == "4th":
+                self.val_harga = jenis_member_th_ids
             else:
+                self.val_harga = jenis_member_st_ids
 
-                perpanjang_id = self.env.user.company_id.perpanjang_ids
-                if not perpanjang_id:
-                    raise ValidationError("Price Perpanjang not defined,  please define on company information!")
-
-                self.val_harga = perpanjang_id
         else:
             self.val_harga = 0
 
@@ -148,14 +157,33 @@ class RequestTransStiker(models.Model):
 
             if v.ganti_nopol == True:
                 args = [('id', '=', v.sticker_id.id)]
-                res = self.env['trans.stiker'].search(args).write({'nopol': v.new_nopol, 'jenis_mobil': v.new_jenis_mobil,
-                                                                   'jenis_member': v.new_jenis_member, 'merk_kendaraan': v.new_merk_kendaraan,
-                                                                   'val_tipe': v.new_val_tipe, 'val_tahun': v.new_val_tahun, 'val_color': v.new_val_color, })
+
+                res = self.env['trans.stiker'].search(args)
+
+                for r in res:
+                    for record in r.detail_ids:
+                        vals = {}
+                        vals.update({'detail_ids': [(1, record.id, {
+                            'nopol': v.new_nopol,
+                            'jenis_mobil': v.new_jenis_mobil,
+                            'jenis_member': v.new_jenis_member,
+                            'merk': v.new_merk_kendaraan,
+                            'tipe': v.new_val_tipe,
+                            'tahun': v.new_val_tahun,
+                            'warna': v.new_val_color,
+                        }), ]})
+                        self.env['trans.stiker'].write(vals)
+
+
+                res.write(vals)
+
             v.state = "done"
+
+        self.message_post("Done Payment")
 
     @api.one
     def trans_payment(self):
-        self.message_post("Transaction already paid")
+        self.message_post("Save Request Transaction Stiker")
         self.state = "payment"
 
     @api.model
@@ -199,14 +227,14 @@ class RequestTransStiker(models.Model):
     baru = fields.Boolean(string="LANGGANAN",  )
     perpanjang = fields.Boolean(string="PERPANJANG",  default=False,)
     beli_stiker = fields.Boolean(string="BELI STIKER",  default=False,)
-    ganti_nopol = fields.Boolean(string="GANTI NOPOL",  default=False,)
+    ganti_nopol = fields.Boolean(string="GANTI NOMOR POLISI",  default=False,)
     kartu_hilang = fields.Boolean(string="KARTU HILANG",  default=False, )
     tipe_trans = fields.Selection(string="Tipe Transaksi",
                                   selection=[('ganti_nopol', 'GANTI NOPOL'), ('kartu_hilang', 'KARTU HILANG'), ],
                                   required=False, )
-    harga_beli_stiker = fields.Integer(string="Harga Beli Stiker", required=False, readonly=True)
-    harga_kartu_hilang = fields.Integer(string="Harga Kartu Hilang", required=False, readonly=True)
-    harga_ganti_nopol = fields.Integer(string="Harga Ganti NOPOL", required=False, readonly=True)
+    harga_beli_stiker = fields.Integer(string="Beli Stiker", required=False, readonly=True)
+    harga_kartu_hilang = fields.Integer(string="Kartu Hilang", required=False, readonly=True)
+    harga_ganti_nopol = fields.Integer(string="Ganti Nomor Polisi", required=False, readonly=True)
     new_val_cara_bayar = fields.Selection(string="Cara Pembayaran",
                                   selection=[('billing', 'Billing'), ('non_billing', 'Non Billing'), ], required=False, )
     new_nopol = fields.Char(string="No Polisi", required=False, )

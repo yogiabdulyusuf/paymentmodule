@@ -12,6 +12,16 @@
 			<field name="implementation">standard</field>
 		</record>
 
+		<record id="seq_billing_periode" model="ir.sequence">
+			<field name="name">Billing Periode</field>
+			<field name="code">billing.periode</field>
+			<field name="prefix">B%(year)s%(month)s</field>
+			<field name="padding">3</field>
+			<field name="next_number_actual">1</field>
+			<field name="number_increment">1</field>
+			<field name="implementation">standard</field>
+		</record>
+
 		<!-- UP
 		<record id="trans_number" model="ir.sequence.type">
 			<field name="name">Loan Trans</field>

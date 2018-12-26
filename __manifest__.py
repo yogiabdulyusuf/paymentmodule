@@ -19,6 +19,7 @@ Payment Module
 """,
 	"data": [
 		"view/payment_module_view.xml",
+		"view/billing_view.xml",
 		"view/top_menu.xml",
 		"view/setting_view.xml",
 		"data/ir_sequence.xml",		

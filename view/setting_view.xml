@@ -13,9 +13,13 @@
                    <!-- Add your fields or attributes here -->
                    <page string="Settings">
                         <group>
-                            <group>
-                                <field name="langganan_baru_ids" />
-                                <field name="perpanjang_ids" />
+                            <group string="Jenis Member">
+                                <field name="jenis_member_st" />
+                                <field name="jenis_member_nd" />
+                                <field name="jenis_member_rd" />
+                                <field name="jenis_member_th" />
+                            </group>
+                            <group string="Denda">
                                 <field name="beli_stiker_ids" />
                                 <field name="ganti_nopol_ids" />
                                 <field name="kartu_hilang_ids" />

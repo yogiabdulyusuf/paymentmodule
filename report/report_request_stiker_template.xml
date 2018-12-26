@@ -78,10 +78,10 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <t t-if="o.perpanjang == true">
+                                        <t t-if="o.baru == true">
                                             <tr> <!--  t-foreach="o.spm_line_ids" t-as="l"   -->
                                                 <td>Langganan</td>
-                                                <td class="text-right"><span t-field="o.amount" /></td>
+                                                <td class="text-right"><span t-field="o.val_harga" /></td>
                                             </tr>
                                         </t>
                                         <t t-if="o.beli_stiker == true">
