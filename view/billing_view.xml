@@ -8,7 +8,8 @@
            <field name="arch" type="xml">
                <form string="Form Billing Periode">
                    <header>
-                        <button name="update_startdate_enddate" string="Generate" type="object" class="oe_highlight" confirm="has the customer paid?" states="generate" />
+                        <button name="trans_generate" string="Generate" type="object" class="oe_highlight" states="generate" />
+                        <button name="back_trans_generate" string="Back to Generate" type="object" class="oe_highlight" states="confirm" />
                         <button name="update_startdate_enddate" string="Confirm" type="object" class="oe_highlight" confirm="has the customer paid?" states="confirm" />
                         <button name="update_startdate_enddate" string="Transfer" type="object" class="oe_highlight" confirm="has the customer paid?" states="transfer" />
                         <field name="state" widget="statusbar" statusbar_visible="open,generate,confirm,transfer,close"/>

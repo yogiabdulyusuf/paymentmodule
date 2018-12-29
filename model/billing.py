@@ -5,49 +5,53 @@ from odoo.exceptions import ValidationError, Warning
 class BillingPeriode(models.Model):
     _name = 'billing.periode'
     _rec_name = 'billing_id'
-    _description = 'New Description'
+
+    @api.one
+    def trans_generate_line(self):
+        args = [('val_cara_bayar', '=', 'billing'), ('state', '=', 'done'), ('baru', '=', True)]
+        res = self.env['request.transstiker'].search(args)
+        for row in res:
+            arg = [('nopol', '=', row.nopol)]
+            list = res.search(arg, limit=1, order='create_date desc',)
+            date = fields.Datetime.from_string(list.end_date)
+            d_date = date.day
+            date_now = datetime.now()
+            duration = timedelta(days=30)
+            date_delta = date_now + duration
+            d_year = date_delta.year
+            d_month = date_delta.month
+
+            duration = timedelta(days=30)
+            start_date = datetime.strptime(str(d_year) + '-' + str(d_month) + '-' + str(d_date) + " 00:00:00" , "%Y-%m-%d %H:%M:%S")
+            str_start_date = str(start_date)
+            end_date = start_date + duration
+            str_end_date = str(end_date)
+
+            billing_line_obj = self.env['billingperiode.line']
+            vals = {}
+            vals.update({'billing_periode': self.id})
+            vals.update({'unitno': row.unit_kerja.kode})
+            vals.update({'date_trans': datetime.now()})
+            vals.update(
+                {'description': 'Contribution A ( ' + row.jenis_member + ' ) periode ' + str_start_date + ' - ' + str_end_date})
+            vals.update({'amount': row.val_harga})
+            vals.update({'awal': start_date})
+            vals.update({'akhir': end_date})
+            vals.update({'jenis_langganan': row.jenis_member})
+            billing_line_save = billing_line_obj.create(vals)
+
+            if not billing_line_save:
+                raise ValidationError("Error Creating Billing Periode Line")
+
+        self.state = "confirm"
 
     @api.one
     def trans_generate(self):
-        date = datetime.strptime(self.end_date, "%Y-%m-%d")
-        d_month = date.month
-        d_date = date.date
+        self.trans_generate_line()
 
-        date_now = datetime.now()
-        d_year = date_now.year
-
-        duration = timedelta(days=30)
-
-        start_date = datetime.strptime(d_year + '-' + d_month + '-' + d_date, "%Y-%m-%d")
-
-        self.line_ids.awal = start_date
-        self.line_ids.akhir = start_date + duration
-
-        # @api.one
-        # def generate_billing_savings(self):
-        #
-        #     args = [('state', '=', 'active')]
-        #     res = self.env['savings.account'].search(args)
-        #
-        #     for data_detail in res:
-        #         # Generate Transaksi Simpanan Wajib
-        #         savings_trans_obj = self.env['savings.trans']
-        #
-        #         mandatory_savings = self.env.user.company_id.mandatory_savings_trans_type_id
-        #         if not mandatory_savings:
-        #             raise ValidationError("Mandatory Savings not defined, please define on company information!")
-        #
-        #         vals = {}
-        #         vals.update({'account_number_id': data_detail.savings_account.id})
-        #         vals.update({'debit': self.env.user.company_id.mandatory_savings})
-        #         vals.update({'saving_method': 'deposit'})
-        #         vals.update({'credit': 0.0})
-        #         vals.update({'trans_type_id': mandatory_savings.id})
-        #         vals.update({'state': 'openbilling'})
-        #         saving_trans = savings_trans_obj.create(vals)
-        #
-        #         if not saving_trans:
-        #             raise ValidationError("Error Creating Simpanan Wajib")
+    @api.one
+    def back_trans_generate(self):
+        self.state = "generate"
 
     @api.one
     def trans_open(self):
@@ -56,7 +60,7 @@ class BillingPeriode(models.Model):
     @api.model
     def create(self, vals):
         vals['billing_id'] = self.env['ir.sequence'].next_by_code('billing.periode')
-        res = super(BillingPeriode, self).create(vals)
+        res = super(BillingPeriode, self).create(vals) # PERINTAH SUPER INI DI GUNAKAN KETIKA
         res.trans_open()
         return res
 
@@ -74,7 +78,6 @@ class BillingPeriodeLine(models.Model):
     date_trans = fields.Date(string="Date", required=False, )
     description = fields.Text(string="Description", required=False, )
     amount = fields.Integer(string="Amount", required=False, )
-    billing_id = fields.Char(string="Billing ID", required=False, )
     awal = fields.Date(string="Start Date", required=False, )
     akhir = fields.Date(string="End Date", required=False, )
     jenis_langganan = fields.Char(string="Member Type", required=False, )
