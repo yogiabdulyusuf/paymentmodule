@@ -1,7 +1,7 @@
 from odoo import api, fields, models
 from datetime import datetime, timedelta
 from odoo.exceptions import ValidationError, Warning
-
+from dateutil.relativedelta import *
 
 class RequestTransStiker(models.Model):
     _name = 'request.transstiker'
@@ -60,7 +60,36 @@ class RequestTransStiker(models.Model):
         self.val_tahun = tahun
         self.val_color = color
 
-    @api.onchange('baru', 'jenis_transaksi')
+        if self.baru == True:
+
+            jenis_member_st_ids = self.env.user.company_id.jenis_member_st
+            jenis_member_nd_ids = self.env.user.company_id.jenis_member_nd
+            if not jenis_member_nd_ids:
+                raise ValidationError("Price 2nd Membership not defined,  please define on company information!")
+            jenis_member_rd_ids = self.env.user.company_id.jenis_member_rd
+            if not jenis_member_rd_ids:
+                raise ValidationError("Price 3rd Membership not defined,  please define on company information!")
+            jenis_member_th_ids = self.env.user.company_id.jenis_member_th
+            if not jenis_member_th_ids:
+                raise ValidationError("Price 4th Membership not defined,  please define on company information!")
+
+            check_row = self.no_id[4]
+
+            if check_row == "1":
+                self.val_harga = jenis_member_st_ids
+            elif check_row == "2":
+                self.val_harga = jenis_member_nd_ids
+            elif self.jenis_member == "3rd":
+                self.val_harga = jenis_member_rd_ids
+            elif self.jenis_member == "4th":
+                self.val_harga = jenis_member_th_ids
+            else:
+                self.val_harga = jenis_member_st_ids
+
+        else:
+            self.val_harga = 0
+
+    @api.onchange('sticker_id', 'baru', 'jenis_transaksi')
     def _change_harga_langganan(self):
         if self.baru == True:
 
@@ -75,9 +104,11 @@ class RequestTransStiker(models.Model):
             if not jenis_member_th_ids:
                 raise ValidationError("Price 4th Membership not defined,  please define on company information!")
 
-            if self.jenis_member == "1st":
+            check_row = self.no_id[4]
+
+            if check_row == "1":
                 self.val_harga = jenis_member_st_ids
-            elif self.jenis_member == "2nd":
+            elif check_row == "2":
                 self.val_harga = jenis_member_nd_ids
             elif self.jenis_member == "3rd":
                 self.val_harga = jenis_member_rd_ids
@@ -137,14 +168,9 @@ class RequestTransStiker(models.Model):
             # Membuat variable start yang isinya tanggal dari field start_date
             start_date = fields.Datetime.from_string(r.val_akhir)
 
-            # Membuat variable duration yang isinya durasi hari dari field duration
-            # Durasi hari dikurangi 1 detik agar start_date masuk kedalam durasi hari , seconds=-1
-            val_day = 30 * r.duration
-            duration = timedelta(days=val_day)
-
             # Mengupdate field end_date dari perhitungan variabel start ditambah variabel duration
             r.start_date = start_date
-            r.end_date = start_date + duration
+            r.end_date = start_date + relativedelta(months=r.duration)
 
 
     @api.one
