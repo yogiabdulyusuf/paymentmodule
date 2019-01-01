@@ -41,6 +41,7 @@
                                 <field name="val_cara_bayar" attrs="{'readonly': [('jenis_transaksi','!=','langganan_baru')], 'invisible': [('jenis_transaksi','!=','langganan_baru'), ('jenis_transaksi','!=','perpanjang'),]}" />
                                 <field name="nopol" attrs="{'readonly': [('jenis_transaksi','!=','langganan_baru')]}" />
                                 <field name="jenis_mobil" attrs="{'readonly': [('jenis_transaksi','!=','langganan_baru')]}" />
+                                <field name="mobil_ke" attrs="{'readonly': [('jenis_transaksi','!=','langganan_baru')]}" />
                                 <field name="jenis_member" attrs="{'readonly': [('jenis_transaksi','!=','langganan_baru')]}"/>
                                 <field name="merk_kendaraan" attrs="{'readonly': [('jenis_transaksi','!=','langganan_baru')]}" />
                                 <field name="val_tipe" attrs="{'readonly': [('jenis_transaksi','!=','langganan_baru')]}" />

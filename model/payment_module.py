@@ -77,14 +77,19 @@ class RequestTransStiker(models.Model):
 
             if check_row == "1":
                 self.val_harga = jenis_member_st_ids
+                self.mobil_ke = "1"
             elif check_row == "2":
                 self.val_harga = jenis_member_nd_ids
-            elif self.jenis_member == "3rd":
+                self.mobil_ke = "2"
+            elif check_row == "3":
                 self.val_harga = jenis_member_rd_ids
-            elif self.jenis_member == "4th":
+                self.mobil_ke = "3"
+            elif check_row == "4":
                 self.val_harga = jenis_member_th_ids
+                self.mobil_ke = "4"
             else:
                 self.val_harga = jenis_member_st_ids
+                self.mobil_ke = "1"
 
         else:
             self.val_harga = 0
@@ -108,15 +113,19 @@ class RequestTransStiker(models.Model):
 
             if check_row == "1":
                 self.val_harga = jenis_member_st_ids
+                self.mobil_ke = "1"
             elif check_row == "2":
                 self.val_harga = jenis_member_nd_ids
-            elif self.jenis_member == "3rd":
+                self.mobil_ke = "2"
+            elif check_row == "3":
                 self.val_harga = jenis_member_rd_ids
-            elif self.jenis_member == "4th":
+                self.mobil_ke = "3"
+            elif check_row == "4":
                 self.val_harga = jenis_member_th_ids
+                self.mobil_ke = "4"
             else:
                 self.val_harga = jenis_member_st_ids
-
+                self.mobil_ke = "1"
         else:
             self.val_harga = 0
 
@@ -154,6 +163,7 @@ class RequestTransStiker(models.Model):
     def calculate_rts(self):
         total = self.val_harga + self.harga_beli_stiker + self.harga_ganti_nopol + self.harga_kartu_hilang
         self.amount = total
+        self.adm = self.create_uid
 
 
     @api.onchange('duration')
@@ -200,7 +210,6 @@ class RequestTransStiker(models.Model):
                         }), ]})
                         self.env['trans.stiker'].write(vals)
 
-
                 res.write(vals)
 
             v.state = "done"
@@ -237,6 +246,7 @@ class RequestTransStiker(models.Model):
     val_harga = fields.Integer(string="Harga Perpanjang/Baru", required=False, readonly=True, )
     tanggal = fields.Date(string="Date", required=False, readonly=True, default=datetime.now())
     adm = fields.Char(string="Adm", required=False, readonly=True, )
+    mobil_ke = fields.Selection(string="Mobil", selection=[('1', '1st'), ('2', '2nd'), ('3', '3th'), ('4', '4th'), ], required=False, )
     jenis_transaksi = fields.Selection(string="Jenis Transaksi",
                                        selection=[('langganan_baru', 'LANGGANAN BARU'), ('perpanjang', 'PERPANJANG'), ],
                                        required=True, readonly=False, default="langganan_baru")
