@@ -11,10 +11,10 @@ class RequestTransStiker(models.Model):
     @api.onchange('unit_kerja')
     def _change_trans_stiker(self):
         res = {}
-        res['domain'] = {'sticker_id':[('unit_kerja', '=', self.unit_kerja.id)]}
+        res['domain'] = {'stiker_id':[('unit_kerja', '=', self.unit_kerja.id)]}
         return res
 
-    @api.onchange('sticker_id')
+    @api.onchange('stiker_id')
     def _get_stiker(self):
         name = ''
         no_id = ''
@@ -30,7 +30,7 @@ class RequestTransStiker(models.Model):
         tahun = ''
         color = ''
 
-        for data_detail in self.sticker_id:
+        for data_detail in self.stiker_id:
             name = data_detail.name
             no_id = data_detail.no_id
             jenis_transaksi = data_detail.jenis_transaksi
@@ -49,16 +49,16 @@ class RequestTransStiker(models.Model):
         if jenis_transaksi == "langganan_baru":
             jenis_transaksi = "perpanjang"
         self.jenis_transaksi = jenis_transaksi
-        self.val_awal = awal
-        self.val_akhir = akhir
-        self.val_cara_bayar = cara_bayar
+        self.awal = awal
+        self.akhir = akhir
+        self.cara_bayar = cara_bayar
         self.nopol = nopol
         self.jenis_mobil = jenis_mobil
         self.jenis_member = jenis_member
-        self.merk_kendaraan = merk
-        self.val_tipe = tipe
-        self.val_tahun = tahun
-        self.val_color = color
+        self.merk = merk
+        self.tipe = tipe
+        self.tahun = tahun
+        self.warna = color
 
         if self.baru == True:
 
@@ -94,7 +94,7 @@ class RequestTransStiker(models.Model):
         else:
             self.val_harga = 0
 
-    @api.onchange('sticker_id', 'baru', 'jenis_transaksi')
+    @api.onchange('stiker_id', 'baru', 'jenis_transaksi')
     def _change_harga_langganan(self):
         if self.baru == True:
 
@@ -167,16 +167,16 @@ class RequestTransStiker(models.Model):
 
 
     @api.onchange('duration')
-    @api.depends('val_awal', 'duration')
+    @api.depends('awal', 'duration')
     def _get_end_date(self):
         for r in self:
             # Pengecekan jika field duration & start_date tidak diisi, maka field end_date akan di update sama seperti field start_date
-            if not (r.val_awal and r.duration):
-                r.val_akhir = r.val_awal
+            if not (r.awal and r.duration):
+                r.akhir = r.awal
                 continue
 
             # Membuat variable start yang isinya tanggal dari field start_date
-            start_date = fields.Datetime.from_string(r.val_akhir)
+            start_date = fields.Datetime.from_string(r.akhir)
 
             # Mengupdate field end_date dari perhitungan variabel start ditambah variabel duration
             r.start_date = start_date
@@ -188,11 +188,11 @@ class RequestTransStiker(models.Model):
         for v in self:
             if v.baru == True:
                 if v.jenis_transaksi == "perpanjang":
-                    args = [('id', '=', v.sticker_id.id)]
+                    args = [('id', '=', v.stiker_id.id)]
                     res = self.env['trans.stiker'].search(args).write({'awal': v.start_date, 'akhir': v.end_date})
 
             if v.ganti_nopol == True:
-                args = [('id', '=', v.sticker_id.id)]
+                args = [('id', '=', v.stiker_id.id)]
 
                 res = self.env['trans.stiker'].search(args)
 
@@ -203,10 +203,10 @@ class RequestTransStiker(models.Model):
                             'nopol': v.new_nopol,
                             'jenis_mobil': v.new_jenis_mobil,
                             'jenis_member': v.new_jenis_member,
-                            'merk': v.new_merk_kendaraan,
-                            'tipe': v.new_val_tipe,
-                            'tahun': v.new_val_tahun,
-                            'warna': v.new_val_color,
+                            'merk': v.new_merk,
+                            'tipe': v.new_tipe,
+                            'tahun': v.new_tahun,
+                            'warna': v.new_warna,
                         }), ]})
                         self.env['trans.stiker'].write(vals)
 
@@ -223,43 +223,43 @@ class RequestTransStiker(models.Model):
 
     @api.model
     def create(self, vals):
-        vals['trans_stiker_id'] = self.env['ir.sequence'].next_by_code('request.transstiker')
+        # vals['notrans'] = self.env['ir.sequence'].next_by_code('request.transstiker')
         res = super(RequestTransStiker, self).create(vals)
-        res._get_stiker()
-        res._change_harga_beli_stiker()
-        res._change_harga_langganan()
-        res.calculate_rts()
-        res._get_end_date()
-        res.trans_payment()
+        # res._get_stiker()
+        # res._change_harga_beli_stiker()
+        # res._change_harga_langganan()
+        # res.calculate_rts()
+        # res._get_end_date()
+        # res.trans_payment()
         return res
 
-    trans_stiker_id = fields.Char(string="Transaksi ID", readonly=True)
+    notrans = fields.Char(string="Transaksi ID",)
     unit_kerja = fields.Many2one('stasiun.kerja','Unit Kerja #', required=True)
-    sticker_id = fields.Many2one('trans.stiker','Stiker #', required=True, )
+    stiker_id = fields.Many2one('trans.stiker','Stiker #', required=False, )
     name = fields.Char(string="Nama", )
     no_id = fields.Char(string="No ID", )
-    duration = fields.Integer('Duration', default=1, required=False)
-    val_awal = fields.Date(string="Start Date", required=False, )
-    val_akhir = fields.Date(string="End Date", required=False, )
-    start_date = fields.Date(string="New Start Date", required=False, readonly=True,)
-    end_date = fields.Date(string="New End Date", required=False, readonly=True,)
-    val_harga = fields.Integer(string="Harga Perpanjang/Baru", required=False, readonly=True, )
-    tanggal = fields.Date(string="Date", required=False, readonly=True, default=datetime.now())
-    adm = fields.Char(string="Adm", required=False, readonly=True, )
+    duration = fields.Integer('Duration', default=0, required=False)
+    awal = fields.Datetime(string="Start Date", required=False, )
+    akhir = fields.Datetime(string="End Date", required=False, )
+    start_date = fields.Datetime(string="New Start Date", required=False, readonly=True,)
+    end_date = fields.Datetime(string="New End Date", required=False, readonly=True,)
+    val_harga = fields.Integer(string="Harga Perpanjang/Baru", required=False, )
+    tanggal = fields.Datetime(string="Date", required=False,)
+    adm = fields.Many2one(comodel_name="res.users", string="Created By", required=False, default=lambda self: self.env.user and self.env.user.id or False, )
     mobil_ke = fields.Selection(string="Mobil", selection=[('1', '1st'), ('2', '2nd'), ('3', '3th'), ('4', '4th'), ], required=False, )
     jenis_transaksi = fields.Selection(string="Jenis Transaksi",
-                                       selection=[('langganan_baru', 'LANGGANAN BARU'), ('perpanjang', 'PERPANJANG'), ],
+                                       selection=[('langganan_baru', 'LANGGANAN BARU'), ('perpanjang', 'PERPANJANG'), ('stop', 'STOP'), ],
                                        required=True, readonly=False, default="langganan_baru")
-    val_cara_bayar = fields.Selection(string="Cara Pembayaran",
-                                  selection=[('billing', 'Billing'), ('non_billing', 'Non Billing'), ], required=False, )
+    cara_bayar = fields.Selection(string="Cara Pembayaran",
+                                      selection=[('billing', 'Billing'), ('non_billing', 'Non Billing'), ], required=False, )
     nopol = fields.Char(string="No Polisi", required=False, )
     jenis_mobil = fields.Char(string="Jenis Mobil", required=False, )
     jenis_member = fields.Char(string="Jenis Member", required=False, )
-    merk_kendaraan = fields.Char(string="Merk Mobil", required=False, )
-    val_tipe = fields.Char(string="Tipe Mobil", required=False, )
-    val_tahun = fields.Char(string="Tahun", required=False, )
-    val_color = fields.Char(string="Warna", required=False, )
-    amount = fields.Integer(string="Amount", required=False, readonly=True )
+    merk = fields.Char(string="Merk Mobil", required=False, )
+    tipe = fields.Char(string="Tipe Mobil", required=False, )
+    tahun = fields.Char(string="Tahun", required=False, )
+    warna = fields.Char(string="Warna", required=False, )
+    amount = fields.Integer(string="Amount", required=False, )
     baru = fields.Boolean(string="LANGGANAN",  )
     perpanjang = fields.Boolean(string="PERPANJANG",  default=False,)
     beli_stiker = fields.Boolean(string="BELI STIKER",  default=False,)
@@ -268,23 +268,30 @@ class RequestTransStiker(models.Model):
     tipe_trans = fields.Selection(string="Tipe Transaksi",
                                   selection=[('ganti_nopol', 'GANTI NOPOL'), ('kartu_hilang', 'KARTU HILANG'), ],
                                   required=False, )
+    tgl_approved = fields.Datetime(string="Tanggal Approve", required=False, )
+    adm_approved = fields.Char(string="Admin Approve", required=False, )
+    flag = fields.Char(string="Flag", required=False, )
+    remark = fields.Char(string="Remark", required=False, )
+    start_date_status = new_field = fields.Char(string="Start Date Status", required=False, )
+    approvedstatus = fields.Char(string="Approve Status", required=False, )
+    status = fields.Char(string="Status", required=False, )
     harga_beli_stiker = fields.Integer(string="Beli Stiker", required=False, readonly=True)
     harga_kartu_hilang = fields.Integer(string="Kartu Hilang", required=False, readonly=True)
     harga_ganti_nopol = fields.Integer(string="Ganti Nomor Polisi", required=False, readonly=True)
-    new_val_cara_bayar = fields.Selection(string="Cara Pembayaran",
+    new_cara_bayar = fields.Selection(string="Cara Pembayaran",
                                   selection=[('billing', 'Billing'), ('non_billing', 'Non Billing'), ], required=False, )
     new_nopol = fields.Char(string="No Polisi", required=False, )
     new_jenis_mobil = fields.Char(string="Jenis Mobil", required=False, )
     new_jenis_member = fields.Char(string="Jenis Member", required=False, )
-    new_merk_kendaraan = fields.Char(string="Merk Mobil", required=False, )
-    new_val_tipe = fields.Char(string="Tipe Mobil", required=False, )
-    new_val_tahun = fields.Char(string="Tahun", required=False, )
-    new_val_color = fields.Char(string="Warna", required=False, )
+    new_merk = fields.Char(string="Merk Mobil", required=False, )
+    new_tipe = fields.Char(string="Tipe Mobil", required=False, )
+    new_tahun = fields.Char(string="Tahun", required=False, )
+    new_warna = fields.Char(string="Warna", required=False, )
     state = fields.Selection(string="state", selection=[('open', 'Open'),('payment','Waiting Payment'), ('done', 'Done'), ], required=False, default="open",)
 
 class StasiunKerja(models.Model):
     _name = 'stasiun.kerja'
-    _rec_name = 'nama'
+    _rec_name = 'kode'
     _description = 'Stasiun Kerja'
 
     kode = fields.Char(string="Kode", required=False, )
