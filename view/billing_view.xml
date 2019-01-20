@@ -9,10 +9,9 @@
                <form string="Form Billing Periode">
                    <header>
                         <button name="trans_generate" string="Generate" type="object" class="oe_highlight" states="generate" />
-                        <button name="back_trans_generate" string="Back to Generate" type="object" class="oe_highlight" states="confirm" />
                         <button name="update_startdate_enddate" string="Confirm" type="object" class="oe_highlight" confirm="has the customer paid?" states="confirm" />
                         <button name="update_startdate_enddate" string="Transfer" type="object" class="oe_highlight" confirm="has the customer paid?" states="transfer" />
-                        <field name="state" widget="statusbar" statusbar_visible="open,generate,confirm,transfer,close"/>
+                        <field name="state" widget="statusbar" statusbar_visible="open,generate,transfer,close"/>
                     </header>
                    <sheet>
                         <label for="billing_id" class="oe_edit_only" string="Billing ID" />
@@ -61,6 +60,29 @@
             <field name="res_model">billing.periode</field>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
+        </record>
+
+        <!-- ==================================================  -->
+
+        <record id="tree_billing_periode" model="ir.ui.view">
+            <field name="name">Tree Detail Billing Periode</field>
+            <field name="model">billingperiode.line</field>
+            <field name="arch" type="xml">
+                <tree string="Tree Detail Billing Periode">
+                    <field name="billing_periode"/>
+                    <field name="unitno"/>
+                    <field name="date_trans"/>
+                    <field name="description"/>
+                    <field name="amount"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="act_detail_billing" model="ir.actions.act_window">
+            <field name="name">Action Detail Billing Periode</field>
+            <field name="res_model">billingperiode.line</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree</field>
         </record>
 
     </data>

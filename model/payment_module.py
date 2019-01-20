@@ -24,7 +24,6 @@ class RequestTransStiker(models.Model):
         cara_bayar = ''
         nopol = ''
         jenis_mobil = ''
-        jenis_member = ''
         merk = ''
         tipe = ''
         tahun = ''
@@ -39,7 +38,6 @@ class RequestTransStiker(models.Model):
             cara_bayar = data_detail.cara_bayar
             nopol = data_detail.detail_ids.nopol
             jenis_mobil = data_detail.detail_ids.jenis_mobil
-            jenis_member = data_detail.detail_ids.jenis_member
             merk = data_detail.detail_ids.merk
             tipe = data_detail.detail_ids.tipe
             tahun = data_detail.detail_ids.tahun
@@ -54,7 +52,6 @@ class RequestTransStiker(models.Model):
         self.cara_bayar = cara_bayar
         self.nopol = nopol
         self.jenis_mobil = jenis_mobil
-        self.jenis_member = jenis_member
         self.merk = merk
         self.tipe = tipe
         self.tahun = tahun
@@ -75,21 +72,21 @@ class RequestTransStiker(models.Model):
 
             check_row = self.no_id[4]
 
-            if check_row == "1":
+            if check_row == "1st":
                 self.val_harga = jenis_member_st_ids
-                self.mobil_ke = "1"
-            elif check_row == "2":
+                self.jenis_member = "1st"
+            elif check_row == "2nd":
                 self.val_harga = jenis_member_nd_ids
-                self.mobil_ke = "2"
-            elif check_row == "3":
+                self.jenis_member = "2nd"
+            elif check_row == "3rd":
                 self.val_harga = jenis_member_rd_ids
-                self.mobil_ke = "3"
-            elif check_row == "4":
+                self.jenis_member = "3rd"
+            elif check_row == "4th":
                 self.val_harga = jenis_member_th_ids
-                self.mobil_ke = "4"
+                self.jenis_member = "4th"
             else:
                 self.val_harga = jenis_member_st_ids
-                self.mobil_ke = "1"
+                self.jenis_member = "1st"
 
         else:
             self.val_harga = 0
@@ -111,21 +108,21 @@ class RequestTransStiker(models.Model):
 
             check_row = self.no_id[4]
 
-            if check_row == "1":
+            if check_row == "1st":
                 self.val_harga = jenis_member_st_ids
-                self.mobil_ke = "1"
-            elif check_row == "2":
+                self.jenis_member = "1st"
+            elif check_row == "2nd":
                 self.val_harga = jenis_member_nd_ids
-                self.mobil_ke = "2"
-            elif check_row == "3":
+                self.jenis_member = "2nd"
+            elif check_row == "3rd":
                 self.val_harga = jenis_member_rd_ids
-                self.mobil_ke = "3"
-            elif check_row == "4":
+                self.jenis_member = "3rd"
+            elif check_row == "4th":
                 self.val_harga = jenis_member_th_ids
-                self.mobil_ke = "4"
+                self.jenis_member = "4th"
             else:
                 self.val_harga = jenis_member_st_ids
-                self.mobil_ke = "1"
+                self.jenis_member = "1st"
         else:
             self.val_harga = 0
 
@@ -223,17 +220,17 @@ class RequestTransStiker(models.Model):
 
     @api.model
     def create(self, vals):
-        # vals['notrans'] = self.env['ir.sequence'].next_by_code('request.transstiker')
+        vals['notrans'] = self.env['ir.sequence'].next_by_code('request.transstiker')
         res = super(RequestTransStiker, self).create(vals)
-        # res._get_stiker()
-        # res._change_harga_beli_stiker()
-        # res._change_harga_langganan()
-        # res.calculate_rts()
-        # res._get_end_date()
-        # res.trans_payment()
+        res._get_stiker()
+        res._change_harga_beli_stiker()
+        res._change_harga_langganan()
+        res.calculate_rts()
+        res._get_end_date()
+        res.trans_payment()
         return res
 
-    notrans = fields.Char(string="Transaksi ID",)
+    notrans = fields.Char(string="Transaksi ID", readonly=True)
     unit_kerja = fields.Many2one('stasiun.kerja','Unit Kerja #', required=True)
     stiker_id = fields.Many2one('trans.stiker','Stiker #', required=False, )
     name = fields.Char(string="Nama", )
@@ -243,10 +240,10 @@ class RequestTransStiker(models.Model):
     akhir = fields.Datetime(string="End Date", required=False, )
     start_date = fields.Datetime(string="New Start Date", required=False, readonly=True,)
     end_date = fields.Datetime(string="New End Date", required=False, readonly=True,)
-    val_harga = fields.Integer(string="Harga Perpanjang/Baru", required=False, )
-    tanggal = fields.Datetime(string="Date", required=False,)
-    adm = fields.Many2one(comodel_name="res.users", string="Created By", required=False, default=lambda self: self.env.user and self.env.user.id or False, )
-    mobil_ke = fields.Selection(string="Mobil", selection=[('1', '1st'), ('2', '2nd'), ('3', '3th'), ('4', '4th'), ], required=False, )
+    val_harga = fields.Integer(string="Harga", required=False, readonly=True)
+    tanggal = fields.Datetime(string="Date", required=False, readonly=True, default=fields.Date.today())
+    adm = fields.Many2one(comodel_name="res.users", string="Created By", required=False, default=lambda self: self.env.user and self.env.user.id or False, readonly=True)
+    jenis_member = fields.Selection(string="Mobil", selection=[('1st', '1st'), ('2nd', '2nd'), ('3rd', '3rd'), ('4th', '4th'), ], required=False, )
     jenis_transaksi = fields.Selection(string="Jenis Transaksi",
                                        selection=[('langganan_baru', 'LANGGANAN BARU'), ('perpanjang', 'PERPANJANG'), ('stop', 'STOP'), ],
                                        required=True, readonly=False, default="langganan_baru")
@@ -254,12 +251,11 @@ class RequestTransStiker(models.Model):
                                       selection=[('billing', 'Billing'), ('non_billing', 'Non Billing'), ], required=False, )
     nopol = fields.Char(string="No Polisi", required=False, )
     jenis_mobil = fields.Char(string="Jenis Mobil", required=False, )
-    jenis_member = fields.Char(string="Jenis Member", required=False, )
     merk = fields.Char(string="Merk Mobil", required=False, )
     tipe = fields.Char(string="Tipe Mobil", required=False, )
     tahun = fields.Char(string="Tahun", required=False, )
     warna = fields.Char(string="Warna", required=False, )
-    amount = fields.Integer(string="Amount", required=False, )
+    amount = fields.Integer(string="Amount", required=False, readonly=True)
     baru = fields.Boolean(string="LANGGANAN",  )
     perpanjang = fields.Boolean(string="PERPANJANG",  default=False,)
     beli_stiker = fields.Boolean(string="BELI STIKER",  default=False,)

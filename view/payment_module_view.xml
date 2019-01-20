@@ -31,8 +31,8 @@
                                 <field name="name" attrs="{'readonly': [('jenis_transaksi','!=','langganan_baru')], 'required': [('baru','!=', False)], }" />
                                 <field name="no_id" attrs="{'readonly': [('jenis_transaksi','!=','langganan_baru')], 'required': [('baru','!=', False)], }" />
                                 <field name="duration" attrs="{'invisible': [('jenis_transaksi','!=','langganan_baru'), ('jenis_transaksi','!=','perpanjang'),]}" />
-                                <field name="awal" attrs="{'invisible': [('jenis_transaksi','!=','langganan_baru'), ('jenis_transaksi','!=','perpanjang')], 'readonly': [('jenis_transaksi','!=','langganan_baru')] }" />
-                                <field name="akhir" attrs="{'invisible': [('jenis_transaksi','!=','langganan_baru'), ('jenis_transaksi','!=','perpanjang')], 'readonly': [('jenis_transaksi','!=','langganan_baru')]}" />
+                                <field name="awal" attrs="{'invisible': [('jenis_transaksi','!=','langganan_baru'), ('jenis_transaksi','!=','perpanjang'), ('jenis_transaksi','!=','stop')], 'readonly': [('jenis_transaksi','!=','langganan_baru')] }" />
+                                <field name="akhir" attrs="{'invisible': [('jenis_transaksi','!=','langganan_baru'), ('jenis_transaksi','!=','perpanjang'), ('jenis_transaksi','!=','stop')], 'readonly': [('jenis_transaksi','!=','langganan_baru')]}" />
                                 <field name="val_harga"/>
                                 <field name="tanggal"/>
                                 <field name="adm"/>
@@ -41,7 +41,6 @@
                                 <field name="cara_bayar" attrs="{'readonly': [('jenis_transaksi','!=','langganan_baru')], 'invisible': [('jenis_transaksi','!=','langganan_baru'), ('jenis_transaksi','!=','perpanjang'),]}" />
                                 <field name="nopol" attrs="{'readonly': [('jenis_transaksi','!=','langganan_baru')]}" />
                                 <field name="jenis_mobil" attrs="{'readonly': [('jenis_transaksi','!=','langganan_baru')]}" />
-                                <field name="mobil_ke" attrs="{'readonly': [('jenis_transaksi','!=','langganan_baru')]}" />
                                 <field name="jenis_member" attrs="{'readonly': [('jenis_transaksi','!=','langganan_baru')]}"/>
                                 <field name="merk" attrs="{'readonly': [('jenis_transaksi','!=','langganan_baru')]}" />
                                 <field name="tipe" attrs="{'readonly': [('jenis_transaksi','!=','langganan_baru')]}" />
@@ -108,6 +107,7 @@
                     <field name="notrans"/>
                     <field name="unit_kerja"/>
                     <field name="stiker_id"/>
+                    <field name="no_id"/>
                     <field name="name"/>
                     <field name="tanggal"/>
                     <field name="val_harga"/>

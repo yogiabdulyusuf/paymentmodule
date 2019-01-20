@@ -7,5 +7,6 @@
 		<menuitem	id="menu_transaction_payment"	name="Transaction" parent="payment_menu_group"	action="act_request_trans_stiker" />
 		<menuitem	id="menu_transaction_stiker"	name="Transaction Stiker" parent="payment_menu_group"	action="act_trans_stiker" />
 		<menuitem	id="menu_billing_periode"	name="Billing Periode" parent="payment_menu_group"	action="act_billing_periode" />
+		<menuitem	id="menu_detail_billing_periode"	name="Detail Billing" parent="payment_menu_group"	action="act_detail_billing" />
 
 </odoo>
