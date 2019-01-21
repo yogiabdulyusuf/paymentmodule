@@ -18,76 +18,76 @@ class BillingPeriode(models.Model):
         akhir = date_akhir + relativedelta(months=+2)
 
         for row in res:
-            _logger.info(row.no_id)
+            #_logger.info(row.no_id)
 
             arg = [('no_id', '=', row.no_id), ('jenis_member', '!=', '1st'), ('approvedstatus', '=', '1'), ('status', '=', '1'), ]
 
-            list_check = self.env['request.transstiker'].search(arg, order='jenis_transaksi desc', limit=1)
-            _logger.info(list_check.no_id)
+            list = self.env['request.transstiker'].search(arg, order='akhir desc')
+            #_logger.info(line_check.no_id)
 
-            if list_check.jenis_transaksi != 'stop' or list_check.cara_bayar != 'non_billing':
-
-                args = [('no_id', '=', list_check.no_id), ('jenis_member', '!=', '1st'), ('approvedstatus', '=', '1'), ('status', '=', '1'), ('akhir', '>=', str(akhir))]
-                list = self.env['request.transstiker'].search(args, order='tanggal desc', limit=1)
-                # _logger.error("my variable : ", list)
-
-                if not list:
+            for line in list:
+                if line.jenis_transaksi == 'stop' or line.cara_bayar == 'non_billing':
+                    break
+                if line.akhir <= str(akhir):
                     continue
+                if line.akhir >= str(akhir):
 
-                jenis_member_st_ids = self.env.user.company_id.jenis_member_st
-                jenis_member_nd_ids = self.env.user.company_id.jenis_member_nd
-                if not jenis_member_nd_ids:
-                    raise ValidationError("Price 2nd Membership not defined,  please define on company information!")
-                jenis_member_rd_ids = self.env.user.company_id.jenis_member_rd
-                if not jenis_member_rd_ids:
-                    raise ValidationError("Price 3rd Membership not defined,  please define on company information!")
-                jenis_member_th_ids = self.env.user.company_id.jenis_member_th
-                if not jenis_member_th_ids:
-                    raise ValidationError("Price 4th Membership not defined,  please define on company information!")
+                    jenis_member_st_ids = self.env.user.company_id.jenis_member_st
+                    jenis_member_nd_ids = self.env.user.company_id.jenis_member_nd
+                    if not jenis_member_nd_ids:
+                        raise ValidationError("Price 2nd Membership not defined,  please define on company information!")
+                    jenis_member_rd_ids = self.env.user.company_id.jenis_member_rd
+                    if not jenis_member_rd_ids:
+                        raise ValidationError("Price 3rd Membership not defined,  please define on company information!")
+                    jenis_member_th_ids = self.env.user.company_id.jenis_member_th
+                    if not jenis_member_th_ids:
+                        raise ValidationError("Price 4th Membership not defined,  please define on company information!")
 
-                if list.jenis_member == "1st":
-                    val_harga = jenis_member_st_ids
-                elif list.jenis_member == "2nd":
-                    val_harga = jenis_member_nd_ids
-                elif list.jenis_member == "3rd":
-                    val_harga = jenis_member_rd_ids
-                elif list.jenis_member == "4th":
-                    val_harga = jenis_member_th_ids
-                else:
-                    val_harga = jenis_member_st_ids
+                    if line.jenis_member == "1st":
+                        val_harga = jenis_member_st_ids
+                    elif line.jenis_member == "2nd":
+                        val_harga = jenis_member_nd_ids
+                    elif line.jenis_member == "3rd":
+                        val_harga = jenis_member_rd_ids
+                    elif line.jenis_member == "4th":
+                        val_harga = jenis_member_th_ids
+                    else:
+                        val_harga = jenis_member_st_ids
 
-                _logger.info(list.no_id)
-                tgl = fields.Datetime.from_string(list.akhir)
-                str_start_date = str(self.billing_year) + "-" + str(self.billing_month).zfill(2) + "-" + str(tgl.day).zfill(2)
-                start_date = datetime.strptime(str_start_date,"%Y-%m-%d") + relativedelta(months=+1)
-                #d_date = tgl.day
-                #date_now = datetime.now()
-                #duration = timedelta(days=30)
-                #date_delta = date_now + duration
-                #d_year = date_delta.year
-                #d_month = date_delta.month
+                    #_logger.info(line.no_id)
+                    tgl = fields.Datetime.from_string(line.akhir)
+                    str_start_date = str(self.billing_year) + "-" + str(self.billing_month).zfill(2) + "-" + str(tgl.day).zfill(2)
+                    start_date = datetime.strptime(str_start_date,"%Y-%m-%d") + relativedelta(months=+1)
+                    #d_date = tgl.day
+                    #date_now = datetime.now()
+                    #duration = timedelta(days=30)
+                    #date_delta = date_now + duration
+                    #d_year = date_delta.year
+                    #d_month = date_delta.month
 
-                duration = relativedelta(months=+1)
-                #start_date = datetime.strptime(str(d_year) + '-' + str(d_month) + '-' + str(d_date) + ' 00:00:00' , "%Y-%m-%d %H:%M:%S")
-                str_start_date = start_date.strftime('%d/%m/%Y')
-                end_date = start_date + duration
-                str_end_date = end_date.strftime('%d/%m/%Y')
+                    duration = relativedelta(months=+1)
+                    #start_date = datetime.strptime(str(d_year) + '-' + str(d_month) + '-' + str(d_date) + ' 00:00:00' , "%Y-%m-%d %H:%M:%S")
+                    str_start_date = start_date.strftime('%d/%m/%Y')
+                    end_date = start_date + duration
+                    str_end_date = end_date.strftime('%d/%m/%Y')
 
-                billing_line_obj = self.env['billingperiode.line']
-                vals = {}
-                vals.update({'billing_periode': self.id})
-                vals.update({'unitno': list.unit_kerja.kode})
-                vals.update({'date_trans': datetime.now()})
-                vals.update(
-                    {'description': 'Contribution A ( ' + list.jenis_member + ' ) periode ' + str_start_date + ' - ' + str_end_date})
-                vals.update({'amount': val_harga})
-                vals.update({'awal': start_date})
-                vals.update({'akhir': end_date})
-                vals.update({'jenis_langganan': list.jenis_member})
-                billing_line_save = billing_line_obj.create(vals)
+                    billing_line_obj = self.env['billingperiode.line']
+                    vals = {}
+                    vals.update({'billing_periode': self.id})
+                    vals.update({'unitno': line.unit_kerja.kode})
+                    vals.update({'date_trans': datetime.now()})
+                    vals.update(
+                        {'description': 'Contribution A ( ' + line.jenis_member + ' ) periode ' + str_start_date + ' - ' + str_end_date})
+                    vals.update({'amount': val_harga})
+                    vals.update({'awal': start_date})
+                    vals.update({'akhir': end_date})
+                    vals.update({'jenis_langganan': line.jenis_member})
+                    billing_line_save = billing_line_obj.create(vals)
 
-                if not billing_line_save:
-                    raise ValidationError("Error Creating Billing Periode Line")
+                    if not billing_line_save:
+                        raise ValidationError("Error Creating Billing Periode Line")
+
+                    break
 
         self.state = "transfer"
 
