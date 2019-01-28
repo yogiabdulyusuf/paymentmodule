@@ -20,7 +20,7 @@
                             <field name="unit_kerja"/>
                         </group>
                         <group>
-                            <field name="stiker_id"/>
+                            <field name="stiker_id" attrs="{'invisible': [('jenis_transaksi','==','langganan_baru'), ]}" />
                         </group>
                         <group>
                             <group><field name="baru" /></group>
@@ -31,8 +31,8 @@
                                 <field name="name" attrs="{'readonly': [('jenis_transaksi','!=','langganan_baru')], 'required': [('baru','!=', False)], }" />
                                 <field name="no_id" attrs="{'readonly': [('jenis_transaksi','!=','langganan_baru')], 'required': [('baru','!=', False)], }" />
                                 <field name="duration" attrs="{'invisible': [('jenis_transaksi','!=','langganan_baru'), ('jenis_transaksi','!=','perpanjang'),]}" />
-                                <field name="awal" attrs="{'invisible': [('jenis_transaksi','!=','langganan_baru'), ('jenis_transaksi','!=','perpanjang'), ('jenis_transaksi','!=','stop')], 'readonly': [('jenis_transaksi','!=','langganan_baru')] }" />
-                                <field name="akhir" attrs="{'invisible': [('jenis_transaksi','!=','langganan_baru'), ('jenis_transaksi','!=','perpanjang'), ('jenis_transaksi','!=','stop')], 'readonly': [('jenis_transaksi','!=','langganan_baru')]}" />
+                                <field name="awal" attrs="{'invisible': [('jenis_transaksi','!=','langganan_baru'), ('jenis_transaksi','!=','perpanjang'), ('jenis_transaksi','!=','stop')], }" />
+                                <field name="akhir" attrs="{'invisible': [('jenis_transaksi','!=','langganan_baru'), ('jenis_transaksi','!=','perpanjang'), ('jenis_transaksi','!=','stop')], }" />
                                 <field name="val_harga"/>
                                 <field name="tanggal"/>
                                 <field name="adm"/>
@@ -48,8 +48,8 @@
                                 <field name="warna" attrs="{'readonly': [('jenis_transaksi','!=','langganan_baru')]}" />
                             </group>
                             <group>
-                                <field name="start_date"/>
-                                <field name="end_date"/>
+                                <field name="start_date" attrs="{'invisible': [('jenis_transaksi','==','langganan_baru'), ]}" />
+                                <field name="end_date" attrs="{'invisible': [('jenis_transaksi','==','langganan_baru'), ]}" />
                             </group>
                         </group>
                         <group>

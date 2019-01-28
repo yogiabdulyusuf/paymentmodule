@@ -11,53 +11,54 @@ class RequestTransStiker(models.Model):
     @api.onchange('unit_kerja')
     def _change_trans_stiker(self):
         res = {}
-        res['domain'] = {'stiker_id':[('unit_kerja', '=', self.unit_kerja.id)]}
+        res['domain'] = {'stiker_id':[('stasiun_kerja_id', '=', self.unit_kerja.id)]}
         return res
 
     @api.onchange('stiker_id')
     def _get_stiker(self):
-        name = ''
-        no_id = ''
-        jenis_transaksi = ''
-        awal = ''
-        akhir = ''
-        cara_bayar = ''
-        nopol = ''
-        jenis_mobil = ''
-        merk = ''
-        tipe = ''
-        tahun = ''
-        color = ''
-
-        for data_detail in self.stiker_id:
-            name = data_detail.name
-            no_id = data_detail.no_id
-            jenis_transaksi = data_detail.jenis_transaksi
-            awal = data_detail.awal
-            akhir = data_detail.akhir
-            cara_bayar = data_detail.cara_bayar
-            nopol = data_detail.detail_ids.nopol
-            jenis_mobil = data_detail.detail_ids.jenis_mobil
-            merk = data_detail.detail_ids.merk
-            tipe = data_detail.detail_ids.tipe
-            tahun = data_detail.detail_ids.tahun
-            color = data_detail.detail_ids.warna
-        self.name = name
-        self.no_id = no_id
-        if jenis_transaksi == "langganan_baru":
-            jenis_transaksi = "perpanjang"
-        self.jenis_transaksi = jenis_transaksi
-        self.awal = awal
-        self.akhir = akhir
-        self.cara_bayar = cara_bayar
-        self.nopol = nopol
-        self.jenis_mobil = jenis_mobil
-        self.merk = merk
-        self.tipe = tipe
-        self.tahun = tahun
-        self.warna = color
 
         if self.baru == True:
+            name = ''
+            no_id = ''
+            jenis_transaksi = ''
+            awal = ''
+            akhir = ''
+            cara_bayar = ''
+            nopol = ''
+            jenis_mobil = ''
+            merk = ''
+            tipe = ''
+            tahun = ''
+            color = ''
+
+            # AMBIL DATA STIKER DARI TRANS STIKER
+            for data_detail in self.stiker_id:
+                name = data_detail.name
+                no_id = data_detail.no_id
+                jenis_transaksi = data_detail.jenis_transaksi
+                awal = data_detail.awal
+                akhir = data_detail.akhir
+                cara_bayar = data_detail.cara_bayar
+                nopol = data_detail.detail_ids.nopol
+                jenis_mobil = data_detail.detail_ids.jenis_mobil
+                merk = data_detail.detail_ids.merk
+                tipe = data_detail.detail_ids.tipe
+                tahun = data_detail.detail_ids.tahun
+                color = data_detail.detail_ids.warna
+            self.name = name
+            self.no_id = no_id
+            if jenis_transaksi == "langganan_baru":
+                jenis_transaksi = "perpanjang"
+            self.jenis_transaksi = jenis_transaksi
+            self.awal = awal
+            self.akhir = akhir
+            self.cara_bayar = cara_bayar
+            self.nopol = nopol
+            self.jenis_mobil = jenis_mobil
+            self.merk = merk
+            self.tipe = tipe
+            self.tahun = tahun
+            self.warna = color
 
             jenis_member_st_ids = self.env.user.company_id.jenis_member_st
             jenis_member_nd_ids = self.env.user.company_id.jenis_member_nd
@@ -70,7 +71,10 @@ class RequestTransStiker(models.Model):
             if not jenis_member_th_ids:
                 raise ValidationError("Price 4th Membership not defined,  please define on company information!")
 
-            check_row = self.no_id[4]
+            if self.no_id != '':
+                check_row = self.no_id[4]
+            else:
+                check_row = ''
 
             if check_row == "1st":
                 self.val_harga = jenis_member_st_ids
@@ -91,40 +95,45 @@ class RequestTransStiker(models.Model):
         else:
             self.val_harga = 0
 
-    @api.onchange('stiker_id', 'baru', 'jenis_transaksi')
-    def _change_harga_langganan(self):
-        if self.baru == True:
-
-            jenis_member_st_ids = self.env.user.company_id.jenis_member_st
-            jenis_member_nd_ids = self.env.user.company_id.jenis_member_nd
-            if not jenis_member_nd_ids:
-                raise ValidationError("Price 2nd Membership not defined,  please define on company information!")
-            jenis_member_rd_ids = self.env.user.company_id.jenis_member_rd
-            if not jenis_member_rd_ids:
-                raise ValidationError("Price 3rd Membership not defined,  please define on company information!")
-            jenis_member_th_ids = self.env.user.company_id.jenis_member_th
-            if not jenis_member_th_ids:
-                raise ValidationError("Price 4th Membership not defined,  please define on company information!")
-
-            check_row = self.no_id[4]
-
-            if check_row == "1st":
-                self.val_harga = jenis_member_st_ids
-                self.jenis_member = "1st"
-            elif check_row == "2nd":
-                self.val_harga = jenis_member_nd_ids
-                self.jenis_member = "2nd"
-            elif check_row == "3rd":
-                self.val_harga = jenis_member_rd_ids
-                self.jenis_member = "3rd"
-            elif check_row == "4th":
-                self.val_harga = jenis_member_th_ids
-                self.jenis_member = "4th"
-            else:
-                self.val_harga = jenis_member_st_ids
-                self.jenis_member = "1st"
-        else:
-            self.val_harga = 0
+    # @api.onchange('stiker_id', 'baru', 'jenis_transaksi')
+    # def _change_harga_langganan(self):
+    #     if self.baru == True:
+    #
+    #         jenis_member_st_ids = self.env.user.company_id.jenis_member_st
+    #         jenis_member_nd_ids = self.env.user.company_id.jenis_member_nd
+    #         if not jenis_member_nd_ids:
+    #             raise ValidationError("Price 2nd Membership not defined,  please define on company information!")
+    #         jenis_member_rd_ids = self.env.user.company_id.jenis_member_rd
+    #         if not jenis_member_rd_ids:
+    #             raise ValidationError("Price 3rd Membership not defined,  please define on company information!")
+    #         jenis_member_th_ids = self.env.user.company_id.jenis_member_th
+    #         if not jenis_member_th_ids:
+    #             raise ValidationError("Price 4th Membership not defined,  please define on company information!")
+    #
+    #         if self.no_id != '':
+    #             check_row = self.no_id[4]
+    #         else:
+    #             check_row = ''
+    #
+    #         if check_row == "1st":
+    #             self.val_harga = jenis_member_st_ids
+    #             self.jenis_member = "1st"
+    #         elif check_row == "2nd":
+    #             self.val_harga = jenis_member_nd_ids
+    #             self.jenis_member = "2nd"
+    #         elif check_row == "3rd":
+    #             self.val_harga = jenis_member_rd_ids
+    #             self.jenis_member = "3rd"
+    #         elif check_row == "4th":
+    #             self.val_harga = jenis_member_th_ids
+    #             self.jenis_member = "4th"
+    #         elif check_row == "":
+    #             self.jenis_member = ""
+    #         else:
+    #             self.val_harga = jenis_member_st_ids
+    #             self.jenis_member = "1st"
+    #     else:
+    #         self.val_harga = 0
 
 
     @api.onchange('beli_stiker','ganti_nopol','kartu_hilang')
@@ -236,17 +245,17 @@ class RequestTransStiker(models.Model):
     name = fields.Char(string="Nama", )
     no_id = fields.Char(string="No ID", )
     duration = fields.Integer('Duration', default=0, required=False)
-    awal = fields.Datetime(string="Start Date", required=False, )
-    akhir = fields.Datetime(string="End Date", required=False, )
+    awal = fields.Datetime(string="Start Date", required=False, readonly=True,)
+    akhir = fields.Datetime(string="End Date", required=False, readonly=True,)
     start_date = fields.Datetime(string="New Start Date", required=False, readonly=True,)
     end_date = fields.Datetime(string="New End Date", required=False, readonly=True,)
     val_harga = fields.Integer(string="Harga", required=False, readonly=True)
-    tanggal = fields.Datetime(string="Date", required=False, readonly=True, default=fields.Date.today())
+    tanggal = fields.Datetime(string="Date", required=False, readonly=True, default=fields.Datetime().now())
     adm = fields.Many2one(comodel_name="res.users", string="Created By", required=False, default=lambda self: self.env.user and self.env.user.id or False, readonly=True)
     jenis_member = fields.Selection(string="Mobil", selection=[('1st', '1st'), ('2nd', '2nd'), ('3rd', '3rd'), ('4th', '4th'), ], required=False, )
     jenis_transaksi = fields.Selection(string="Jenis Transaksi",
                                        selection=[('langganan_baru', 'LANGGANAN BARU'), ('perpanjang', 'PERPANJANG'), ('stop', 'STOP'), ],
-                                       required=True, readonly=False, default="langganan_baru")
+                                       required=True, readonly=False, )
     cara_bayar = fields.Selection(string="Cara Pembayaran",
                                       selection=[('billing', 'Billing'), ('non_billing', 'Non Billing'), ], required=False, )
     nopol = fields.Char(string="No Polisi", required=False, )

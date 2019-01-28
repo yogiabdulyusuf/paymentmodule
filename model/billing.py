@@ -22,7 +22,7 @@ class BillingPeriode(models.Model):
 
             arg = [('no_id', '=', row.no_id), ('jenis_member', '!=', '1st'), ('approvedstatus', '=', '1'), ('status', '=', '1'), ]
 
-            list = self.env['request.transstiker'].search(arg, order='akhir desc')
+            list = self.env['request.transstiker'].search(arg, order='notrans desc')
             #_logger.info(line_check.no_id)
 
             for line in list:
