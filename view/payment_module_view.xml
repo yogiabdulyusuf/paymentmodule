@@ -8,7 +8,7 @@
             <field name="arch" type="xml">
                 <form string="Request Transaction Stiker Form">
                     <header>
-                        <button name="update_startdate_enddate" string="Done Payment" type="object" class="oe_highlight" confirm="has the customer paid?" states="payment" />
+                        <button name="trans_done_payment" string="Done Payment" type="object" class="oe_highlight" confirm="has the customer paid?" states="payment" />
                         <field name="state" widget="statusbar" statusbar_visible="open,payment,done"/>
                     </header>
                     <sheet>
@@ -20,7 +20,7 @@
                             <field name="unit_kerja"/>
                         </group>
                         <group>
-                            <field name="stiker_id" attrs="{'invisible': [('jenis_transaksi','==','langganan_baru'), ]}" />
+                            <field name="stiker_id" attrs="{'readonly': [('jenis_transaksi','=','langganan_baru')], 'required': [('jenis_transaksi','=','perpanjang'), ('jenis_transaksi','=','stop')]}" />
                         </group>
                         <group>
                             <group><field name="baru" /></group>
@@ -29,7 +29,7 @@
                             <group>
                                 <field name="jenis_transaksi"  />
                                 <field name="name" attrs="{'readonly': [('jenis_transaksi','!=','langganan_baru')], 'required': [('baru','!=', False)], }" />
-                                <field name="no_id" attrs="{'readonly': [('jenis_transaksi','!=','langganan_baru')], 'required': [('baru','!=', False)], }" />
+                                <field name="no_id" />
                                 <field name="duration" attrs="{'invisible': [('jenis_transaksi','!=','langganan_baru'), ('jenis_transaksi','!=','perpanjang'),]}" />
                                 <field name="awal" attrs="{'invisible': [('jenis_transaksi','!=','langganan_baru'), ('jenis_transaksi','!=','perpanjang'), ('jenis_transaksi','!=','stop')], }" />
                                 <field name="akhir" attrs="{'invisible': [('jenis_transaksi','!=','langganan_baru'), ('jenis_transaksi','!=','perpanjang'), ('jenis_transaksi','!=','stop')], }" />
@@ -47,10 +47,9 @@
                                 <field name="tahun" attrs="{'readonly': [('jenis_transaksi','!=','langganan_baru')]}" />
                                 <field name="warna" attrs="{'readonly': [('jenis_transaksi','!=','langganan_baru')]}" />
                             </group>
-                            <group>
-                                <field name="start_date" attrs="{'invisible': [('jenis_transaksi','==','langganan_baru'), ]}" />
-                                <field name="end_date" attrs="{'invisible': [('jenis_transaksi','==','langganan_baru'), ]}" />
-                            </group>
+
+                            <field name="keterangan" />
+
                         </group>
                         <group>
                             <field name="beli_stiker" />
