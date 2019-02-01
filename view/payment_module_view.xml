@@ -20,7 +20,7 @@
                             <field name="unit_kerja"/>
                         </group>
                         <group>
-                            <field name="stiker_id" attrs="{'readonly': [('jenis_transaksi','=','langganan_baru')], 'required': [('jenis_transaksi','=','perpanjang'), ('jenis_transaksi','=','stop')]}" />
+                            <field name="stiker_id" attrs="{'readonly': [('jenis_transaksi','=','langganan_baru')], 'required': [('jenis_transaksi','!=','langganan_baru')]}" />
                         </group>
                         <group>
                             <group><field name="baru" /></group>
@@ -29,6 +29,8 @@
                             <group>
                                 <field name="jenis_transaksi"  />
                                 <field name="name" attrs="{'readonly': [('jenis_transaksi','!=','langganan_baru')], 'required': [('baru','!=', False)], }" />
+                                <field name="alamat" />
+                                <field name="telphone" />
                                 <field name="no_id" />
                                 <field name="duration" attrs="{'invisible': [('jenis_transaksi','!=','langganan_baru'), ('jenis_transaksi','!=','perpanjang'),]}" />
                                 <field name="awal" attrs="{'invisible': [('jenis_transaksi','!=','langganan_baru'), ('jenis_transaksi','!=','perpanjang'), ('jenis_transaksi','!=','stop')], }" />

@@ -5,6 +5,7 @@
 		"base",
 		"mail",
 		"report",
+		"base_external_dbsource",
 	],
 	"author": "jakc-labs",
 	"category": "PaymentModule",

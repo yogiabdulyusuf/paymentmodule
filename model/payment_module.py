@@ -32,8 +32,6 @@ class RequestTransStiker(models.Model):
 
 
 
-
-
     @api.onchange('unit_kerja')
     def _change_trans_stiker(self):
         res = {}
@@ -47,6 +45,8 @@ class RequestTransStiker(models.Model):
             if self.stiker_id:
                 # Ambil data dari trans_id
                 name = ''
+                alamat = ''
+                telphone = ''
                 no_id = ''
                 jenis_transaksi = ''
                 awal = ''
@@ -74,6 +74,8 @@ class RequestTransStiker(models.Model):
                     tahun = data_detail.detail_ids.tahun
                     color = data_detail.detail_ids.warna
                 self.name = name
+                self.alamat = alamat
+                self.telphone = telphone
                 self.no_id = no_id
                 if jenis_transaksi == "langganan_baru":
                     jenis_transaksi = "perpanjang"
@@ -155,6 +157,72 @@ class RequestTransStiker(models.Model):
                         self.val_harga = 0
 
 
+                elif not self.jenis_transaksi:
+                    # kosongkan
+                    name = ''
+                    alamat = ''
+                    telphone = ''
+                    no_id = ''
+                    jenis_transaksi = ''
+                    awal = ''
+                    akhir = ''
+                    cara_bayar = ''
+                    nopol = ''
+                    jenis_mobil = ''
+                    merk = ''
+                    tipe = ''
+                    tahun = ''
+                    color = ''
+
+                    self.name = name
+                    self.alamat = alamat
+                    self.telphone = telphone
+                    self.no_id = no_id
+                    self.jenis_transaksi = jenis_transaksi
+                    self.awal = awal
+                    self.akhir = akhir
+                    self.cara_bayar = cara_bayar
+                    self.nopol = nopol
+                    self.jenis_mobil = jenis_mobil
+                    self.merk = merk
+                    self.tipe = tipe
+                    self.tahun = tahun
+                    self.warna = color
+
+
+        else:
+            # kosongkan
+            name = ''
+            alamat = ''
+            telphone = ''
+            no_id = ''
+            jenis_transaksi = ''
+            awal = ''
+            akhir = ''
+            cara_bayar = ''
+            nopol = ''
+            jenis_mobil = ''
+            merk = ''
+            tipe = ''
+            tahun = ''
+            color = ''
+
+            self.name = name
+            self.alamat = alamat
+            self.telphone = telphone
+            self.no_id = no_id
+            self.jenis_transaksi = jenis_transaksi
+            self.awal = awal
+            self.akhir = akhir
+            self.cara_bayar = cara_bayar
+            self.nopol = nopol
+            self.jenis_mobil = jenis_mobil
+            self.merk = merk
+            self.tipe = tipe
+            self.tahun = tahun
+            self.warna = color
+
+
     @api.onchange('beli_stiker','ganti_nopol','kartu_hilang')
     def _change_harga_beli_stiker(self):
         if self.beli_stiker == True:
@@ -225,167 +293,207 @@ class RequestTransStiker(models.Model):
                 if v.jenis_transaksi == "langganan_baru":
                     # Process create langganan_baru to Server Database Parkir and update trans_id
                     base_external_dbsource_obj = self.env['base.external.dbsource']
-                    # stasiunkerja_obj = self.env['stasiun.kerja']
-                    # transaksi_stiker_obj = self.env['trans.stiker']
-                    # detail_stiker_obj = self.env['detail.transstiker']
+                    stasiunkerja_obj = self.env['stasiun.kerja']
+                    transaksi_stiker_obj = self.env['trans.stiker']
+                    detail_stiker_obj = self.env['detail.transstiker']
                     postgresconn = base_external_dbsource_obj.browse(1)
                     postgresconn.connection_open()
                     _logger.info("Connection Open")
                     _logger.info("Sync Stasiun Kerja")
 
+                    check = self.jenis_transaksi
+                    if check == "langganan_baru":
+                        jt = "0"
+                    elif check == "perpanjang":
+                        jt = "1"
+                    elif check == "stop":
+                        jt = "2"
 
-                # Insert Data Trans Stiker with Odoo to Database Server Parkir
+                    check_row = self.jenis_member
+                    if check_row == "1st":
+                        j_member = 'C'
+                    elif check_row == "2nd":
+                        j_member = 'C2'
+                    elif check_row == "3rd":
+                        j_member = 'C3'
+                    elif check_row == "4th":
+                        j_member = 'C4'
+
+                    DATE = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+
+                    # Insert Data Trans Stiker with Odoo to Database Server Parkir
                     _logger.info('Insert Data Trans Stiker')
-                    strSQL = """INSERT INTO transaksi_stiker_tes""" \ 
+                    strSQL = """INSERT INTO transaksi_stiker_tes """ \
                              """(notrans, nama, alamat, telepon, jenis_transaksi, awal, harga, keterangan, tanggal, operator, akhir,""" \
                              """maks, no_id, unit_kerja, no_induk, jenis_stiker, hari_ke, jenis_langganan, exit_pass, no_kuitansi, tgl_edited,""" \
                              """tipe_exit_pass, seq_code, unitno, area, reserved, cara_bayar)""" \
-                             """VALUES""" \
-                             """({}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {},""" \
-                             """{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {})""".format(self.no_id, self.name, self.alamat, self.telphone, self.jenis_transaksi, self.awal, self.val_harga, self.keterangan, self.tanggal, self.adm, self.akhir,"",self.no_id, self.unit_kerja, "", "", "", "", "", self.no_id, "", "", "", "", "", "", "")
+                             """ VALUES """ \
+                             """('{}', '{}', '{}', '{}', '{}', '{}', '0', '{}', '{}', '{}', '{}', '1',""" \
+                             """'{}', '{}', NULL, '0', NULL, '{}', '0', '{}', '{}', '1', '0', NULL, NULL, '0', '0')""".format(
+                        self.no_id, self.name, self.alamat, self.telphone, jt, self.awal,self.keterangan, self.tanggal, self.adm.name,
+                        self.akhir, self.no_id, self.unit_kerja.kode, j_member, self.no_id, DATE)
 
-                    transaksistikers = postgresconn.execute(query=strSQL, metadata=False)
+                    postgresconn.execute_general(strSQL)
 
-                    _logger.info(transaksistikers)
+                    # Insert Detail Trans Stiker with Odoo to Database Server Parkir
+                    _logger.info('Insert Detail Trans Stiker')
+                    strSQL2 = """INSERT INTO detail_transaksi_stiker_tes """ \
+                             """(notrans, nopol, jenis_mobil, adm, kategori, jenis_member, akses, akses_out, status, merk, tipe,""" \
+                             """tahun, warna, keterangan)""" \
+                             """ VALUES """ \
+                             """('{}', '{}', '{}', '{}', '0', '{}', NULL, NULL, '1', '{}', '{}', '{}',""" \
+                             """'{}', '{}')""".format(
+                        self.no_id, self.nopol, self.jenis_mobil, self.adm.name, self.jenis_member, self.merk,
+                        self.tipe, self.tahun, self.warna, self.keterangan)
+
+                    # _logger.info()
+                    postgresconn.execute_general(strSQL2)
+
 
                     # a = """Nama Saya {}""".format("Wahyu")
 
 
-                # UPDATE TRANS STIKER WITH DATABASE SERVER PARKIR
-                #     _logger.info('Sync Transaksi Stiker')
-                #     strSQL = 'SELECT ' \
-                #              '"notrans","nama","alamat","telepon","jenis_transaksi",' \
-                #              '"awal","harga","keterangan","tanggal","operator","akhir",' \
-                #              '"maks","no_id","unit_kerja","no_induk","jenis_stiker","hari_ke",' \
-                #              '"jenis_langganan","exit_pass","no_kuitansi","tgl_edited","tipe_exit_pass",' \
-                #              '"seq_code","unitno","area","reserved","cara_bayar" ' \
-                #              'FROM "public"."transaksi_stiker"'
-                #
-                #     transaksistikers = postgresconn.execute(query=strSQL, metadata=False)
-                #     for transaksistiker in transaksistikers:
-                #         current_record = self.find_transaksi_stiker(transaksistiker[0])
-                #         if current_record:
-                #             stasiunkerja = self.find_stasiun_kerja(transaksistiker[13])
-                #             vals = {}
-                #             vals.update({'stasiun_kerja_id': stasiunkerja.id})
-                #             vals.update({'notrans': transaksistiker[0]})
-                #             vals.update({'name': transaksistiker[1]})
-                #             vals.update({'alamat': transaksistiker[2]})
-                #             vals.update({'telphone': transaksistiker[3]})
-                #             if int(transaksistiker[4]) == 0:
-                #                 vals.update({'jenis_transaksi': 'langganan_baru'})
-                #             else:
-                #                 vals.update({'jenis_transaksi': 'perpanjang'})
-                #             vals.update({'awal': transaksistiker[5]})
-                #             vals.update({'harga': transaksistiker[6]})
-                #             vals.update({'keterangan': transaksistiker[7]})
-                #             vals.update({'tanggal': transaksistiker[8]})
-                #             vals.update({'operator': transaksistiker[9]})
-                #             vals.update({'akhir': transaksistiker[10]})
-                #             vals.update({'maks': transaksistiker[11]})
-                #             vals.update({'no_id': transaksistiker[12]})
-                #             vals.update({'unit_kerja': stasiunkerja.id})
-                #             vals.update({'no_induk': transaksistiker[14]})
-                #             vals.update({'jenis_stiker': str(transaksistiker[15])})
-                #             vals.update({'hari_ke': transaksistiker[16]})
-                #             vals.update({'jenis_langganan': transaksistiker[17]})
-                #             vals.update({'exit_pass': transaksistiker[18]})
-                #             vals.update({'no_kuitansi': transaksistiker[19]})
-                #             vals.update({'tgl_edited': transaksistiker[20]})
-                #             vals.update({'tipe_exit_pass': transaksistiker[21]})
-                #             vals.update({'seq_code': transaksistiker[22]})
-                #             vals.update({'unitno': transaksistiker[23]})
-                #             vals.update({'area': transaksistiker[24]})
-                #             vals.update({'reserved': transaksistiker[25]})
-                #             vals.update({'cara_bayar': 'non_billing'})
-                #             current_record.write(vals)
-                #             _logger.info('Transaksi Stiker Updated')
-                #         else:
-                #             stasiunkerja = self.find_stasiun_kerja(transaksistiker[13])
-                #             vals = {}
-                #             vals.update({'stasiun_kerja_id': stasiunkerja.id})
-                #             vals.update({'notrans': transaksistiker[0]})
-                #             vals.update({'name': transaksistiker[1]})
-                #             vals.update({'alamat': transaksistiker[2]})
-                #             vals.update({'telphone': transaksistiker[3]})
-                #             if int(transaksistiker[4]) == 0:
-                #                 vals.update({'jenis_transaksi': 'langganan_baru'})
-                #             else:
-                #                 vals.update({'jenis_transaksi': 'perpanjang'})
-                #             vals.update({'awal': transaksistiker[5]})
-                #             vals.update({'harga': transaksistiker[6]})
-                #             vals.update({'keterangan': transaksistiker[7]})
-                #             vals.update({'tanggal': transaksistiker[8]})
-                #             vals.update({'operator': transaksistiker[9]})
-                #             vals.update({'akhir': transaksistiker[10]})
-                #             vals.update({'maks': transaksistiker[11]})
-                #             vals.update({'no_id': transaksistiker[12]})
-                #             vals.update({'unit_kerja': transaksistiker[13]})
-                #             vals.update({'no_induk': transaksistiker[14]})
-                #             vals.update({'jenis_stiker': int(transaksistiker[15])})
-                #             vals.update({'hari_ke': transaksistiker[16]})
-                #             vals.update({'jenis_langganan': transaksistiker[17]})
-                #             vals.update({'exit_pass': transaksistiker[18]})
-                #             vals.update({'no_kuitansi': transaksistiker[19]})
-                #             vals.update({'tgl_edited': transaksistiker[20]})
-                #             vals.update({'tipe_exit_pass': transaksistiker[21]})
-                #             vals.update({'seq_code': transaksistiker[22]})
-                #             vals.update({'unitno': transaksistiker[23]})
-                #             vals.update({'area': transaksistiker[24]})
-                #             vals.update({'reserved': transaksistiker[25]})
-                #             vals.update({'cara_bayar': 'non_billing'})
-                #             transaksi_stiker_obj.create(vals)
-                #             _logger.info('Transaksi Stiker Created')
-                #
-                #     _logger.info('Sync Detail Transaksi Stiker')
-                #     strSQL = 'SELECT "notrans","nopol","jenis_mobil","adm","kategori",' \
-                #              '"jenis_member","akses","akses_out","status","merk","tipe",' \
-                #              '"tahun","warna","keterangan" FROM "public"."detail_transaksi_stiker"'
-                #
-                #     detailstikers = postgresconn.execute(query=strSQL, metadata=False)
-                #     for detailstiker in detailstikers:
-                #         current_record = self.find_detail_stiker(detailstiker[0])
-                #         if current_record:
-                #             transaksistiker = self.find_transaksi_stiker(detailstiker[0])
-                #             vals = {}
-                #             vals.update({'trans_stiker_id': transaksistiker.id})
-                #             vals.update({'notrans': detailstiker[0]})
-                #             vals.update({'nopol': detailstiker[1]})
-                #             vals.update({'jenis_mobil': detailstiker[2]})
-                #             vals.update({'adm': detailstiker[3]})
-                #             vals.update({'kategori': detailstiker[4]})
-                #             vals.update({'jenis_member': detailstiker[5]})
-                #             vals.update({'akses': detailstiker[6]})
-                #             vals.update({'akses_out': detailstiker[7]})
-                #             vals.update({'status': detailstiker[8]})
-                #             vals.update({'merk': detailstiker[9]})
-                #             vals.update({'tipe': detailstiker[10]})
-                #             vals.update({'tahun': detailstiker[11]})
-                #             vals.update({'warna': detailstiker[12]})
-                #             vals.update({'keterangan': detailstiker[13]})
-                #             current_record.write(vals)
-                #             _logger.info("Detail Updated")
-                #         else:
-                #             transaksistiker = self.find_transaksi_stiker(detailstiker[0])
-                #             vals = {}
-                #             vals.update({'trans_stiker_id': transaksistiker.id})
-                #             vals.update({'notrans': detailstiker[0]})
-                #             vals.update({'nopol': detailstiker[1]})
-                #             vals.update({'jenis_mobil': detailstiker[2]})
-                #             vals.update({'adm': detailstiker[3]})
-                #             vals.update({'kategori': detailstiker[4]})
-                #             vals.update({'jenis_member': detailstiker[5]})
-                #             vals.update({'akses': detailstiker[6]})
-                #             vals.update({'akses_out': detailstiker[7]})
-                #             vals.update({'status': detailstiker[8]})
-                #             vals.update({'merk': detailstiker[9]})
-                #             vals.update({'tipe': detailstiker[10]})
-                #             vals.update({'tahun': detailstiker[11]})
-                #             vals.update({'warna': detailstiker[12]})
-                #             vals.update({'keterangan': detailstiker[13]})
-                #             detail_stiker_obj.create(vals)
-                #             _logger.info("Detail Created")
+                    # UPDATE TRANS STIKER WITH DATABASE SERVER PARKIR
+                    _logger.info('Sync Transaksi Stiker')
+                    strSQL = """SELECT """ \
+                             """'notrans','nama','alamat','telepon','jenis_transaksi',""" \
+                             """'awal','harga','keterangan','tanggal','operator','akhir',""" \
+                             """'maks','no_id','unit_kerja','no_induk','jenis_stiker','hari_ke',""" \
+                             """'jenis_langganan','exit_pass','no_kuitansi','tgl_edited','tipe_exit_pass',""" \
+                             """'seq_code','unitno','area','reserved','cara_bayar' """ \
+                             """FROM transaksi_stiker_tes WHERE no_id='{}'""".format(self.no_id)
 
+                    transaksistikers = postgresconn.execute(query=strSQL, metadata=False)
+                    for transaksistiker in transaksistikers:
+                        current_record = self.find_transaksi_stiker(transaksistiker[0])
+                        if current_record:
+                            stasiunkerja = self.find_stasiun_kerja(transaksistiker[13])
+                            vals = {}
+                            vals.update({'stasiun_kerja_id': stasiunkerja.id})
+                            vals.update({'notrans': transaksistiker[0]})
+                            vals.update({'name': transaksistiker[1]})
+                            vals.update({'alamat': transaksistiker[2]})
+                            vals.update({'telphone': transaksistiker[3]})
+                            if int(transaksistiker[4]) == 0:
+                                vals.update({'jenis_transaksi': 'langganan_baru'})
+                            else:
+                                vals.update({'jenis_transaksi': 'perpanjang'})
+                            vals.update({'awal': transaksistiker[5]})
+                            vals.update({'harga': transaksistiker[6]})
+                            vals.update({'keterangan': transaksistiker[7]})
+                            vals.update({'tanggal': transaksistiker[8]})
+                            vals.update({'operator': transaksistiker[9]})
+                            vals.update({'akhir': transaksistiker[10]})
+                            vals.update({'maks': transaksistiker[11]})
+                            vals.update({'no_id': transaksistiker[12]})
+                            vals.update({'unit_kerja': stasiunkerja.id})
+                            vals.update({'no_induk': transaksistiker[14]})
+                            vals.update({'jenis_stiker': str(transaksistiker[15])})
+                            vals.update({'hari_ke': transaksistiker[16]})
+                            vals.update({'jenis_langganan': transaksistiker[17]})
+                            vals.update({'exit_pass': transaksistiker[18]})
+                            vals.update({'no_kuitansi': transaksistiker[19]})
+                            vals.update({'tgl_edited': transaksistiker[20]})
+                            vals.update({'tipe_exit_pass': transaksistiker[21]})
+                            vals.update({'seq_code': transaksistiker[22]})
+                            vals.update({'unitno': transaksistiker[23]})
+                            vals.update({'area': transaksistiker[24]})
+                            vals.update({'reserved': transaksistiker[25]})
+                            vals.update({'cara_bayar': 'non_billing'})
+                            current_record.write(vals)
+                            _logger.info('Transaksi Stiker Updated')
+                        else:
+                            stasiunkerja = self.find_stasiun_kerja(transaksistiker[13])
+                            vals = {}
+                            vals.update({'stasiun_kerja_id': stasiunkerja.id})
+                            vals.update({'notrans': transaksistiker[0]})
+                            vals.update({'name': transaksistiker[1]})
+                            vals.update({'alamat': transaksistiker[2]})
+                            vals.update({'telphone': transaksistiker[3]})
+                            if int(transaksistiker[4]) == 0:
+                                vals.update({'jenis_transaksi': 'langganan_baru'})
+                            else:
+                                vals.update({'jenis_transaksi': 'perpanjang'})
+                            vals.update({'awal': transaksistiker[5]})
+                            vals.update({'harga': transaksistiker[6]})
+                            vals.update({'keterangan': transaksistiker[7]})
+                            vals.update({'tanggal': transaksistiker[8]})
+                            vals.update({'operator': transaksistiker[9]})
+                            vals.update({'akhir': transaksistiker[10]})
+                            vals.update({'maks': transaksistiker[11]})
+                            vals.update({'no_id': transaksistiker[12]})
+                            vals.update({'unit_kerja': transaksistiker[13]})
+                            vals.update({'no_induk': transaksistiker[14]})
+                            vals.update({'jenis_stiker': int(transaksistiker[15])})
+                            vals.update({'hari_ke': transaksistiker[16]})
+                            vals.update({'jenis_langganan': transaksistiker[17]})
+                            vals.update({'exit_pass': transaksistiker[18]})
+                            vals.update({'no_kuitansi': transaksistiker[19]})
+                            vals.update({'tgl_edited': transaksistiker[20]})
+                            vals.update({'tipe_exit_pass': transaksistiker[21]})
+                            vals.update({'seq_code': transaksistiker[22]})
+                            vals.update({'unitno': transaksistiker[23]})
+                            vals.update({'area': transaksistiker[24]})
+                            vals.update({'reserved': transaksistiker[25]})
+                            vals.update({'cara_bayar': 'non_billing'})
+                            transaksi_stiker_obj.create(vals)
+                            _logger.info('Transaksi Stiker Created')
+
+                    _logger.info('Sync Detail Transaksi Stiker')
+                    strSQL = """SELECT 'notrans','nopol','jenis_mobil','adm','kategori',""" \
+                             """'jenis_member','akses','akses_out','status','merk','tipe',""" \
+                             """'tahun','warna','keterangan' FROM detail_transaksi_stiker_tes WHERE notrans='{}'""".format(self.no_id)
+
+                    detailstikers = postgresconn.execute(query=strSQL, metadata=False)
+                    for detailstiker in detailstikers:
+                        current_record = self.find_detail_stiker(detailstiker[0])
+                        if current_record:
+                            transaksistiker = self.find_transaksi_stiker(detailstiker[0])
+                            vals = {}
+                            vals.update({'trans_stiker_id': transaksistiker.id})
+                            vals.update({'notrans': detailstiker[0]})
+                            vals.update({'nopol': detailstiker[1]})
+                            vals.update({'jenis_mobil': detailstiker[2]})
+                            vals.update({'adm': detailstiker[3]})
+                            vals.update({'kategori': detailstiker[4]})
+                            vals.update({'jenis_member': detailstiker[5]})
+                            vals.update({'akses': detailstiker[6]})
+                            vals.update({'akses_out': detailstiker[7]})
+                            vals.update({'status': detailstiker[8]})
+                            vals.update({'merk': detailstiker[9]})
+                            vals.update({'tipe': detailstiker[10]})
+                            vals.update({'tahun': detailstiker[11]})
+                            vals.update({'warna': detailstiker[12]})
+                            vals.update({'keterangan': detailstiker[13]})
+                            current_record.write(vals)
+                            _logger.info("Detail Updated")
+                        else:
+                            transaksistiker = self.find_transaksi_stiker(detailstiker[0])
+                            vals = {}
+                            vals.update({'trans_stiker_id': transaksistiker.id})
+                            vals.update({'notrans': detailstiker[0]})
+                            vals.update({'nopol': detailstiker[1]})
+                            vals.update({'jenis_mobil': detailstiker[2]})
+                            vals.update({'adm': detailstiker[3]})
+                            vals.update({'kategori': detailstiker[4]})
+                            vals.update({'jenis_member': detailstiker[5]})
+                            vals.update({'akses': detailstiker[6]})
+                            vals.update({'akses_out': detailstiker[7]})
+                            vals.update({'status': detailstiker[8]})
+                            vals.update({'merk': detailstiker[9]})
+                            vals.update({'tipe': detailstiker[10]})
+                            vals.update({'tahun': detailstiker[11]})
+                            vals.update({'warna': detailstiker[12]})
+                            vals.update({'keterangan': detailstiker[13]})
+                            detail_stiker_obj.create(vals)
+                            _logger.info("Detail Created")
+
+                args = [('no_id', '=', self.no_id)]
+                res = self.env['trans.stiker'].search(args, limit=1)
+
+                self.stiker_id = res.id
+
+                v.state = "done"
 
             if v.ganti_nopol == True:
                 args = [('id', '=', v.stiker_id.id)]
@@ -432,11 +540,20 @@ class RequestTransStiker(models.Model):
         elif check == "4th":
             n = "4"
 
-        #_logger.info(unit)
-        tex = unit[1:5]
-        self.stiker_id = tex + str(n)
-        #_logger.info(tex)
-        self.no_id = tex + str(n)
+        if self.jenis_transaksi == "langganan_baru":
+            #_logger.info(unit)
+            tex = unit[1:5]
+            # self.stiker_id = tex + str(n)
+            #_logger.info(tex)
+            trans = tex + str(n)
+            self.no_id = trans
+
+            args = [('no_id', '=', trans)]
+            res = self.env['trans.stiker'].search(args, limit=1)
+
+            if res.no_id:
+                raise ValidationError("this trans id : "+ trans +" already exists!")
+
 
     @api.model
     def create(self, vals):
@@ -450,19 +567,19 @@ class RequestTransStiker(models.Model):
         res._generate_stiker_id()
         return res
 
-    notrans = fields.Char(string="Transaksi ID", readonly=True)
-    unit_kerja = fields.Many2one('stasiun.kerja','Unit Kerja #', required=True)
-    stiker_id = fields.Many2one('trans.stiker','Stiker #', required=False, )
+    notrans = fields.Char(string="Transaksi ID", readonly=True) #
+    unit_kerja = fields.Many2one('stasiun.kerja','Unit Kerja #', required=True) #
+    stiker_id = fields.Many2one('trans.stiker','Stiker #', required=True, )
     name = fields.Char(string="Nama", )
     alamat = fields.Char(string="Alamat", required=False, )
     telphone = fields.Char(string="No Telphone", required=False, )
-    no_id = fields.Char(string="No ID", readonly=True,)
+    no_id = fields.Char(string="No ID", readonly=True,) #
     duration = fields.Integer('Duration', default=1, required=False)
-    awal = fields.Datetime(string="Start Date", required=False, readonly=True,)
-    akhir = fields.Datetime(string="End Date", required=False, readonly=True,)
-    val_harga = fields.Integer(string="Harga", required=False, readonly=True)
-    tanggal = fields.Datetime(string="Date", required=False, readonly=True, default=fields.Datetime().now())
-    adm = fields.Many2one(comodel_name="res.users", string="Created By", required=False, default=lambda self: self.env.user and self.env.user.id or False, readonly=True)
+    awal = fields.Datetime(string="Start Date", required=False, readonly=True,) #
+    akhir = fields.Datetime(string="End Date", required=False, readonly=True,) #
+    val_harga = fields.Integer(string="Harga", required=False, readonly=True) #
+    tanggal = fields.Datetime(string="Date", required=False,  default=fields.Datetime().now(), readonly=True,) #
+    adm = fields.Many2one(comodel_name="res.users", string="Created By", required=False, default=lambda self: self.env.user and self.env.user.id or False, readonly=True) #
     jenis_member = fields.Selection(string="Mobil", selection=[('1st', '1st'), ('2nd', '2nd'), ('3rd', '3rd'), ('4th', '4th'), ], required=False, )
     jenis_transaksi = fields.Selection(string="Jenis Transaksi",
                                        selection=[('langganan_baru', 'LANGGANAN BARU'), ('perpanjang', 'PERPANJANG'), ('stop', 'STOP'), ],
@@ -476,7 +593,7 @@ class RequestTransStiker(models.Model):
     tipe = fields.Char(string="Tipe Mobil", required=False, )
     tahun = fields.Char(string="Tahun", required=False, )
     warna = fields.Char(string="Warna", required=False, )
-    amount = fields.Integer(string="Amount", required=False, readonly=True)
+    amount = fields.Integer(string="Amount", required=False, readonly=True) #
     baru = fields.Boolean(string="LANGGANAN",  )
     perpanjang = fields.Boolean(string="PERPANJANG",  default=False,)
     beli_stiker = fields.Boolean(string="BELI STIKER",  default=False,)

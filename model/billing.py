@@ -10,6 +10,9 @@ class BillingPeriode(models.Model):
     _name = 'billing.periode'
     _rec_name = 'billing_id'
 
+    def last_day_of_month(self, year, month):
+        return datetime.strptime(str(year) + '-' + str(month + 1).zfill(2) + '-01', '%Y-%m-%d') + relativedelta(days=-1)
+
     @api.one
     def trans_generate_line(self):
         args = [('jenis_transaksi','!=','stop')]
@@ -18,9 +21,9 @@ class BillingPeriode(models.Model):
         akhir = date_akhir + relativedelta(months=+2)
 
         for row in res:
-            #_logger.info(row.no_id)
+            #_logger.info(row.no_id) ('approvedstatus', '=', '1'), ('status', '=', '1'),
 
-            arg = [('no_id', '=', row.no_id), ('jenis_member', '!=', '1st'), ('approvedstatus', '=', '1'), ('status', '=', '1'), ]
+            arg = [('no_id', '=', row.no_id), ('jenis_member', '!=', '1st') ]
 
             list = self.env['request.transstiker'].search(arg, order='notrans desc')
             #_logger.info(line_check.no_id)
@@ -56,7 +59,12 @@ class BillingPeriode(models.Model):
 
                     #_logger.info(line.no_id)
                     tgl = fields.Datetime.from_string(line.akhir)
-                    str_start_date = str(self.billing_year) + "-" + str(self.billing_month).zfill(2) + "-" + str(tgl.day).zfill(2)
+                    last_day = self.last_day_of_month(self.billing_year, self.billing_month).day
+                    if last_day > tgl.day:
+                        str_start_date = str(self.billing_year) + "-" + str(self.billing_month).zfill(2) + "-" + str(tgl.day).zfill(2)
+                    else:
+                        str_start_date = str(self.billing_year) + "-" + str(self.billing_month).zfill(2) + "-" + str(last_day).zfill(2)
+                    _logger.info(str_start_date)
                     start_date = datetime.strptime(str_start_date,"%Y-%m-%d") + relativedelta(months=+1)
                     #d_date = tgl.day
                     #date_now = datetime.now()
