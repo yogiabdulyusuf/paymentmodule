@@ -8,19 +8,19 @@
             <field name="arch" type="xml">
                 <form string="Request Transaction Stiker Form">
                     <header>
-                        <button name="update_startdate_enddate" string="Done Payment" type="object" class="oe_highlight" confirm="has the customer paid?" states="payment" />
+                        <button name="trans_done_payment" string="Done Payment" type="object" class="oe_highlight" confirm="has the customer paid?" states="payment" />
                         <field name="state" widget="statusbar" statusbar_visible="open,payment,done"/>
                     </header>
                     <sheet>
                         <label for="unit_trans_stiker_id" class="oe_edit_only" string="Request Trans Stiker ID" />
                         <h1>
-                            <field name="trans_stiker_id"/>
+                            <field name="notrans"/>
                         </h1>
                         <group>
                             <field name="unit_kerja"/>
                         </group>
                         <group>
-                            <field name="sticker_id"/>
+                            <field name="stiker_id" attrs="{'readonly': [('jenis_transaksi','=','langganan_baru')], 'required': [('jenis_transaksi','!=','langganan_baru')]}" />
                         </group>
                         <group>
                             <group><field name="baru" /></group>
@@ -29,29 +29,29 @@
                             <group>
                                 <field name="jenis_transaksi"  />
                                 <field name="name" attrs="{'readonly': [('jenis_transaksi','!=','langganan_baru')], 'required': [('baru','!=', False)], }" />
-                                <field name="no_id" attrs="{'readonly': [('jenis_transaksi','!=','langganan_baru')], 'required': [('baru','!=', False)], }" />
+                                <field name="alamat" />
+                                <field name="telphone" />
+                                <field name="no_id" />
                                 <field name="duration" attrs="{'invisible': [('jenis_transaksi','!=','langganan_baru'), ('jenis_transaksi','!=','perpanjang'),]}" />
-                                <field name="val_awal" attrs="{'invisible': [('jenis_transaksi','!=','langganan_baru'), ('jenis_transaksi','!=','perpanjang')], 'readonly': [('jenis_transaksi','!=','langganan_baru')] }" />
-                                <field name="val_akhir" attrs="{'invisible': [('jenis_transaksi','!=','langganan_baru'), ('jenis_transaksi','!=','perpanjang')], 'readonly': [('jenis_transaksi','!=','langganan_baru')]}" />
+                                <field name="awal" attrs="{'invisible': [('jenis_transaksi','!=','langganan_baru'), ('jenis_transaksi','!=','perpanjang'), ('jenis_transaksi','!=','stop')], }" />
+                                <field name="akhir" attrs="{'invisible': [('jenis_transaksi','!=','langganan_baru'), ('jenis_transaksi','!=','perpanjang'), ('jenis_transaksi','!=','stop')], }" />
                                 <field name="val_harga"/>
                                 <field name="tanggal"/>
                                 <field name="adm"/>
                             </group>
                             <group>
-                                <field name="val_cara_bayar" attrs="{'readonly': [('jenis_transaksi','!=','langganan_baru')], 'invisible': [('jenis_transaksi','!=','langganan_baru'), ('jenis_transaksi','!=','perpanjang'),]}" />
+                                <field name="cara_bayar" attrs="{'readonly': [('jenis_transaksi','!=','langganan_baru')], 'invisible': [('jenis_transaksi','!=','langganan_baru'), ('jenis_transaksi','!=','perpanjang'),]}" />
                                 <field name="nopol" attrs="{'readonly': [('jenis_transaksi','!=','langganan_baru')]}" />
                                 <field name="jenis_mobil" attrs="{'readonly': [('jenis_transaksi','!=','langganan_baru')]}" />
-                                <field name="mobil_ke" attrs="{'readonly': [('jenis_transaksi','!=','langganan_baru')]}" />
                                 <field name="jenis_member" attrs="{'readonly': [('jenis_transaksi','!=','langganan_baru')]}"/>
-                                <field name="merk_kendaraan" attrs="{'readonly': [('jenis_transaksi','!=','langganan_baru')]}" />
-                                <field name="val_tipe" attrs="{'readonly': [('jenis_transaksi','!=','langganan_baru')]}" />
-                                <field name="val_tahun" attrs="{'readonly': [('jenis_transaksi','!=','langganan_baru')]}" />
-                                <field name="val_color" attrs="{'readonly': [('jenis_transaksi','!=','langganan_baru')]}" />
+                                <field name="merk" attrs="{'readonly': [('jenis_transaksi','!=','langganan_baru')]}" />
+                                <field name="tipe" attrs="{'readonly': [('jenis_transaksi','!=','langganan_baru')]}" />
+                                <field name="tahun" attrs="{'readonly': [('jenis_transaksi','!=','langganan_baru')]}" />
+                                <field name="warna" attrs="{'readonly': [('jenis_transaksi','!=','langganan_baru')]}" />
                             </group>
-                            <group>
-                                <field name="start_date"/>
-                                <field name="end_date"/>
-                            </group>
+
+                            <field name="keterangan" />
+
                         </group>
                         <group>
                             <field name="beli_stiker" />
@@ -69,10 +69,10 @@
                                 <field name="new_nopol" />
                                 <field name="new_jenis_mobil" />
                                 <field name="new_jenis_member"/>
-                                <field name="new_merk_kendaraan" />
-                                <field name="new_val_tipe" />
-                                <field name="new_val_tahun" />
-                                <field name="new_val_color" />
+                                <field name="new_merk" />
+                                <field name="new_tipe" />
+                                <field name="new_tahun" />
+                                <field name="new_warna" />
                             </group>
                             <group>
                                 <field name="harga_ganti_nopol"/>
@@ -105,9 +105,10 @@
             <field name="model">request.transstiker</field>
             <field name="arch" type="xml">
                 <tree string="request_transaction_stiker_tree">
-                    <field name="trans_stiker_id"/>
+                    <field name="notrans"/>
                     <field name="unit_kerja"/>
-                    <field name="sticker_id"/>
+                    <field name="stiker_id"/>
+                    <field name="no_id"/>
                     <field name="name"/>
                     <field name="tanggal"/>
                     <field name="val_harga"/>
