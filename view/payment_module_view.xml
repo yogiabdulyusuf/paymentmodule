@@ -68,6 +68,7 @@
                             <group string="New NOPOL">
                                 <field name="new_nopol" />
                                 <field name="new_jenis_mobil" />
+                                <field name="new_jenis_member"/>
                                 <field name="new_merk" />
                                 <field name="new_tipe" />
                                 <field name="new_tahun" />

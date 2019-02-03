@@ -73,7 +73,6 @@
                     <field name="unitno"/>
                     <field name="date_trans"/>
                     <field name="description"/>
-                    <field name="akhir"/>
                     <field name="amount"/>
                 </tree>
             </field>
