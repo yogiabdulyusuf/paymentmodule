@@ -284,13 +284,33 @@ class RequestTransStiker(models.Model):
     def trans_done_payment(self):
         for v in self:
             if v.baru == True:
+
                 if v.jenis_transaksi == "perpanjang":
+
+                    # Process perpanjang to Server Database Parkir and update trans_id
+                    base_external_dbsource_obj = self.env['base.external.dbsource']
+                    postgresconn = base_external_dbsource_obj.browse(1)
+                    postgresconn.connection_open()
+                    _logger.info("Connection Open")
+                    _logger.info("Sync Stasiun Kerja")
+
+                    # Insert Data Trans Stiker with Odoo to Database Server Parkir
+                    _logger.info('Update Data Trans Stiker')
+                    strSQLUpdate_akhir = """UPDATE transaksi_stiker_tes """ \
+                             """ SET akhir='{}'""" \
+                             """ WHERE """ \
+                             """notrans='{}'""".format(v.end_date, self.no_id)
+
+                    postgresconn.execute_general(strSQLUpdate_akhir)
+
+                    # UPDATE TO TRANS STIKER ODOO
                     args = [('id', '=', v.stiker_id.id)]
-                    res = self.env['trans.stiker'].search(args).write({'awal': v.start_date, 'akhir': v.end_date})
+                    res = self.env['trans.stiker'].search(args).write({'akhir': v.end_date})
 
 
 
                 if v.jenis_transaksi == "langganan_baru":
+
                     # Process create langganan_baru to Server Database Parkir and update trans_id
                     base_external_dbsource_obj = self.env['base.external.dbsource']
                     stasiunkerja_obj = self.env['stasiun.kerja']
@@ -488,25 +508,41 @@ class RequestTransStiker(models.Model):
                             detail_stiker_obj.create(vals)
                             _logger.info("Detail Created")
 
-                args = [('no_id', '=', self.no_id)]
-                res = self.env['trans.stiker'].search(args, limit=1)
+                    args = [('no_id', '=', self.no_id)]
+                    res = self.env['trans.stiker'].search(args, limit=1)
 
-                self.stiker_id = res.id
+                    self.stiker_id = res.id
 
-                v.state = "done"
+                    v.state = "done"
 
             if v.ganti_nopol == True:
+
+                # Process perpanjang to Server Database Parkir and update trans_id
+                base_external_dbsource_obj = self.env['base.external.dbsource']
+                postgresconn = base_external_dbsource_obj.browse(1)
+                postgresconn.connection_open()
+                _logger.info("Connection Open")
+                _logger.info("Sync Stasiun Kerja")
+
+                # Insert Data Trans Stiker with Odoo to Database Server Parkir
+                _logger.info('Update NOPOL')
+                strSQLUpdate_nopol = """UPDATE detail_transaksi_stiker_tes """ \
+                         """ SET """ \
+                         """nopol='{}', jenis_mobil='{}', merk='{}', tipe='{}',""" \
+                         """tahun='{}', warna='{}'""" \
+                         """ WHERE """ \
+                         """notrans='{}'""".format(v.new_nopol, v.new_jenis_mobil, v.new_merk, v.new_tipe, v.new_tahun, v.new_warna, self.no_id)
+
+                postgresconn.execute_general(strSQLUpdate_nopol)
+
                 args = [('id', '=', v.stiker_id.id)]
-
                 res = self.env['trans.stiker'].search(args)
-
                 for r in res:
                     for record in r.detail_ids:
                         vals = {}
                         vals.update({'detail_ids': [(1, record.id, {
                             'nopol': v.new_nopol,
                             'jenis_mobil': v.new_jenis_mobil,
-                            'jenis_member': v.new_jenis_member,
                             'merk': v.new_merk,
                             'tipe': v.new_tipe,
                             'tahun': v.new_tahun,
@@ -514,9 +550,9 @@ class RequestTransStiker(models.Model):
                         }), ]})
                         self.env['trans.stiker'].write(vals)
 
-                res.write(vals)
+                # res.write(vals)
 
-            v.state = "done"
+                v.state = "done"
 
         self.message_post("Done Payment")
 
@@ -616,7 +652,6 @@ class RequestTransStiker(models.Model):
                                   selection=[('billing', 'Billing'), ('non_billing', 'Non Billing'), ], required=False, )
     new_nopol = fields.Char(string="No Polisi", required=False, )
     new_jenis_mobil = fields.Char(string="Jenis Mobil", required=False, )
-    new_jenis_member = fields.Char(string="Jenis Member", required=False, )
     new_merk = fields.Char(string="Merk Mobil", required=False, )
     new_tipe = fields.Char(string="Tipe Mobil", required=False, )
     new_tahun = fields.Char(string="Tahun", required=False, )
