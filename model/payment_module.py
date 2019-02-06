@@ -38,6 +38,8 @@ class RequestTransStiker(models.Model):
         res['domain'] = {'stiker_id':[('stasiun_kerja_id', '=', self.unit_kerja.id)]}
         return res
 
+
+
     @api.onchange('stiker_id', 'baru', 'jenis_transaksi', 'jenis_member')
     def _get_stiker(self):
 
@@ -51,7 +53,6 @@ class RequestTransStiker(models.Model):
                 jenis_transaksi = ''
                 awal = ''
                 akhir = ''
-                cara_bayar = ''
                 nopol = ''
                 jenis_mobil = ''
                 merk = ''
@@ -62,11 +63,12 @@ class RequestTransStiker(models.Model):
                 # AMBIL DATA STIKER DARI TRANS STIKER
                 for data_detail in self.stiker_id:
                     name = data_detail.name
+                    alamat = data_detail.alamat
+                    telphone = data_detail.telphone
                     no_id = data_detail.no_id
                     jenis_transaksi = data_detail.jenis_transaksi
                     awal = data_detail.awal
                     akhir = data_detail.akhir
-                    cara_bayar = data_detail.cara_bayar
                     nopol = data_detail.detail_ids.nopol
                     jenis_mobil = data_detail.detail_ids.jenis_mobil
                     merk = data_detail.detail_ids.merk
@@ -77,12 +79,19 @@ class RequestTransStiker(models.Model):
                 self.alamat = alamat
                 self.telphone = telphone
                 self.no_id = no_id
-                if jenis_transaksi == "langganan_baru":
-                    jenis_transaksi = "perpanjang"
-                self.jenis_transaksi = jenis_transaksi
+                if self.jenis_transaksi == "stop":
+                    self.jenis_transaksi = "stop"
+                elif self.jenis_transaksi == "perpanjang":
+                    self.jenis_transaksi = "perpanjang"
+                else:
+                    self.jenis_transaksi = jenis_transaksi
                 self.awal = awal
-                self.akhir = akhir
-                self.cara_bayar = cara_bayar
+                if self.jenis_transaksi == "stop":
+                    akhir = datetime.now() + relativedelta(months=1)
+                    self.akhir = akhir
+                    self.cara_bayar = "non_billing"
+                else:
+                    self.akhir = akhir
                 self.nopol = nopol
                 self.jenis_mobil = jenis_mobil
                 self.merk = merk
@@ -101,29 +110,27 @@ class RequestTransStiker(models.Model):
                 if not jenis_member_th_ids:
                     raise ValidationError("Price 4th Membership not defined,  please define on company information!")
 
-                if no_id != '':
+                if self.no_id:
                     check_row = self.no_id[4]
                 else:
                     check_row = ''
 
-                if check_row == "1st":
-                    self.val_harga = jenis_member_st_ids
+                if check_row == "1":
                     self.jenis_member = "1st"
-                elif check_row == "2nd":
-                    self.val_harga = jenis_member_nd_ids
+                elif check_row == "2":
+
                     self.jenis_member = "2nd"
-                elif check_row == "3rd":
-                    self.val_harga = jenis_member_rd_ids
+                elif check_row == "3":
+
                     self.jenis_member = "3rd"
-                elif check_row == "4th":
-                    self.val_harga = jenis_member_th_ids
+                elif check_row == "4":
                     self.jenis_member = "4th"
+
                 elif check_row == "":
                     self.val_harga = 0
                     self.jenis_member = ""
-                else:
-                    self.val_harga = jenis_member_st_ids
-                    self.jenis_member = "1st"
+
+
             else:
                 # kosongkan data
                 if self.jenis_transaksi == 'langganan_baru':
@@ -261,9 +268,16 @@ class RequestTransStiker(models.Model):
 
 
     # END DATE UPDATE
-    @api.onchange('duration')
+    @api.onchange('duration','cara_bayar')
     @api.depends('awal', 'duration')
     def _get_end_date(self):
+        akhir = ''
+
+        # AMBIL DATA STIKER DARI TRANS STIKER
+        for data_detail in self.stiker_id:
+            akhir = data_detail.akhir
+
+
         for r in self:
             # Pengecekan jika field duration & start_date tidak diisi, maka field end_date akan di update sama seperti field start_date
             if r.jenis_transaksi == 'langganan_baru':
@@ -272,11 +286,58 @@ class RequestTransStiker(models.Model):
 
             else:
                 if r.akhir:
-                    start_date = fields.Datetime.from_string(r.akhir)
+                    start_date = fields.Datetime.from_string(akhir)
 
                     # Mengupdate field end_date dari perhitungan variabel start ditambah variabel duration
                     r.awal = start_date
                     r.akhir = start_date + relativedelta(months=r.duration)
+
+        jenis_member_st_ids = self.env.user.company_id.jenis_member_st
+        jenis_member_nd_ids = self.env.user.company_id.jenis_member_nd
+        if not jenis_member_nd_ids:
+            raise ValidationError("Price 2nd Membership not defined,  please define on company information!")
+        jenis_member_rd_ids = self.env.user.company_id.jenis_member_rd
+        if not jenis_member_rd_ids:
+            raise ValidationError("Price 3rd Membership not defined,  please define on company information!")
+        jenis_member_th_ids = self.env.user.company_id.jenis_member_th
+        if not jenis_member_th_ids:
+            raise ValidationError("Price 4th Membership not defined,  please define on company information!")
+
+        if self.no_id:
+            check_row = self.no_id[4]
+        else:
+            check_row = ''
+
+        if check_row == "1":
+            self.val_harga = jenis_member_st_ids
+
+        elif check_row == "2":
+            if self.jenis_transaksi == "stop":
+                self.val_harga = 0
+            else:
+                if self.cara_bayar == "non_billing":
+                    self.val_harga = int(jenis_member_nd_ids) * int(self.duration)
+                else:
+                    self.val_harga = int(jenis_member_nd_ids) * 2
+
+        elif check_row == "3":
+            if self.jenis_transaksi == "stop":
+                self.val_harga = 0
+            else:
+                if self.cara_bayar == "non_billing":
+                    self.val_harga = int(jenis_member_rd_ids) * int(self.duration)
+                else:
+                    self.val_harga = int(jenis_member_rd_ids) * 2
+
+        elif check_row == "4":
+            if self.jenis_transaksi == "stop":
+                self.val_harga = 0
+            else:
+                if self.cara_bayar == "non_billing":
+                    self.val_harga = int(jenis_member_th_ids) * int(self.duration)
+                else:
+                    self.val_harga = int(jenis_member_th_ids) * 2
+
 
 
     # BUTTON DONE PAYMENT
@@ -299,21 +360,20 @@ class RequestTransStiker(models.Model):
                     strSQLUpdate_akhir = """UPDATE transaksi_stiker_tes """ \
                              """ SET akhir='{}'""" \
                              """ WHERE """ \
-                             """notrans='{}'""".format(v.end_date, self.no_id)
+                             """notrans='{}'""".format(v.akhir, self.no_id)
 
                     postgresconn.execute_general(strSQLUpdate_akhir)
 
                     # UPDATE TO TRANS STIKER ODOO
                     args = [('id', '=', v.stiker_id.id)]
-                    res = self.env['trans.stiker'].search(args).write({'akhir': v.end_date})
+                    res = self.env['trans.stiker'].search(args).write({'akhir': v.akhir})
 
-
+                    v.state = "done"
 
                 if v.jenis_transaksi == "langganan_baru":
 
                     # Process create langganan_baru to Server Database Parkir and update trans_id
                     base_external_dbsource_obj = self.env['base.external.dbsource']
-                    stasiunkerja_obj = self.env['stasiun.kerja']
                     transaksi_stiker_obj = self.env['trans.stiker']
                     detail_stiker_obj = self.env['detail.transstiker']
                     postgresconn = base_external_dbsource_obj.browse(1)
@@ -341,6 +401,11 @@ class RequestTransStiker(models.Model):
 
                     DATE = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
+                    if self.cara_bayar == "non_billing":
+                        cb = "0"
+                    else:
+                        cb = "1"
+
                     # Insert Data Trans Stiker with Odoo to Database Server Parkir
                     _logger.info('Insert Data Trans Stiker')
                     strSQL = """INSERT INTO transaksi_stiker_tes """ \
@@ -349,9 +414,9 @@ class RequestTransStiker(models.Model):
                              """tipe_exit_pass, seq_code, unitno, area, reserved, cara_bayar)""" \
                              """ VALUES """ \
                              """('{}', '{}', '{}', '{}', '{}', '{}', '0', '{}', '{}', '{}', '{}', '1',""" \
-                             """'{}', '{}', NULL, '0', NULL, '{}', '0', '{}', '{}', '1', '0', NULL, NULL, '0', '0')""".format(
+                             """'{}', '{}', NULL, '0', NULL, '{}', '0', '{}', '{}', '1', '0', NULL, NULL, '0', '{}')""".format(
                         self.no_id, self.name, self.alamat, self.telphone, jt, self.awal,self.keterangan, self.tanggal, self.adm.name,
-                        self.akhir, self.no_id, self.unit_kerja.kode, j_member, self.no_id, DATE)
+                        self.akhir, self.no_id, self.unit_kerja.kode, j_member, self.no_id, DATE, cb)
 
                     postgresconn.execute_general(strSQL)
 
@@ -396,8 +461,10 @@ class RequestTransStiker(models.Model):
                             vals.update({'telphone': transaksistiker[3]})
                             if int(transaksistiker[4]) == 0:
                                 vals.update({'jenis_transaksi': 'langganan_baru'})
-                            else:
+                            elif int(transaksistiker[4]) == 1:
                                 vals.update({'jenis_transaksi': 'perpanjang'})
+                            else:
+                                vals.update({'jenis_transaksi': 'stop'})
                             vals.update({'awal': transaksistiker[5]})
                             vals.update({'harga': transaksistiker[6]})
                             vals.update({'keterangan': transaksistiker[7]})
@@ -419,7 +486,10 @@ class RequestTransStiker(models.Model):
                             vals.update({'unitno': transaksistiker[23]})
                             vals.update({'area': transaksistiker[24]})
                             vals.update({'reserved': transaksistiker[25]})
-                            vals.update({'cara_bayar': 'non_billing'})
+                            if int(transaksistiker[26]) == 0:
+                                vals.update({'cara_bayar': 'non_billing'})
+                            else:
+                                vals.update({'cara_bayar': 'billing'})
                             current_record.write(vals)
                             _logger.info('Transaksi Stiker Updated')
                         else:
@@ -432,8 +502,10 @@ class RequestTransStiker(models.Model):
                             vals.update({'telphone': transaksistiker[3]})
                             if int(transaksistiker[4]) == 0:
                                 vals.update({'jenis_transaksi': 'langganan_baru'})
-                            else:
+                            elif int(transaksistiker[4]) == 1:
                                 vals.update({'jenis_transaksi': 'perpanjang'})
+                            else:
+                                vals.update({'jenis_transaksi': 'stop'})
                             vals.update({'awal': transaksistiker[5]})
                             vals.update({'harga': transaksistiker[6]})
                             vals.update({'keterangan': transaksistiker[7]})
@@ -455,7 +527,10 @@ class RequestTransStiker(models.Model):
                             vals.update({'unitno': transaksistiker[23]})
                             vals.update({'area': transaksistiker[24]})
                             vals.update({'reserved': transaksistiker[25]})
-                            vals.update({'cara_bayar': 'non_billing'})
+                            if int(transaksistiker[26]) == 0:
+                                vals.update({'cara_bayar': 'non_billing'})
+                            else:
+                                vals.update({'cara_bayar': 'billing'})
                             transaksi_stiker_obj.create(vals)
                             _logger.info('Transaksi Stiker Created')
 
@@ -515,6 +590,30 @@ class RequestTransStiker(models.Model):
 
                     v.state = "done"
 
+                if v.jenis_transaksi == "stop":
+
+                    # Process perpanjang to Server Database Parkir and update trans_id
+                    base_external_dbsource_obj = self.env['base.external.dbsource']
+                    postgresconn = base_external_dbsource_obj.browse(1)
+                    postgresconn.connection_open()
+                    _logger.info("Connection Open")
+                    _logger.info("Sync Stasiun Kerja")
+
+                    # Insert Data Trans Stiker with Odoo to Database Server Parkir
+                    _logger.info('Update Data Trans Stiker')
+                    strSQLUpdate_akhir = """UPDATE transaksi_stiker_tes """ \
+                                         """ SET akhir='{}', cara_bayar='{}'""" \
+                                         """ WHERE """ \
+                                         """notrans='{}'""".format(v.akhir,v.cara_bayar, self.no_id)
+
+                    postgresconn.execute_general(strSQLUpdate_akhir)
+
+                    # UPDATE TO TRANS STIKER ODOO
+                    args = [('id', '=', v.stiker_id.id)]
+                    res = self.env['trans.stiker'].search(args).write({'akhir': v.akhir})
+
+                    v.state = "done"
+
             if v.ganti_nopol == True:
 
                 # Process perpanjang to Server Database Parkir and update trans_id
@@ -531,26 +630,20 @@ class RequestTransStiker(models.Model):
                          """nopol='{}', jenis_mobil='{}', merk='{}', tipe='{}',""" \
                          """tahun='{}', warna='{}'""" \
                          """ WHERE """ \
-                         """notrans='{}'""".format(v.new_nopol, v.new_jenis_mobil, v.new_merk, v.new_tipe, v.new_tahun, v.new_warna, self.no_id)
+                         """notrans='{}'""".format(v.new_nopol, v.new_jenis_mobil, v.new_merk, v.new_tipe, v.new_tahun, v.new_warna, v.stiker_id.notrans)
 
                 postgresconn.execute_general(strSQLUpdate_nopol)
 
-                args = [('id', '=', v.stiker_id.id)]
-                res = self.env['trans.stiker'].search(args)
-                for r in res:
-                    for record in r.detail_ids:
-                        vals = {}
-                        vals.update({'detail_ids': [(1, record.id, {
-                            'nopol': v.new_nopol,
-                            'jenis_mobil': v.new_jenis_mobil,
-                            'merk': v.new_merk,
-                            'tipe': v.new_tipe,
-                            'tahun': v.new_tahun,
-                            'warna': v.new_warna,
-                        }), ]})
-                        self.env['trans.stiker'].write(vals)
-
-                # res.write(vals)
+                args = [('notrans', '=', v.stiker_id.notrans)]
+                res = self.env['detail.transstiker'].search(args)
+                vals = {}
+                vals.update({'nopol': v.new_nopol})
+                vals.update({'jenis_mobil': v.new_jenis_mobil})
+                vals.update({'merk': v.new_merk})
+                vals.update({'tipe': v.new_tipe})
+                vals.update({'tahun': v.new_tahun})
+                vals.update({'warna': v.new_warna})
+                res.write(vals)
 
                 v.state = "done"
 
@@ -622,7 +715,7 @@ class RequestTransStiker(models.Model):
                                        required=False, readonly=False, )
     keterangan = fields.Text(string="Keterangan", required=False, )
     cara_bayar = fields.Selection(string="Cara Pembayaran",
-                                      selection=[('billing', 'Billing'), ('non_billing', 'Non Billing'), ], required=False, )
+                                      selection=[('billing', 'Billing'), ('non_billing', 'Non Billing'), ], required=True, default="non_billing")
     nopol = fields.Char(string="No Polisi", required=False, )
     jenis_mobil = fields.Char(string="Jenis Mobil", required=False, )
     merk = fields.Char(string="Merk Mobil", required=False, )
@@ -635,9 +728,6 @@ class RequestTransStiker(models.Model):
     beli_stiker = fields.Boolean(string="BELI STIKER",  default=False,)
     ganti_nopol = fields.Boolean(string="GANTI NOMOR POLISI",  default=False,)
     kartu_hilang = fields.Boolean(string="KARTU HILANG",  default=False, )
-    tipe_trans = fields.Selection(string="Tipe Transaksi",
-                                  selection=[('ganti_nopol', 'GANTI NOPOL'), ('kartu_hilang', 'KARTU HILANG'), ],
-                                  required=False, )
     tgl_approved = fields.Datetime(string="Tanggal Approve", required=False, )
     adm_approved = fields.Char(string="Admin Approve", required=False, )
     flag = fields.Char(string="Flag", required=False, )
@@ -648,8 +738,6 @@ class RequestTransStiker(models.Model):
     harga_beli_stiker = fields.Integer(string="Beli Stiker", required=False, readonly=True)
     harga_kartu_hilang = fields.Integer(string="Kartu Hilang", required=False, readonly=True)
     harga_ganti_nopol = fields.Integer(string="Ganti Nomor Polisi", required=False, readonly=True)
-    new_cara_bayar = fields.Selection(string="Cara Pembayaran",
-                                  selection=[('billing', 'Billing'), ('non_billing', 'Non Billing'), ], required=False, )
     new_nopol = fields.Char(string="No Polisi", required=False, )
     new_jenis_mobil = fields.Char(string="Jenis Mobil", required=False, )
     new_merk = fields.Char(string="Merk Mobil", required=False, )

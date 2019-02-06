@@ -5,7 +5,7 @@
 		<record id="seq_trans_stiker" model="ir.sequence">
 			<field name="name">Request Trans Stiker</field>
 			<field name="code">request.transstiker</field>
-			<field name="prefix">RTS%(year)s%(month)s</field>
+			<field name="prefix">%(year)s%(month)s%(day)s%(h24)s%(min)s%(sec)s</field>
 			<field name="padding">3</field>
 			<field name="next_number_actual">1</field>
 			<field name="number_increment">1</field>
