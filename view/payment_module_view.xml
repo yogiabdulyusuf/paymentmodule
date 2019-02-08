@@ -19,50 +19,55 @@
 
                         <group>
                             <group>
-                                <field name="unit_kerja"/>
-                                <field name="stiker_id" attrs="{'readonly': [('jenis_transaksi','=','langganan_baru')], 'required': [('jenis_transaksi','!=','langganan_baru')]}" />
+                                <field name="unit_kerja" attrs="{'readonly': [('state', '!=', 'open')]}"/>
+                                <field name="stiker_id" attrs="{'readonly': ['|',('jenis_transaksi','=','langganan_baru'), ('state','=','done')], 'required': [('jenis_transaksi','!=','langganan_baru')]}" />
                             </group>
 
-                            <group style="border: 2px solid #8c1aff;">
+                            <group style="border: 1px solid #D2D2FF; border-radius:10px;">
                                 <div class="text-right" >
-                                    <field name="amount" style="color:#8c1aff; font-size:48px"/>
+                                    <field name="amount" style="color:#7C7BAD; font-size:36px; padding-right:15px;"/>
                                 </div>
                             </group>
                         </group>
 
+                        <br/>
+                        <br/>
+                        <div class="container-fluid">
+                            <div class="row" style="border: 2px solid #7C7BAD; border-radius:10px; padding-top:10px; padding-bottom:10px;">
+                                <div class="col-md-3">
+                                    <field name="baru" attrs="{'readonly': [('state', '!=', 'open')]}"/>
+                                    <label for="baru" string="Langganan" />
+                                </div>
+                                <div class="col-md-3">
+                                    <field name="beli_stiker" attrs="{'readonly': [('state', '!=', 'open')]}"/>
+                                    <label for="beli_stiker" string="Beli Stiker" />
 
-                        <div class="row">
-                            <div class="col-md-3">
-                                <field name="baru" />
-                                <label for="baru" class="oe_edit_only" string="Langganan" />
-                            </div>
-                            <div class="col-md-3">
-                                <field name="beli_stiker" />
-                                <label for="beli_stiker" class="oe_edit_only" string="Beli Stiker" />
+                                </div>
+                                <div class="col-md-3">
+                                    <field name="ganti_nopol" attrs="{'readonly': [('state', '!=', 'open')]}"/>
+                                    <label for="ganti_nopol" string="Ganti Nopol" />
 
-                            </div>
-                            <div class="col-md-3">
-                                <field name="ganti_nopol" />
-                                <label for="ganti_nopol" class="oe_edit_only" string="Ganti Nopol" />
+                                </div>
+                                <div class="col-md-3">
+                                    <field name="kartu_hilang" attrs="{'readonly': [('state', '!=', 'open')]}"/>
+                                    <label for="kartu_hilang" string="Kartu Hilang" />
 
-                            </div>
-                            <div class="col-md-3">
-                                <field name="kartu_hilang" />
-                                <label for="kartu_hilang" class="oe_edit_only" string="Kartu Hilang" />
-
+                                </div>
                             </div>
                         </div>
+                        <br/>
+                        <br/>
 
                         <notebook>
-                            <page string="Langganan">
-                                <group string="Description" attrs="{'invisible': [('baru','!=', True), ]}" >
+                            <page string="Langganan" attrs="{'invisible': [('baru','!=', True), ]}">
+                                <group string="Description">
                                     <group>
-                                        <field name="jenis_transaksi"  />
-                                        <field name="name" attrs="{'readonly': [('jenis_transaksi','!=','langganan_baru')], 'required': [('baru','!=', False)], }" />
-                                        <field name="alamat" attrs="{'readonly': [('jenis_transaksi','!=','langganan_baru')]}"/>
-                                        <field name="telphone" attrs="{'readonly': [('jenis_transaksi','!=','langganan_baru')]}"/>
+                                        <field name="jenis_transaksi" attrs="{'readonly': [('state', '!=', 'open')]}" />
+                                        <field name="name" attrs="{'readonly': [('jenis_transaksi','!=','langganan_baru')], 'required': [('jenis_transaksi','=', 'langganan_baru')], }" />
+                                        <field name="alamat" attrs="{'readonly': [('jenis_transaksi','!=','langganan_baru')], 'required': [('jenis_transaksi','=', 'langganan_baru')],}"/>
+                                        <field name="telphone" attrs="{'readonly': [('jenis_transaksi','!=','langganan_baru')], 'required': [('jenis_transaksi','=', 'langganan_baru')],} "/>
                                         <field name="no_id" />
-                                        <field name="duration" attrs="{'invisible': [('jenis_transaksi','!=','langganan_baru'), ('jenis_transaksi','!=','perpanjang'),]}" />
+                                        <field name="duration" attrs="{'readonly': [('state', '!=', 'open')], 'invisible': [('jenis_transaksi','!=','langganan_baru'), ('jenis_transaksi','!=','perpanjang'),]}" />
                                         <field name="awal" attrs="{'invisible': [('jenis_transaksi','!=','langganan_baru'), ('jenis_transaksi','!=','perpanjang'), ('jenis_transaksi','!=','stop')], }" />
                                         <field name="akhir" attrs="{'invisible': [('jenis_transaksi','!=','langganan_baru'), ('jenis_transaksi','!=','perpanjang'), ('jenis_transaksi','!=','stop')], }" />
                                         <field name="val_harga"/>
@@ -70,31 +75,31 @@
                                         <field name="adm"/>
                                     </group>
                                     <group>
-                                        <field name="cara_bayar" attrs="{'readonly': [('jenis_transaksi','=','stop')], 'invisible': [('jenis_transaksi','=', False)]}" />
-                                        <field name="nopol" attrs="{'readonly': [('jenis_transaksi','!=','langganan_baru')]}" />
-                                        <field name="jenis_mobil" attrs="{'readonly': [('jenis_transaksi','!=','langganan_baru')]}" />
-                                        <field name="jenis_member" attrs="{'readonly': [('jenis_transaksi','!=','langganan_baru')]}"/>
-                                        <field name="merk" attrs="{'readonly': [('jenis_transaksi','!=','langganan_baru')]}" />
-                                        <field name="tipe" attrs="{'readonly': [('jenis_transaksi','!=','langganan_baru')]}" />
-                                        <field name="tahun" attrs="{'readonly': [('jenis_transaksi','!=','langganan_baru')]}" />
-                                        <field name="warna" attrs="{'readonly': [('jenis_transaksi','!=','langganan_baru')]}" />
+                                        <field name="cara_bayar" attrs="{'readonly': ['|',('jenis_transaksi','=','stop'),('state','=','done')], 'invisible': [('jenis_transaksi','=', False)], 'required': [('jenis_transaksi','=', 'langganan_baru')],}" />
+                                        <field name="nopol" attrs="{'readonly': [('jenis_transaksi','!=','langganan_baru')], 'required': [('jenis_transaksi','=', 'langganan_baru')],}" />
+                                        <field name="jenis_mobil" attrs="{'readonly': [('jenis_transaksi','!=','langganan_baru')], 'required': [('jenis_transaksi','=', 'langganan_baru')],}" />
+                                        <field name="jenis_member" attrs="{'readonly': [('jenis_transaksi','!=','langganan_baru')], 'required': [('jenis_transaksi','=', 'langganan_baru')],}"/>
+                                        <field name="merk" attrs="{'readonly': [('jenis_transaksi','!=','langganan_baru')], 'required': [('jenis_transaksi','=', 'langganan_baru')],}" />
+                                        <field name="tipe" attrs="{'readonly': [('jenis_transaksi','!=','langganan_baru')], 'required': [('jenis_transaksi','=', 'langganan_baru')],}" />
+                                        <field name="tahun" attrs="{'readonly': [('jenis_transaksi','!=','langganan_baru')], 'required': [('jenis_transaksi','=', 'langganan_baru')],}" />
+                                        <field name="warna" attrs="{'readonly': [('jenis_transaksi','!=','langganan_baru')], 'required': [('jenis_transaksi','=', 'langganan_baru')],}" />
                                     </group>
 
-                                    <field name="keterangan" />
+                                    <field name="keterangan" attrs="{'readonly': [('state', '!=', 'open')]}" />
 
                                 </group>
                             </page>
-                            <page string="Beli Stiker">
+                            <page string="Beli Stiker" attrs="{'invisible': [('beli_stiker','!=', True), ]}">
 
-                                <group attrs="{'invisible': [('beli_stiker','!=', True), ]}" >
+                                <group >
                                     <group>
                                         <field name="harga_beli_stiker" />
                                     </group>
                                 </group>
                             </page>
-                            <page string="Ganti Nomor Polisi">
+                            <page string="Ganti Nomor Polisi" attrs="{'invisible': [('ganti_nopol','!=', True), ]}">
 
-                                <group  attrs="{'invisible': [('ganti_nopol','!=', True), ]}" >
+                                <group >
                                     <group string="New NOPOL">
                                         <field name="new_nopol" />
                                         <field name="new_jenis_mobil" />
@@ -108,9 +113,9 @@
                                     </group>
                                 </group>
                             </page>
-                            <page string="Kartu Hilang">
+                            <page string="Kartu Hilang" attrs="{'invisible': [('kartu_hilang','!=', True), ]}" >
 
-                                <group attrs="{'invisible': [('kartu_hilang','!=', True), ]}" >
+                                <group >
                                     <group>
                                         <field name="harga_kartu_hilang"  />
                                     </group>

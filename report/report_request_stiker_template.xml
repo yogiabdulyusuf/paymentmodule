@@ -28,7 +28,7 @@
                     <div class="container">
                         <div class="row">
                             <div class="col-sm-4">
-                                <h3>Nomor: <span t-field="o.trans_stiker_id"/></h3>
+                                <h3><span t-field="o.notrans"/></h3>
                             </div>
                         </div>
                     </div>
@@ -45,7 +45,7 @@
                                     </tr>
                                     <tr style="height: 25px;">
                                     <td style="width: 130.983px; height: 25px;">No Trans</td>
-                                    <td style="width: 403.017px; height: 25px;"><span t-field="o.sticker_id"/></td>
+                                    <td style="width: 403.017px; height: 25px;"><span t-field="o.stiker_id"/></td>
                                     </tr>
                                     <tr style="height: 25px;">
                                     <td style="width: 130.983px; height: 25px;">Date</td>
@@ -57,7 +57,7 @@
                                     </tr>
                                     <tr style="height: 25px;">
                                     <td style="width: 130.983px; height: 25px;">Payment Method</td>
-                                    <td style="width: 403.017px; height: 25px;"><span t-field="o.val_cara_bayar"/></td>
+                                    <td style="width: 403.017px; height: 25px;"><span t-field="o.cara_bayar"/></td>
                                     </tr>
                                     </tbody>
                                 </table>
@@ -73,31 +73,41 @@
                                 <table class="table">
                                     <thead>
                                         <tr>
-                                            <th class="text-center">DESCRIPTION</th>
+                                            <th class="text-left">NO</th>
+                                            <th class="text-left">DESCRIPTION</th>
                                             <th class="text-right">AMOUNT</th>
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        <t t-set="i" t-value="1" />
                                         <t t-if="o.baru == true">
                                             <tr> <!--  t-foreach="o.spm_line_ids" t-as="l"   -->
+                                                <td><span t-esc="i" /></td>
+                                                <t t-set="i" t-value="i+1"/>
                                                 <td>Langganan</td>
                                                 <td class="text-right"><span t-field="o.val_harga" /></td>
                                             </tr>
                                         </t>
                                         <t t-if="o.beli_stiker == true">
                                             <tr> <!--  t-foreach="o.spm_line_ids" t-as="l"   -->
+                                                <td><span t-esc="i" /></td>
+                                                <t t-set="i" t-value="i+1"/>
                                                 <td>Stiker</td>
                                                 <td class="text-right"><span t-field="o.harga_beli_stiker" /></td>
                                             </tr>
                                         </t>
                                         <t t-if="o.ganti_nopol == true">
                                             <tr> <!--  t-foreach="o.spm_line_ids" t-as="l"   -->
+                                                <td><span t-esc="i" /></td>
+                                                <t t-set="i" t-value="i+1"/>
                                                 <td>Pergantian Nomor Polisi</td>
                                                 <td class="text-right"><span t-field="o.harga_ganti_nopol" /></td>
                                             </tr>
                                         </t>
                                         <t t-if="o.kartu_hilang == true">
                                             <tr> <!--  t-foreach="o.spm_line_ids" t-as="l"   -->
+                                                <td><span t-esc="i" /></td>
+                                                <t t-set="i" t-value="i+1"/>
                                                 <td>Kartu Hilang</td>
                                                 <td class="text-right"><span t-field="o.harga_kartu_hilang" /></td>
                                             </tr>

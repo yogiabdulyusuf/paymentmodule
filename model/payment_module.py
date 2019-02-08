@@ -696,55 +696,66 @@ class RequestTransStiker(models.Model):
         res._generate_stiker_id()
         return res
 
-    notrans = fields.Char(string="Transaksi ID", readonly=True) #
-    unit_kerja = fields.Many2one('stasiun.kerja','Unit Kerja #', required=True) #
-    stiker_id = fields.Many2one('trans.stiker','Stiker #', required=True, )
-    name = fields.Char(string="Nama", )
-    alamat = fields.Char(string="Alamat", required=False, )
-    telphone = fields.Char(string="No Telphone", required=False, )
-    no_id = fields.Char(string="No ID", readonly=True,) #
-    duration = fields.Integer('Duration', default=1, required=False)
-    awal = fields.Datetime(string="Start Date", required=False, readonly=True,) #
-    akhir = fields.Datetime(string="End Date", required=False, readonly=True,) #
-    val_harga = fields.Integer(string="Harga", required=False, readonly=True) #
-    tanggal = fields.Datetime(string="Date", required=False,  default=fields.Datetime().now(), readonly=True,) #
-    adm = fields.Many2one(comodel_name="res.users", string="Created By", required=False, default=lambda self: self.env.user and self.env.user.id or False, readonly=True) #
-    jenis_member = fields.Selection(string="Mobil", selection=[('1st', '1st'), ('2nd', '2nd'), ('3rd', '3rd'), ('4th', '4th'), ], required=False, )
+
+    notrans = fields.Char(string="Transaksi ID", readonly=True)  #
+    unit_kerja = fields.Many2one('stasiun.kerja', 'Unit Kerja #', required=True, readonly=False)  #
+    stiker_id = fields.Many2one('trans.stiker', 'Stiker #', required=True, readonly=True)
+    name = fields.Char(string="Nama", required=False, readonly=False)
+    alamat = fields.Char(string="Alamat", required=False, readonly=False)
+    telphone = fields.Char(string="No Telphone", required=False, readonly=False)
+    no_id = fields.Char(string="No ID", readonly=True, )  #
+    duration = fields.Integer('Duration', default=1, required=False, readonly=False)
+    awal = fields.Datetime(string="Start Date", required=False, readonly=True, )  #
+    akhir = fields.Datetime(string="End Date", required=False, readonly=True, )  #
+    val_harga = fields.Integer(string="Harga", required=False, readonly=True)  #
+    tanggal = fields.Datetime(string="Date", required=False, default=fields.Datetime().now(), readonly=True, )  #
+    adm = fields.Many2one(comodel_name="res.users", string="Created By", required=False,
+                          default=lambda self: self.env.user and self.env.user.id or False, readonly=True)  #
+    jenis_member = fields.Selection(string="Mobil",
+                                    selection=[('1st', '1st'), ('2nd', '2nd'), ('3rd', '3rd'), ('4th', '4th'), ],
+                                    required=False, readonly=False)
     jenis_transaksi = fields.Selection(string="Jenis Transaksi",
-                                       selection=[('langganan_baru', 'LANGGANAN BARU'), ('perpanjang', 'PERPANJANG'), ('stop', 'STOP'), ],
-                                       required=False, readonly=False, )
-    keterangan = fields.Text(string="Keterangan", required=False, )
+                                       selection=[('langganan_baru', 'LANGGANAN BARU'), ('perpanjang', 'PERPANJANG'),
+                                                  ('stop', 'STOP'), ],
+                                       required=False, readonly=False)
+    keterangan = fields.Text(string="Keterangan", required=False, readonly=False)
     cara_bayar = fields.Selection(string="Cara Pembayaran",
-                                      selection=[('billing', 'Billing'), ('non_billing', 'Non Billing'), ], required=True, default="non_billing")
-    nopol = fields.Char(string="No Polisi", required=False, )
-    jenis_mobil = fields.Char(string="Jenis Mobil", required=False, )
-    merk = fields.Char(string="Merk Mobil", required=False, )
-    tipe = fields.Char(string="Tipe Mobil", required=False, )
-    tahun = fields.Char(string="Tahun", required=False, )
-    warna = fields.Char(string="Warna", required=False, )
-    amount = fields.Integer(string="Amount", required=False, readonly=True) #
-    baru = fields.Boolean(string="LANGGANAN",  )
-    perpanjang = fields.Boolean(string="PERPANJANG",  default=False,)
-    beli_stiker = fields.Boolean(string="BELI STIKER",  default=False,)
-    ganti_nopol = fields.Boolean(string="GANTI NOMOR POLISI",  default=False,)
-    kartu_hilang = fields.Boolean(string="KARTU HILANG",  default=False, )
-    tgl_approved = fields.Datetime(string="Tanggal Approve", required=False, )
-    adm_approved = fields.Char(string="Admin Approve", required=False, )
-    flag = fields.Char(string="Flag", required=False, )
-    remark = fields.Char(string="Remark", required=False, )
-    start_date_status = new_field = fields.Char(string="Start Date Status", required=False, )
-    approvedstatus = fields.Char(string="Approve Status", required=False, )
-    status = fields.Char(string="Status", required=False, )
+                                  selection=[('billing', 'Billing'), ('non_billing', 'Non Billing'), ],
+                                  required=False, readonly=True)
+    nopol = fields.Char(string="No Polisi", required=False, readonly=False)
+    jenis_mobil = fields.Char(string="Jenis Mobil", required=False, readonly=False)
+    merk = fields.Char(string="Merk Mobil", required=False, readonly=False)
+    tipe = fields.Char(string="Tipe Mobil", required=False, readonly=False)
+    tahun = fields.Char(string="Tahun", required=False, readonly=False)
+    warna = fields.Char(string="Warna", required=False, readonly=False)
+    amount = fields.Integer(string="Amount", required=False, readonly=True)  #
+    baru = fields.Boolean(string="LANGGANAN", readonly=False)
+    perpanjang = fields.Boolean(string="PERPANJANG", default=False, readonly=False)
+    beli_stiker = fields.Boolean(string="BELI STIKER", default=False, readonly=False)
+    ganti_nopol = fields.Boolean(string="GANTI NOMOR POLISI", default=False, readonly=False)
+    kartu_hilang = fields.Boolean(string="KARTU HILANG", default=False, readonly=False)
+    tipe_trans = fields.Selection(string="Tipe Transaksi",
+                                  selection=[('ganti_nopol', 'GANTI NOPOL'), ('kartu_hilang', 'KARTU HILANG'), ],
+                                  required=False, readonly=False)
+    tgl_approved = fields.Datetime(string="Tanggal Approve", required=False, readonly=False)
+    adm_approved = fields.Char(string="Admin Approve", required=False, readonly=False)
+    flag = fields.Char(string="Flag", required=False, readonly=False)
+    remark = fields.Char(string="Remark", required=False, readonly=False)
+    start_date_status = new_field = fields.Char(string="Start Date Status", required=False, readonly=False)
+    approvedstatus = fields.Char(string="Approve Status", required=False, readonly=False)
+    status = fields.Char(string="Status", required=False, readonly=False)
     harga_beli_stiker = fields.Integer(string="Beli Stiker", required=False, readonly=True)
     harga_kartu_hilang = fields.Integer(string="Kartu Hilang", required=False, readonly=True)
     harga_ganti_nopol = fields.Integer(string="Ganti Nomor Polisi", required=False, readonly=True)
-    new_nopol = fields.Char(string="No Polisi", required=False, )
-    new_jenis_mobil = fields.Char(string="Jenis Mobil", required=False, )
-    new_merk = fields.Char(string="Merk Mobil", required=False, )
-    new_tipe = fields.Char(string="Tipe Mobil", required=False, )
-    new_tahun = fields.Char(string="Tahun", required=False, )
-    new_warna = fields.Char(string="Warna", required=False, )
-    state = fields.Selection(string="state", selection=[('open', 'Open'),('payment','Waiting Payment'), ('done', 'Done'), ], required=False, default="open",)
+    new_nopol = fields.Char(string="No Polisi", required=False, readonly=False)
+    new_jenis_mobil = fields.Char(string="Jenis Mobil", required=False, readonly=False)
+    new_merk = fields.Char(string="Merk Mobil", required=False, readonly=False)
+    new_tipe = fields.Char(string="Tipe Mobil", required=False, readonly=False)
+    new_tahun = fields.Char(string="Tahun", required=False, readonly=False)
+    new_warna = fields.Char(string="Warna", required=False, readonly=False)
+    state = fields.Selection(string="state",
+                         selection=[('open', 'Open'), ('payment', 'Waiting Payment'), ('done', 'Done'), ],
+                         required=False, default="open", )
 
 class StasiunKerja(models.Model):
     _name = 'stasiun.kerja'
