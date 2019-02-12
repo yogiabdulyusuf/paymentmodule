@@ -11,6 +11,7 @@ class RequestTransStiker(models.Model):
     _name = 'request.transstiker'
     _inherit = ['mail.thread']
     _description = 'Request Transaction Stiker'
+    _order = 'notrans desc'
 
     def find_stasiun_kerja(self, kode):
         stasiunkerja_obj = self.env['stasiun.kerja']

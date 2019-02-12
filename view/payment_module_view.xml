@@ -152,11 +152,33 @@
             </field>
         </record>
 
+        <record model="ir.ui.view" id="pivot_request_transstiker">
+            <field name="name">Graph Request Transaction</field>
+            <field name="model">request.transstiker</field>
+            <field name="arch" type="xml">
+                <pivot string="Pivot">
+                    <field name="stiker_id" type="row"/>
+                    <field name="jenis_transaksi" type="col"/>
+               </pivot>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="graph_request_transstiker">
+            <field name="name">Graph Request Transaction</field>
+            <field name="model">request.transstiker</field>
+            <field name="arch" type="xml">
+                <graph string="Graph">
+                    <field name="stiker_id" type="row"/>
+                    <field name="jenis_transaksi" type="col"/>
+               </graph>
+            </field>
+        </record>
+
         <record id="act_request_trans_stiker" model="ir.actions.act_window">
             <field name="name">Request Transaction Stiker</field>
             <field name="res_model">request.transstiker</field>
             <field name="view_type">form</field>
-            <field name="view_mode">tree,form</field>
+            <field name="view_mode">tree,form,graph,pivot</field>
         </record>
 
 

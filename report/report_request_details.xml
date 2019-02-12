@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <report
+            id="action_report_trans"
+            model="report.paymentmodule.report_requestdetails"
+            string="Transaktion report"
+            report_type="qweb-pdf"
+            name="paymentmodule.report_requestdetails"
+            file="paymentmodule.report_requestdetails"
+            />
+    </data>
+</odoo>
