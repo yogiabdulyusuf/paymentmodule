@@ -25,7 +25,7 @@ Payment Module
 		"data/ir_sequence.xml",		
 		"report/report_request_stiker.xml",
 		"report/report_request_stiker_template.xml",
-		"report/report_request_details_template.xml",
+		"report/report_requestdetails.xml",
 		"report/report_request_details.xml",
 		"wizard/wizard_report_request_details_view.xml",
 		"view/top_menu.xml",

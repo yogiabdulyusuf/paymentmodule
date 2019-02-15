@@ -44,6 +44,24 @@ class RequestTransStiker(models.Model):
     @api.onchange('stiker_id', 'baru', 'jenis_transaksi', 'jenis_member')
     def _get_stiker(self):
 
+        if self.ganti_nopol == True:
+            ganti_nopol_id = self.env.user.company_id.ganti_nopol_ids
+
+            if not ganti_nopol_id:
+                raise ValidationError("Price Ganti Nopol not defined,  please define on company information!")
+
+            if self.stiker_id:
+                check_no_id = self.stiker_id.notrans[4]
+            else:
+                check_no_id = ''
+
+            if check_no_id == "1":
+                self.harga_ganti_nopol = 0
+            else:
+                self.harga_ganti_nopol = ganti_nopol_id
+
+
+
         if self.baru == True:
             if self.stiker_id:
                 # Ambil data dari trans_id
@@ -233,6 +251,7 @@ class RequestTransStiker(models.Model):
 
     @api.onchange('beli_stiker','ganti_nopol','kartu_hilang')
     def _change_harga_beli_stiker(self):
+
         if self.beli_stiker == True:
             beli_stiker_id = self.env.user.company_id.beli_stiker_ids
             if not beli_stiker_id:
@@ -244,10 +263,20 @@ class RequestTransStiker(models.Model):
 
         if self.ganti_nopol == True:
             ganti_nopol_id = self.env.user.company_id.ganti_nopol_ids
+
             if not ganti_nopol_id:
                 raise ValidationError("Price Ganti Nopol not defined,  please define on company information!")
 
-            self.harga_ganti_nopol = ganti_nopol_id
+            if self.stiker_id:
+                check_row = self.stiker_id.notrans[4]
+            else:
+                check_row = ''
+
+            if check_row == "1":
+                self.harga_ganti_nopol = 0
+            elif check_row == "2":
+                self.harga_ganti_nopol = ganti_nopol_id
+
         else:
             self.harga_ganti_nopol = 0
 
@@ -648,6 +677,11 @@ class RequestTransStiker(models.Model):
 
                 v.state = "done"
 
+            if v.beli_stiker == True:
+                v.state = "done"
+            if v.kartu_hilang == True:
+                v.state = "done"
+
         self.message_post("Done Payment")
 
     @api.one
@@ -698,9 +732,9 @@ class RequestTransStiker(models.Model):
         return res
 
 
-    notrans = fields.Char(string="Transaksi ID", readonly=True)  #
-    unit_kerja = fields.Many2one('stasiun.kerja', 'Unit Kerja #', required=True, readonly=False)  #
-    stiker_id = fields.Many2one('trans.stiker', 'Stiker #', required=True, readonly=True)
+    notrans = fields.Char(string="ID #", readonly=True)  #
+    unit_kerja = fields.Many2one('stasiun.kerja', 'UNIT #', required=True, readonly=False)  #
+    stiker_id = fields.Many2one('trans.stiker', 'STIKER #', required=True, readonly=True)
     name = fields.Char(string="Nama", required=False, readonly=False)
     alamat = fields.Char(string="Alamat", required=False, readonly=False)
     telphone = fields.Char(string="No Telphone", required=False, readonly=False)
@@ -712,6 +746,7 @@ class RequestTransStiker(models.Model):
     tanggal = fields.Datetime(string="Date", required=False, default=fields.Datetime().now(), readonly=True, )  #
     adm = fields.Many2one(comodel_name="res.users", string="Created By", required=False,
                           default=lambda self: self.env.user and self.env.user.id or False, readonly=True)  #
+    no_kartu = fields.Char(string="No Card", required=False, )
     jenis_member = fields.Selection(string="Mobil",
                                     selection=[('1st', '1st'), ('2nd', '2nd'), ('3rd', '3rd'), ('4th', '4th'), ],
                                     required=False, readonly=False)
@@ -729,12 +764,12 @@ class RequestTransStiker(models.Model):
     tipe = fields.Char(string="Tipe Mobil", required=False, readonly=False)
     tahun = fields.Char(string="Tahun", required=False, readonly=False)
     warna = fields.Char(string="Warna", required=False, readonly=False)
-    amount = fields.Integer(string="Amount", required=False, readonly=True)  #
-    baru = fields.Boolean(string="LANGGANAN", readonly=False)
+    amount = fields.Integer(string="Total Amount", required=False, readonly=True)  #
+    baru = fields.Boolean(string="KONTRIBUSI", readonly=False)
     perpanjang = fields.Boolean(string="PERPANJANG", default=False, readonly=False)
-    beli_stiker = fields.Boolean(string="BELI STIKER", default=False, readonly=False)
-    ganti_nopol = fields.Boolean(string="GANTI NOMOR POLISI", default=False, readonly=False)
-    kartu_hilang = fields.Boolean(string="KARTU HILANG", default=False, readonly=False)
+    beli_stiker = fields.Boolean(string="STIKER", default=False, readonly=False)
+    ganti_nopol = fields.Boolean(string="GANTI NOPOL", default=False, readonly=False)
+    kartu_hilang = fields.Boolean(string="KARTU PARKIR", default=False, readonly=False)
     tipe_trans = fields.Selection(string="Tipe Transaksi",
                                   selection=[('ganti_nopol', 'GANTI NOPOL'), ('kartu_hilang', 'KARTU HILANG'), ],
                                   required=False, readonly=False)
@@ -754,7 +789,7 @@ class RequestTransStiker(models.Model):
     new_tipe = fields.Char(string="Tipe Mobil", required=False, readonly=False)
     new_tahun = fields.Char(string="Tahun", required=False, readonly=False)
     new_warna = fields.Char(string="Warna", required=False, readonly=False)
-    state = fields.Selection(string="state",
+    state = fields.Selection(string="State",
                          selection=[('open', 'Open'), ('payment', 'Waiting Payment'), ('done', 'Done'), ],
                          required=False, default="open", )
 

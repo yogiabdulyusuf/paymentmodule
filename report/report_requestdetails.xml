@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <template id="report_requestdetails">
+            <t t-call="report.html_container">
+                <t t-call="report.internal_layout">
+                    <div class="page">
+                        <div class="text-center">
+                            <h2>Request Details</h2>
+
+                            <strong><t t-esc="date_start" t-options="{'widget': 'datetime'}"/> - <t t-esc="date_stop" t-options="{'widget': 'datetime'}"/></strong>
+                        </div>
+
+                        <table  class="table table-condensed">
+
+                            <thead><tr>
+                                <th>ID #</th>
+                                <th>UNIT #</th>
+                                <th>NAME</th>
+                                <th>DATE</th>
+                                <th>NOPOL</th>
+                                <th>PERIODE</th>
+                                <th>DURASI</th>
+                                <th>BIAYA KONTRIBUSI</th>
+                                <th>STIKER</th>
+                                <th>KARTU PARKIR</th>
+                                <th>GANTI NOPOL</th>
+                                <th>TOTAL AMOUNT</th>
+                            </tr></thead>
+                            <tbody>
+                                <t t-set="total" t-value="0" />
+                                <t t-set="total_val_harga" t-value="0" />
+                                <t t-set="total_harga_beli_stiker" t-value="0" />
+                                <t t-set="total_harga_kartu_hilang" t-value="0" />
+                                <t t-set="total_harga_ganti_nopol" t-value="0" />
+
+                                <tr t-foreach='transstikers' t-as='line'>
+                                    <td><t t-esc="line['notrans']" /></td>
+                                    <td><t t-esc="line['unit_kerja']" /></td>
+                                    <td><t t-esc="line['name']" /></td>
+                                    <td><t t-esc="line['tanggal']" /></td>
+                                    <td><t t-esc="line['nopol']" /></td>
+                                    <td><t t-esc="line['periode']" /></td>
+                                    <td><t t-esc="line['duration']" /></td>
+                                    <td class="text-right"><t t-esc="line['val_harga']" /></td>
+                                    <td class="text-right"><t t-esc="line['harga_beli_stiker']" /></td>
+                                    <td class="text-right"><t t-esc="line['harga_kartu_hilang']" /></td>
+                                    <td class="text-right"><t t-esc="line['harga_ganti_nopol']" /></td>
+                                    <td class="text-right"><t t-esc="line['amount']" /></td>
+
+                                    <t t-set="total_val_harga" t-value="total_val_harga + line['val_harga']"/>
+                                    <t t-set="total_harga_beli_stiker" t-value="total_harga_beli_stiker + line['harga_beli_stiker']"/>
+                                    <t t-set="total_harga_kartu_hilang" t-value="total_harga_kartu_hilang + line['harga_kartu_hilang']"/>
+                                    <t t-set="total_harga_ganti_nopol" t-value="total_harga_ganti_nopol + line['harga_ganti_nopol']"/>
+                                    <t t-set="total" t-value="total + line['amount']"/>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td><strong>Total </strong></td>
+                                    <td class="text-right">
+                                        <span t-esc="total_val_harga" />
+                                    </td>
+                                    <td class="text-right">
+                                        <span t-esc="total_harga_beli_stiker" />
+                                    </td>
+                                    <td class="text-right">
+                                        <span t-esc="total_harga_kartu_hilang" />
+                                    </td>
+                                    <td class="text-right">
+                                        <span t-esc="total_harga_ganti_nopol" />
+                                    </td>
+                                    <td class="text-right">
+                                        <span t-esc="total" />
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <br/>
+                        <br/>
+
+                        <div class="row text-center">
+                            <div class="col-xs-3">
+                                <div class="row">
+                                    <span>PREPARED BY,</span>
+                                </div>
+                                <div class="row">
+                                    <br/>
+                                    <br/>
+                                    <br/>
+                                    <br/>
+                                </div>
+                                <div class="row">
+                                    <span>(...................................)</span>
+                                </div>
+                                <div class="row">
+                                    <span>FRONT OFFICE</span>
+                                </div>
+                            </div>
+
+                            <div class="col-xs-6">
+                                <div class="row">
+                                    <span>CHECKED BY,</span>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-6">
+                                         <div class="row">
+                                            <br/>
+                                            <br/>
+                                            <br/>
+                                            <br/>
+                                        </div>
+                                        <div class="row">
+                                            <span>(...................................)</span>
+                                        </div>
+                                         <div class="row">
+                                            <span>FRONT OFFICE MGR.</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <div class="row">
+                                            <br/>
+                                            <br/>
+                                            <br/>
+                                            <br/>
+                                        </div>
+                                        <div class="row">
+                                            <span>(...................................)</span>
+                                        </div>
+                                        <div class="row">
+                                            <span>ASST. MGR. ADMINISTRATION</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-3">
+                                <div class="row">
+                                    <span>APPROVED BY,</span>
+                                </div>
+                                <div class="row">
+                                    <br/>
+                                    <br/>
+                                    <br/>
+                                    <br/>
+                                </div>
+                                <div class="row">
+                                    <span>(...................................)</span>
+                                </div>
+                                <div class="row">
+                                    <span> GENERAL MANAGER</span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </t>
+            </t>
+        </template>
+    </data>
+</openerp>

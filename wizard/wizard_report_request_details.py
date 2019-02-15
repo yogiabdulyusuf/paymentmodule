@@ -3,15 +3,15 @@
 
 from odoo import api, fields, models
 from odoo.exceptions import UserError
+from datetime import datetime, timedelta
 
 
 class WizardReportRequestDetails(models.TransientModel):
     _name = 'wizard.report.request.details'
     _description = 'Open Sale Details Report'
 
-
-    start_date = fields.Datetime(required=True, default=fields.Datetime.now)
-    end_date = fields.Datetime(required=True, default=fields.Datetime.now)
+    start_date = fields.Date(required=True, )
+    end_date = fields.Date(required=True, )
 
     @api.onchange('start_date')
     def _onchange_start_date(self):

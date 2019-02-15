@@ -36,21 +36,21 @@
                             <div class="row" style="border: 2px solid #7C7BAD; border-radius:10px; padding-top:10px; padding-bottom:10px;">
                                 <div class="col-md-3">
                                     <field name="baru" attrs="{'readonly': [('state', '!=', 'open')]}"/>
-                                    <label for="baru" string="Langganan" />
+                                    <label for="baru" string="KONTRIBUSI" />
                                 </div>
                                 <div class="col-md-3">
                                     <field name="beli_stiker" attrs="{'readonly': [('state', '!=', 'open')]}"/>
-                                    <label for="beli_stiker" string="Beli Stiker" />
+                                    <label for="beli_stiker" string="STIKER" />
 
                                 </div>
                                 <div class="col-md-3">
                                     <field name="ganti_nopol" attrs="{'readonly': [('state', '!=', 'open')]}"/>
-                                    <label for="ganti_nopol" string="Ganti Nopol" />
+                                    <label for="ganti_nopol" string="GANTI NOPOL" />
 
                                 </div>
                                 <div class="col-md-3">
                                     <field name="kartu_hilang" attrs="{'readonly': [('state', '!=', 'open')]}"/>
-                                    <label for="kartu_hilang" string="Kartu Hilang" />
+                                    <label for="kartu_hilang" string="KARTU PARKIR" />
 
                                 </div>
                             </div>
@@ -59,7 +59,7 @@
                         <br/>
 
                         <notebook>
-                            <page string="Langganan" attrs="{'invisible': [('baru','!=', True), ]}">
+                            <page string="KONTRIBUSI" attrs="{'invisible': [('baru','!=', True), ]}">
                                 <group string="Description">
                                     <group>
                                         <field name="jenis_transaksi" attrs="{'readonly': [('state', '!=', 'open')]}" />
@@ -89,7 +89,7 @@
 
                                 </group>
                             </page>
-                            <page string="Beli Stiker" attrs="{'invisible': [('beli_stiker','!=', True), ]}">
+                            <page string="STIKER" attrs="{'invisible': [('beli_stiker','!=', True), ]}">
 
                                 <group >
                                     <group>
@@ -97,27 +97,28 @@
                                     </group>
                                 </group>
                             </page>
-                            <page string="Ganti Nomor Polisi" attrs="{'invisible': [('ganti_nopol','!=', True), ]}">
+                            <page string="GANTI NOPOL" attrs="{'invisible': [('ganti_nopol','!=', True), ]}">
 
                                 <group >
                                     <group string="New NOPOL">
-                                        <field name="new_nopol" />
-                                        <field name="new_jenis_mobil" />
-                                        <field name="new_merk" />
-                                        <field name="new_tipe" />
-                                        <field name="new_tahun" />
-                                        <field name="new_warna" />
+                                        <field name="new_nopol" attrs="{'required': [('ganti_nopol','=', True), ]}" />
+                                        <field name="new_jenis_mobil" attrs="{'required': [('ganti_nopol','=', True), ]}" />
+                                        <field name="new_merk" attrs="{'required': [('ganti_nopol','=', True), ]}" />
+                                        <field name="new_tipe" attrs="{'required': [('ganti_nopol','=', True), ]}" />
+                                        <field name="new_tahun" attrs="{'required': [('ganti_nopol','=', True), ]}" />
+                                        <field name="new_warna" attrs="{'required': [('ganti_nopol','=', True), ]}" />
                                     </group>
                                     <group>
                                         <field name="harga_ganti_nopol"/>
                                     </group>
                                 </group>
                             </page>
-                            <page string="Kartu Hilang" attrs="{'invisible': [('kartu_hilang','!=', True), ]}" >
+                            <page string="KARTU PARKIR" attrs="{'invisible': [('kartu_hilang','!=', True), ]}" >
 
                                 <group >
                                     <group>
                                         <field name="harga_kartu_hilang"  />
+                                        <field name="no_kartu" />
                                     </group>
                                 </group>
                             </page>
