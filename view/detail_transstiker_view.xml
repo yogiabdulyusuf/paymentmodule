@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- DETAIL TRANSACTION STIKER -->
+        <record id="detail_transaction_stiker_form_view" model="ir.ui.view">
+            <field name="name">Detail Transaction Stiker Form</field>
+            <field name="model">detail.transstiker</field>
+            <field name="arch" type="xml">
+                <form string="Detail Transaksi Stiker Form">
+                    <sheet>
+                        <group>
+                            <group string="Vehicle Information">
+                                <field name="nopol"/>
+                                <field name="jenis_mobil"/>
+                                <field name="adm"/>
+                                <field name="kategori"/>
+                                <field name="jenis_member"/>
+                                <field name="akses"/>
+                                <field name="akses_out"/>
+                            </group>
+                            <group>
+                                <field name="status"/>
+                                <field name="merk"/>
+                                <field name="tipe"/>
+                                <field name="tahun"/>
+                                <field name="warna"/>
+                                <field name="keterangan"/>
+                            </group>
+                        </group>
+
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <!-- END DETAIL TRANSACTION stiker -->
+
+    </data>
+</odoo>

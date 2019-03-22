@@ -19,7 +19,11 @@ Payment Module
 
 """,
 	"data": [
-		"view/payment_module_view.xml",
+		"security/payment_module_security.xml",
+		"security/ir.model.access.csv",
+		"view/request_transstiker_view.xml",
+		"view/trans_stiker_view.xml",
+		"view/detail_transstiker_view.xml",
 		"view/billing_view.xml",
 		"view/setting_view.xml",
 		"data/ir_sequence.xml",		

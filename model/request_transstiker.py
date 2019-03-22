@@ -41,7 +41,6 @@ class RequestTransStiker(models.Model):
         return res
 
 
-
     @api.onchange('stiker_id', 'baru', 'jenis_transaksi', 'jenis_member')
     def _get_stiker(self):
 
@@ -124,6 +123,8 @@ class RequestTransStiker(models.Model):
                     self.jenis_transaksi = "stop"
                 elif self.jenis_transaksi == "perpanjang":
                     self.jenis_transaksi = "perpanjang"
+                elif self.jenis_transaksi == "langganan_baru":
+                    self.jenis_transaksi = "langganan_baru"
                 else:
                     self.jenis_transaksi = jenis_transaksi
                 self.awal_old = awal
@@ -174,7 +175,6 @@ class RequestTransStiker(models.Model):
 
 
             else:
-                # kosongkan data
                 if self.jenis_transaksi == 'langganan_baru':
                     # check langganan baru mobil ke berapa
                     jenis_member_st_ids = self.env.user.company_id.jenis_member_st
@@ -274,6 +274,7 @@ class RequestTransStiker(models.Model):
     @api.onchange('beli_stiker','ganti_nopol','kartu_hilang')
     def _change_harga_beli_stiker(self):
 
+        # PILIH STIKER
         if self.beli_stiker == True:
             beli_stiker_id = self.env.user.company_id.beli_stiker_ids
             if not beli_stiker_id:
@@ -283,6 +284,7 @@ class RequestTransStiker(models.Model):
         else:
             self.harga_beli_stiker = 0
 
+        # PILIH GANTI NOPOL
         if self.ganti_nopol == True:
             ganti_nopol_id = self.env.user.company_id.ganti_nopol_ids
 
@@ -335,6 +337,16 @@ class RequestTransStiker(models.Model):
         else:
             self.harga_kartu_hilang = 0
 
+    # Buttom request for cancel
+    @api.one
+    def send_mail(self):
+        args = [('name','=','Request for Cancel')]
+        template_ids = self.env['mail.template'].search(args) # search tamplate dengan nama : Request for Cancel
+        template_ids[0].send_mail(self.id, force_send=True)
+
+        self.message_post("Send Email notification for cancel transaction to Manager")
+        self.state = 'request_cancel'
+
 
     @api.onchange('val_harga', 'harga_beli_stiker', 'harga_ganti_nopol', 'harga_kartu_hilang')
     def calculate_rts(self):
@@ -343,9 +355,39 @@ class RequestTransStiker(models.Model):
         self.adm = self.create_uid
 
 
+    # GENERATE TRANS ID WHERE langganan_baru
+    @api.one
+    def _generate_stiker_id(self):
+        unit = self.unit_kerja.kode
+        check = self.jenis_member
+
+        if check == "1st":
+            n = "1"
+        elif check == "2nd":
+            n = "2"
+        elif check == "3rd":
+            n = "3"
+        elif check == "4th":
+            n = "4"
+
+        if self.jenis_transaksi == "langganan_baru":
+            # _logger.info(unit)
+            tex = unit[1:5]
+            # self.stiker_id = tex + str(n)
+            # _logger.info(tex)
+            trans = tex + str(n)
+            self.no_id = trans
+
+            args = [('no_id', '=', trans)]
+            res = self.env['trans.stiker'].search(args, limit=1)
+
+            if res.no_id:
+                raise ValidationError("this trans id : " + trans + " already exists!")
+
+
     # END DATE UPDATE
-    @api.onchange('duration','cara_bayar')
-    @api.depends('awal', 'duration','val_harga')
+    @api.onchange('cara_bayar','jenis_member','jenis_transaksi')
+    @api.depends('awal','duration','val_harga','stiker_id')
     def _get_end_date(self):
         # akhir_old = ''
         #
@@ -377,41 +419,40 @@ class RequestTransStiker(models.Model):
         if not jenis_member_th_ids:
             raise ValidationError("Price 4th Membership not defined,  please define on company information!")
 
-        if self.no_id:
-            check_row = self.no_id[4]
+        if self.jenis_member:
+            check_row = self.jenis_member
         else:
             check_row = ''
 
-        if check_row == "1":
+        if check_row == "1st":
             self.val_harga = jenis_member_st_ids
 
-        elif check_row == "2":
+        elif check_row == "2nd":
             if self.jenis_transaksi == "stop":
                 self.val_harga = 0
-            else:
+            elif self.jenis_transaksi == "langganan_baru":
                 if self.cara_bayar == "non_billing":
                     self.val_harga = int(jenis_member_nd_ids) * int(self.duration)
                 else:
                     self.val_harga = int(jenis_member_nd_ids) * 2
 
-        elif check_row == "3":
+        elif check_row == "3rd":
             if self.jenis_transaksi == "stop":
                 self.val_harga = 0
-            else:
+            elif self.jenis_transaksi == "langganan_baru":
                 if self.cara_bayar == "non_billing":
                     self.val_harga = int(jenis_member_rd_ids) * int(self.duration)
                 else:
                     self.val_harga = int(jenis_member_rd_ids) * 2
 
-        elif check_row == "4":
+        elif check_row == "4th":
             if self.jenis_transaksi == "stop":
                 self.val_harga = 0
-            else:
+            elif self.jenis_transaksi == "langganan_baru":
                 if self.cara_bayar == "non_billing":
                     self.val_harga = int(jenis_member_th_ids) * int(self.duration)
                 else:
                     self.val_harga = int(jenis_member_th_ids) * 2
-
 
 
     # BUTTON DONE PAYMENT
@@ -482,8 +523,9 @@ class RequestTransStiker(models.Model):
 
                     strSQL = """SELECT notrans FROM transaksi_stiker_tes WHERE notrans='{}'""".format(self.no_id)
                     transaksistikers1 = postgresconn.execute_general(strSQL)
-
-                    if len(transaksistikers1) == 0:
+                    _logger.info("Search stiker")
+                    _logger.info(transaksistikers1)
+                    if transaksistikers1 != "None":
                         base_external_dbsource_obj = self.env['base.external.dbsource']
                         postgresconn = base_external_dbsource_obj.sudo().browse(1)
                         postgresconn.connection_open()
@@ -506,7 +548,7 @@ class RequestTransStiker(models.Model):
                     strSQL = """SELECT notrans FROM detail_transaksi_stiker_tes WHERE notrans='{}'""".format(self.no_id)
                     transaksistikers2 = postgresconn.execute_general(strSQL)
 
-                    if len(transaksistikers2) == 0:
+                    if transaksistikers2 != "None":
                         base_external_dbsource_obj = self.env['base.external.dbsource']
                         postgresconn = base_external_dbsource_obj.sudo().browse(1)
                         postgresconn.connection_open()
@@ -554,7 +596,7 @@ class RequestTransStiker(models.Model):
                             else:
                                 vals.update({'jenis_transaksi': 'stop'})
                             vals.update({'awal': transaksistiker[5]})
-                            vals.update({'harga': transaksistiker[6]})    
+                            vals.update({'harga': transaksistiker[6]})
                             vals.update({'keterangan': transaksistiker[7]})
                             vals.update({'tanggal': transaksistiker[8]})
                             vals.update({'operator': transaksistiker[9]})
@@ -598,7 +640,7 @@ class RequestTransStiker(models.Model):
                                 vals.update({'jenis_transaksi': 'stop'})
                             _logger.info(transaksistiker[5])
                             vals.update({'awal': transaksistiker[5]})
-                            vals.update({'harga': transaksistiker[6]})            
+                            vals.update({'harga': transaksistiker[6]})
                             vals.update({'keterangan': transaksistiker[7]})
                             vals.update({'tanggal': transaksistiker[8]})
                             vals.update({'operator': transaksistiker[9]})
@@ -879,69 +921,17 @@ class RequestTransStiker(models.Model):
 
         self.message_post("Request for Cancel - Approve")
 
-    @api.one
-    def trans_reject(self):
-        self.message_post("Request for Cancel - Reject")
-        self.state = 'done'
-
-    # Buttom request for cancel
-    @api.one
-    def send_mail(self):
-        args = [('name','=','Request for Cancel')]
-        template_ids = self.env['mail.template'].search(args) # search tamplate dengan nama : Request for Cancel
-        template_ids[0].send_mail(self.id, force_send=True)
-
-        self.message_post("Send Email notification for cancel transaction to Manager")
-        self.state = 'request_cancel'
-
-
     # Buttom Payment
     @api.one
     def trans_payment(self):
         self.message_post("Save Request Transaction Stiker")
         self.state = "payment"
 
-    # GENERATE TRANS ID WHERE langganan_baru
     @api.one
-    def _generate_stiker_id(self):
-        unit = self.unit_kerja.kode
-        check = self.jenis_member
+    def trans_reject(self):
+        self.message_post("Request for Cancel - Reject")
+        self.state = 'done'
 
-        if check == "1st":
-            n = "1"
-        elif check == "2nd":
-            n = "2"
-        elif check == "3rd":
-            n = "3"
-        elif check == "4th":
-            n = "4"
-
-        if self.jenis_transaksi == "langganan_baru":
-            #_logger.info(unit)
-            tex = unit[1:5]
-            # self.stiker_id = tex + str(n)
-            #_logger.info(tex)
-            trans = tex + str(n)
-            self.no_id = trans
-
-            args = [('no_id', '=', trans)]
-            res = self.env['trans.stiker'].search(args, limit=1)
-
-            if res.no_id:
-                raise ValidationError("this trans id : "+ trans +" already exists!")
-
-
-    @api.model
-    def create(self, vals):
-        vals['notrans'] = self.env['ir.sequence'].next_by_code('request.transstiker')
-        res = super(RequestTransStiker, self).create(vals)
-        res._get_stiker()
-        res._change_harga_beli_stiker()
-        res._get_end_date()
-        res.trans_payment()
-        res._generate_stiker_id()
-        res.calculate_rts()
-        return res
 
     notrans = fields.Char(string="ID #", readonly=True)  #
     unit_kerja = fields.Many2one('stasiun.kerja', 'UNIT #', required=True, readonly=False)  #
@@ -1008,80 +998,34 @@ class RequestTransStiker(models.Model):
                                         ('done', 'Done')],
                              required=False, default="open", )
 
+    @api.model
+    def create(self, vals):
+        vals['notrans'] = self.env['ir.sequence'].next_by_code('request.transstiker')
+        res = super(RequestTransStiker, self).create(vals)
+        res._get_stiker()
+        res._change_harga_beli_stiker()
+        res._get_end_date()
+        res.trans_payment()
+        res._generate_stiker_id()
+        res.calculate_rts()
+        return res
 
-class StasiunKerja(models.Model):
-    _name = 'stasiun.kerja'
-    _rec_name = 'kode'
-    _description = 'Stasiun Kerja'
+    @api.multi
+    def unlink(self):
+        if self.state == 'done':
+            raise ValidationError("Can't delete record")
+        elif self.state == 'cancel':
+            raise ValidationError("Can't delete record")
+        elif self.state == 'request_cancel':
+            raise ValidationError("Can't delete record")
 
-    kode = fields.Char(string="Kode", required=False, )
-    nama = fields.Char(string="Nama", required=False, )
-    margin = fields.Integer(string="Margin", required=False, )
-    spv = fields.Char(string="SPV", required=False, )
-    target = fields.Integer(string="Target", required=False, )
-    status = fields.Integer(string="Status", required=False, )
-    trans_stiker_ids = fields.One2many(comodel_name="trans.stiker", inverse_name="stasiun_kerja_id",
-                                       string="Trans Stiker #", required=False, )
+    @api.multi
+    def write(self, vals):
+        """Override default Odoo write function and extend."""
+        # Do your custom logic here
+        if self.state == 'open':
+            raise ValidationError("Can't Edit record")
+        else:
+            raise ValidationError("Can't Edit record")
 
-
-# TRANSACTION PAYMENT
-class TransStiker(models.Model):
-    _name = 'trans.stiker'
-    _rec_name = 'notrans'
-    _description = 'Transaction Payment Module'
-
-    stasiun_kerja_id = fields.Many2one(comodel_name="stasiun.kerja", string="Stasiun Kerja", required=False, )
-    notrans = fields.Char(string="No Transaksi", required=False, )
-    name = fields.Char(string="Nama", required=False, )
-    alamat = fields.Char(string="Alamat", required=False, )
-    telphone = fields.Char(string="No Telphone", required=False, )
-    jenis_transaksi = fields.Selection(string="Jenis Transaksi",
-                                       selection=[('langganan_baru', 'Langganan Baru'), ('perpanjang', 'Perpanjang'),
-                                                  ('stop', 'Stop Langganan'), ], required=False, )
-    awal = fields.Date(string="Start Date", required=False, )
-    harga = fields.Integer(string="Harga", required=False, )
-    keterangan = fields.Text(string="Keterangan", required=False, )
-    tanggal = fields.Date(string="Date", required=False, default=datetime.now())
-    operator = fields.Char(string="Operator", required=False, )
-    akhir = fields.Date(string="End Date", required=True, )
-    maks = fields.Char(string="Maks", required=False, )
-    no_id = fields.Char(string="No ID", required=False, )
-    unit_kerja = fields.Char(string="Unit Kerja", required=False, )
-    no_induk = fields.Char(string="No Induk", required=False, )
-    jenis_stiker = fields.Char(string="Jenis Stiker", required=False, )
-    hari_ke = fields.Char(string="Hari ke", required=False, )
-    jenis_langganan = fields.Char(string="Jenis Langganan", required=False, )
-    exit_pass = fields.Char(string="Exit Pass", required=False, )
-    no_kuitansi = fields.Char(string="No Kuitansi", required=False, )
-    tgl_edited = fields.Date(string="Tanggal Edit", required=False, )
-    tipe_exit_pass = fields.Char(string="Tipe Exit Pass", required=False, )
-    seq_code = fields.Char(string="Seq Code", required=False, )
-    unitno = fields.Char(string="Unit No", required=False, )
-    area = fields.Char(string="Area", required=False, )
-    reserved = fields.Char(string="Reserved", required=False, )
-    cara_bayar = fields.Selection(string="Cara Pembayaran",
-                                  selection=[('billing', 'Billing'), ('non_billing', 'Non Billing'), ],
-                                  required=False, )
-    detail_ids = fields.One2many('detail.transstiker', 'trans_stiker_id', 'Details')
-
-
-class DetailTransStiker(models.Model):
-    _name = 'detail.transstiker'
-    _rec_name = 'nopol'
-    _description = 'Transaction Stiker'
-
-    trans_stiker_id = fields.Many2one('trans.stiker', 'Stiker #')
-    notrans = fields.Char(string="No Transaksi", required=False, )
-    nopol = fields.Char(string="No Polisi", required=False, )
-    jenis_mobil = fields.Char(string="Jenis Mobil", required=False, )
-    adm = fields.Char(string="Admin", required=False, )
-    kategori = fields.Integer(string="Kategori", required=False, )
-    jenis_member = fields.Char(string="Jenis Member", required=False, )
-    akses = fields.Char(string="Akses", required=False, )
-    akses_out = fields.Char(string="Akses Out", required=False, )
-    status = fields.Integer(string="Status", required=False, )
-    merk = fields.Char(string="Merk Mobil", required=False, )
-    tipe = fields.Char(string="Tipe Mobil", required=False, )
-    tahun = fields.Char(string="Tahun", required=False, )
-    warna = fields.Char(string="Warna", required=False, )
-    keterangan = fields.Text(string="Keterangan", required=False, )
+        return super(RequestTransStiker, self).write(vals)

@@ -3,6 +3,10 @@ from datetime import datetime, timedelta, time
 from odoo.exceptions import ValidationError, Warning
 from dateutil.relativedelta import relativedelta
 import logging
+import base64
+import StringIO
+import logging
+import io
 
 _logger = logging.getLogger(__name__)
 
@@ -12,6 +16,23 @@ class BillingPeriode(models.Model):
 
     def last_day_of_month(self, year, month):
         return datetime.strptime(str(year) + '-' + str(month + 1).zfill(2) + '-01', '%Y-%m-%d') + relativedelta(days=-1)
+
+    @api.one
+    def trans_generate_file(self):
+        output = StringIO.StringIO()
+        output.write("unitno,date_trans,description,amount\r\n")
+        for source in self.line_ids:
+            # for source in self.stock_inventory_source_ids:
+            _logger.info(source)
+            content = "{},{},{},{}\r\n".format(
+                source.unitno,
+                source.date_trans,
+                source.description,
+                source.amount)
+            _logger.info(content)
+            output.write(content)
+        self.billing_csv_file = base64.encodestring(output.getvalue())
+
 
     @api.one
     def trans_generate_line(self):
@@ -66,12 +87,7 @@ class BillingPeriode(models.Model):
                         str_start_date = str(self.billing_year) + "-" + str(self.billing_month).zfill(2) + "-" + str(last_day).zfill(2)
                     _logger.info(str_start_date)
                     start_date = datetime.strptime(str_start_date,"%Y-%m-%d") + relativedelta(months=+1)
-                    #d_date = tgl.day
-                    #date_now = datetime.now()
-                    #duration = timedelta(days=30)
-                    #date_delta = date_now + duration
-                    #d_year = date_delta.year
-                    #d_month = date_delta.month
+
 
                     duration = relativedelta(months=+1)
                     #start_date = datetime.strptime(str(d_year) + '-' + str(d_month) + '-' + str(d_date) + ' 00:00:00' , "%Y-%m-%d %H:%M:%S")
@@ -98,27 +114,47 @@ class BillingPeriode(models.Model):
                     break
 
         self.state = "transfer"
+        self.generate_date_billing = datetime.now()
 
     @api.one
     def trans_generate(self):
         self.trans_generate_line()
 
     @api.one
+    def trans_confirm(self):
+        self.state = "close"
+
+    @api.one
     def trans_open(self):
         self.state = "generate"
 
-    @api.model
-    def create(self, vals):
-        vals['billing_id'] = self.env['ir.sequence'].next_by_code('billing.periode')
-        res = super(BillingPeriode, self).create(vals) # PERINTAH SUPER INI DI GUNAKAN KETIKA
-        res.trans_open()
-        return res
 
     billing_id = fields.Char(string="Billing ID", readonly=True)
     billing_year = fields.Integer(string="Billing Year", required=False, )
     billing_month = fields.Integer(string="Billing Month", required=False, )
+    generate_date_billing = fields.Date(string="Date Generate Billing", required=False, )
+    billing_csv_filename = fields.Char('File Name', readonly=True, default="billing.csv")
+    billing_csv_file = fields.Binary('Billing File', readonly=True)
     line_ids = fields.One2many('billingperiode.line', 'billing_periode', 'Details', readonly=True)
     state = fields.Selection(string="", selection=[('open', 'Open'), ('generate', 'Waiting Generate'), ('transfer', 'Waiting Transfer'), ('close', 'Close'), ], required=False, default="open" )
+
+    @api.model
+    def create(self, vals):
+        vals['billing_id'] = self.env['ir.sequence'].next_by_code('billing.periode')
+        res = super(BillingPeriode, self).create(vals)  # PERINTAH SUPER INI DI GUNAKAN KETIKA
+        res.trans_open()
+        return res
+
+    @api.multi
+    def unlink(self):
+        if self.state == 'close':
+            raise ValidationError("Can't delete record")
+        else:
+            # delete cancel
+            args2 = [('billing_periode', '=', self.billing_id.id)]
+            self.env['billingperiode.line'].search(args2).unlink()
+        super(BillingPeriode,self).unlink()
+
 
 class BillingPeriodeLine(models.Model):
     _name = 'billingperiode.line'
@@ -131,4 +167,16 @@ class BillingPeriodeLine(models.Model):
     awal = fields.Date(string="Start Date", required=False, )
     akhir = fields.Date(string="End Date", required=False, )
     jenis_langganan = fields.Char(string="Member Type", required=False, )
+
+    # @api.multi
+    # def unlink(self):
+    #     if self.state == 'done':
+    #         raise ValidationError("Can't delete record")
+    #     super(BillingPeriodeLine,self).unlink()
+
+
+
+
+
+
 

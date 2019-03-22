@@ -7,10 +7,10 @@
            <field name="model">billing.periode</field>
            <field name="arch" type="xml">
                <form string="Form Billing Periode">
-                   <header>
-                        <button name="trans_generate" string="Generate" type="object" class="oe_highlight" states="generate" />
-                        <!--<button name="update_startdate_enddate" string="Confirm" type="object" class="oe_highlight" confirm="has the customer paid?" states="confirm" />-->
-                        <!--<button name="update_startdate_enddate" string="Transfer" type="object" class="oe_highlight" confirm="has the customer paid?" states="transfer" />-->
+                    <header>
+                        <button name="trans_generate" string="Generate" type="object" class="oe_highlight" states="generate" groups="paymentmodule.group_fo_user"/>
+                        <button name="trans_confirm" string="Confirm" type="object" class="oe_highlight" states="transfer" groups="paymentmodule.group_fo_user"/>
+                        <button name="trans_generate_file" string="Export to CSV" type="object" class="oe_highlight" states="close" groups="paymentmodule.group_fo_user"/>
                         <field name="state" widget="statusbar" statusbar_visible="open,generate,transfer,close"/>
                     </header>
                    <sheet>
@@ -22,6 +22,8 @@
                            <group>
                                <field name="billing_year"/>
                                <field name="billing_month"/>
+                               <field name="billing_csv_filename"/>
+                               <field name="billing_csv_file" readonly="1" filename="billing_csv_filename"/>
                            </group>
                        </group>
 
@@ -60,6 +62,19 @@
             <field name="res_model">billing.periode</field>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
+        </record>
+
+        <record id="group_access_user_form_billing" model="ir.ui.view">
+            <field name="name">Action Billing Periode</field>
+            <field name="model">billing.periode</field>
+            <field name="inherit_id" ref="form_billing_periode"/>
+            <field name="groups_id" eval="[(6,0,[ref('paymentmodule.group_fo_user')])]"/>
+            <field name="domain_force">[('state','!=','close')]</field>
+            <field name="arch" type="xml">
+                <xpath expr="//form" position="attributes">
+                    <attribute name="delete">false</attribute>
+                </xpath>
+            </field>
         </record>
 
         <!-- ==================================================  -->
