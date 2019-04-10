@@ -2,25 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7d06e309-00d6-43d7-ab4f-0f81211e74d1" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/model/detail_transstiker.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/model/request_transstiker.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/model/stasiun_kerja.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/model/trans_stiker.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/security/payment_module_security.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/view/detail_transstiker_view.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/view/request_transstiker_view.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/view/trans_stiker_view.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/__manifest__.py" beforeDir="false" afterPath="$PROJECT_DIR$/__manifest__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/model/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/model/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/model/billing.py" beforeDir="false" afterPath="$PROJECT_DIR$/model/billing.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/model/payment_module.py" beforeDir="false" afterPath="$PROJECT_DIR$/model/payment_module.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/security/groups.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/security/ir.model.access.csv" beforeDir="false" afterPath="$PROJECT_DIR$/security/ir.model.access.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/view/billing_view.xml" beforeDir="false" afterPath="$PROJECT_DIR$/view/billing_view.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/view/payment_module_view.xml" beforeDir="false" afterPath="$PROJECT_DIR$/view/payment_module_view.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/view/top_menu.xml" beforeDir="false" afterPath="$PROJECT_DIR$/view/top_menu.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/model/request_transstiker.py" beforeDir="false" afterPath="$PROJECT_DIR$/model/request_transstiker.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/view/request_transstiker_view.xml" beforeDir="false" afterPath="$PROJECT_DIR$/view/request_transstiker_view.xml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -32,7 +16,7 @@
     <session id="557566045">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="22" />
+          <entry key="project.closed" value="23" />
           <entry key="project.open.time.0" value="4" />
           <entry key="project.open.time.1" value="1" />
           <entry key="project.open.time.10" value="1" />
@@ -44,41 +28,42 @@
           <entry key="project.open.time.24" value="1" />
           <entry key="project.open.time.25" value="1" />
           <entry key="project.open.time.26" value="3" />
+          <entry key="project.open.time.28" value="1" />
           <entry key="project.open.time.3" value="2" />
           <entry key="project.open.time.33" value="1" />
           <entry key="project.open.time.4" value="2" />
           <entry key="project.open.time.48" value="1" />
           <entry key="project.open.time.6" value="1" />
           <entry key="project.open.time.7" value="1" />
-          <entry key="project.opened" value="24" />
+          <entry key="project.opened" value="25" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="csv" value="199" />
-          <entry key="py" value="11075" />
+          <entry key="py" value="14254" />
           <entry key="txt" value="47" />
-          <entry key="xml" value="3292" />
+          <entry key="xml" value="3648" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="PLAIN_TEXT" value="246" />
-          <entry key="Python" value="11075" />
-          <entry key="XML" value="3292" />
+          <entry key="Python" value="14254" />
+          <entry key="XML" value="3648" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
-          <entry key="csv" value="4" />
-          <entry key="py" value="59" />
+          <entry key="csv" value="5" />
+          <entry key="py" value="62" />
           <entry key="xml" value="44" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="PLAIN_TEXT" value="4" />
-          <entry key="Python" value="59" />
+          <entry key="PLAIN_TEXT" value="5" />
+          <entry key="Python" value="62" />
           <entry key="XML" value="44" />
         </counts>
       </usages-collector>
@@ -92,8 +77,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/model/billing.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-16">
-              <caret line="144" column="24" lean-forward="true" selection-start-line="144" selection-start-column="24" selection-end-line="144" selection-end-column="24" />
+            <state relative-caret-position="884">
+              <caret line="144" column="24" selection-start-line="144" selection-start-column="24" selection-end-line="144" selection-end-column="24" />
               <folding>
                 <element signature="e#0#36#0" expanded="true" />
                 <element signature="e#616#1160#0" />
@@ -106,8 +91,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/model/detail_transstiker.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="102">
-              <caret line="6" column="25" lean-forward="true" selection-start-line="6" selection-start-column="25" selection-end-line="6" selection-end-column="32" />
+            <state relative-caret-position="170">
+              <caret line="10" column="16" selection-start-line="10" selection-start-column="4" selection-end-line="10" selection-end-column="19" />
               <folding>
                 <element signature="e#0#36#0" expanded="true" />
               </folding>
@@ -118,18 +103,43 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/model/request_transstiker.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="102">
-              <caret line="389" column="43" lean-forward="true" selection-start-line="389" selection-start-column="43" selection-end-line="389" selection-end-column="43" />
+            <state relative-caret-position="-529">
+              <caret line="158" column="42" selection-start-line="158" selection-start-column="42" selection-end-line="158" selection-end-column="42" />
               <folding>
                 <element signature="e#0#36#0" expanded="true" />
                 <element signature="e#1225#1338#0" />
-                <element signature="e#1451#10045#0" />
-                <element signature="e#10160#12253#0" />
-                <element signature="e#12333#12674#0" />
-                <element signature="e#12809#12970#0" />
-                <element signature="e#13074#13808#0" />
-                <element signature="e#16887#36503#0" />
-                <element signature="e#36414#42212#0" />
+                <element signature="e#1417#2715#0" />
+                <element signature="e#12161#16624#0" />
+                <element signature="e#16671#17454#0" />
+                <element signature="e#10431#12575#0" />
+                <element signature="e#13061#15797#0" />
+                <element signature="e#17934#18043#0" />
+                <element signature="e#21553#22805#0" />
+                <element signature="e#23360#24358#0" />
+                <element signature="e#26020#32065#0" />
+                <element signature="e#32597#35337#0" />
+                <element signature="e#35622#36778#0" />
+                <element signature="e#36835#38391#0" />
+                <element signature="e#38631#44429#0" />
+                <element signature="e#38723#39829#0" />
+                <element signature="e#39905#41397#0" />
+                <element signature="e#41462#42568#0" />
+                <element signature="e#42619#44370#0" />
+                <marker date="1554878553221" expanded="true" signature="2792:6381" ph="..." />
+                <marker date="1554878553221" expanded="true" signature="19481:22250" ph="..." />
+                <marker date="1554878553221" expanded="true" signature="23565:23719" ph="..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/model/trans_stiker.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="238">
+              <caret line="14" column="11" selection-start-line="14" selection-start-column="4" selection-end-line="14" selection-end-column="11" />
+              <folding>
+                <element signature="e#0#36#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -139,7 +149,7 @@
         <entry file="file://$PROJECT_DIR$/security/payment_module_security.xml">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="474">
-              <caret line="40" column="36" lean-forward="true" selection-start-line="40" selection-start-column="36" selection-end-line="40" selection-end-column="36" />
+              <caret line="40" column="36" selection-start-line="40" selection-start-column="36" selection-end-line="40" selection-end-column="36" />
             </state>
           </provider>
         </entry>
@@ -156,8 +166,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/view/request_transstiker_view.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="255">
-              <caret line="15" column="56" selection-start-line="15" selection-start-column="56" selection-end-line="15" selection-end-column="56" />
+            <state relative-caret-position="357">
+              <caret line="84" column="116" selection-start-line="84" selection-start-column="116" selection-end-line="84" selection-end-column="116" />
             </state>
           </provider>
         </entry>
@@ -165,7 +175,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/view/billing_view.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-51">
+            <state relative-caret-position="17">
               <caret line="18" column="29" selection-start-line="18" selection-start-column="29" selection-end-line="18" selection-end-column="29" />
             </state>
           </provider>
@@ -190,6 +200,9 @@
       <find>update_startdate_enddate</find>
       <find>-ss-</find>
       <find>stasiun.ker</find>
+      <find>awal_old</find>
+      <find>store</find>
+      <find>stiker_check</find>
     </findStrings>
     <replaceStrings>
       <replace>awal</replace>
@@ -234,10 +247,10 @@
         <option value="$PROJECT_DIR$/view/detail_transstiker_view.xml" />
         <option value="$PROJECT_DIR$/__manifest__.py" />
         <option value="$PROJECT_DIR$/model/billing.py" />
-        <option value="$PROJECT_DIR$/view/request_transstiker_view.xml" />
         <option value="$PROJECT_DIR$/security/payment_module_security.xml" />
         <option value="$PROJECT_DIR$/security/ir.model.access.csv" />
         <option value="$PROJECT_DIR$/view/top_menu.xml" />
+        <option value="$PROJECT_DIR$/view/request_transstiker_view.xml" />
         <option value="$PROJECT_DIR$/model/request_transstiker.py" />
       </list>
     </option>
@@ -253,6 +266,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -294,12 +308,11 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Mappings" />
+    <property name="settings.editor.selected.configurable" value="reference.settingsdialog.IDE.editor.colors.General" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -471,14 +484,20 @@
       <option name="project" value="LOCAL" />
       <updated>1550200355953</updated>
     </task>
-    <option name="localTasksCounter" value="22" />
+    <task id="LOCAL-00022" summary="init">
+      <created>1553252034494</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1553252034494</updated>
+    </task>
+    <option name="localTasksCounter" value="23" />
     <servers />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1616" height="876" extended-state="6" />
-    <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.22179975" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" type="SLIDING" visible="true" weight="0.22179975" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -600,16 +619,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/model/trans_stiker.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="3" column="36" selection-start-line="3" selection-start-column="36" selection-end-line="3" selection-end-column="36" />
-          <folding>
-            <element signature="e#0#36#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/model/payment_module.py">
       <provider selected="true" editor-type-id="text-editor">
         <state>
@@ -641,16 +650,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/model/stasiun_kerja.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="10" lean-forward="true" selection-start-line="10" selection-end-line="10" />
-          <folding>
-            <element signature="e#0#36#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/view/payment_module_view.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="593">
@@ -665,18 +664,8 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/paymentmodule/security/ir.model.access.csv">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/paymentmodule/model/payment_module.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-7038">
-          <folding>
-            <element signature="e#0#36#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/paymentmodule/security/ir.model.access.csv" />
+    <entry file="file://$PROJECT_DIR$/paymentmodule/model/payment_module.py" />
     <entry file="file://$PROJECT_DIR$/model/setting.py">
       <provider selected="true" editor-type-id="text-editor">
         <state>
@@ -691,10 +680,24 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/report/report_request_details.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-85">
+          <caret line="7" column="48" selection-start-line="7" selection-start-column="13" selection-end-line="7" selection-end-column="55" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/model/stasiun_kerja.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="10" lean-forward="true" selection-start-line="10" selection-end-line="10" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/model/billing.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-16">
-          <caret line="144" column="24" lean-forward="true" selection-start-line="144" selection-start-column="24" selection-end-line="144" selection-end-column="24" />
+        <state relative-caret-position="884">
+          <caret line="144" column="24" selection-start-line="144" selection-start-column="24" selection-end-line="144" selection-end-column="24" />
           <folding>
             <element signature="e#0#36#0" expanded="true" />
             <element signature="e#616#1160#0" />
@@ -703,10 +706,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/report/report_request_details.py">
+    <entry file="file://$PROJECT_DIR$/view/top_menu.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-85">
-          <caret line="7" column="48" selection-start-line="7" selection-start-column="13" selection-end-line="7" selection-end-column="55" />
+        <state relative-caret-position="187">
+          <caret line="11" column="51" selection-start-line="11" selection-start-column="51" selection-end-line="11" selection-end-column="51" />
         </state>
       </provider>
     </entry>
@@ -719,56 +722,72 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/view/billing_view.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-51">
+        <state relative-caret-position="17">
           <caret line="18" column="29" selection-start-line="18" selection-start-column="29" selection-end-line="18" selection-end-column="29" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/view/top_menu.xml">
+    <entry file="file://$PROJECT_DIR$/view/request_transstiker_view.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="11" column="51" selection-start-line="11" selection-start-column="51" selection-end-line="11" selection-end-column="51" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/model/detail_transstiker.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="6" column="25" lean-forward="true" selection-start-line="6" selection-start-column="25" selection-end-line="6" selection-end-column="32" />
-          <folding>
-            <element signature="e#0#36#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="357">
+          <caret line="84" column="116" selection-start-line="84" selection-start-column="116" selection-end-line="84" selection-end-column="116" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/security/payment_module_security.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="474">
-          <caret line="40" column="36" lean-forward="true" selection-start-line="40" selection-start-column="36" selection-end-line="40" selection-end-column="36" />
+          <caret line="40" column="36" selection-start-line="40" selection-start-column="36" selection-end-line="40" selection-end-column="36" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/view/request_transstiker_view.xml">
+    <entry file="file://$PROJECT_DIR$/model/detail_transstiker.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="15" column="56" selection-start-line="15" selection-start-column="56" selection-end-line="15" selection-end-column="56" />
+        <state relative-caret-position="170">
+          <caret line="10" column="16" selection-start-line="10" selection-start-column="4" selection-end-line="10" selection-end-column="19" />
+          <folding>
+            <element signature="e#0#36#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/model/trans_stiker.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="14" column="11" selection-start-line="14" selection-start-column="4" selection-end-line="14" selection-end-column="11" />
+          <folding>
+            <element signature="e#0#36#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/model/request_transstiker.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="389" column="43" lean-forward="true" selection-start-line="389" selection-start-column="43" selection-end-line="389" selection-end-column="43" />
+        <state relative-caret-position="-529">
+          <caret line="158" column="42" selection-start-line="158" selection-start-column="42" selection-end-line="158" selection-end-column="42" />
           <folding>
             <element signature="e#0#36#0" expanded="true" />
             <element signature="e#1225#1338#0" />
-            <element signature="e#1451#10045#0" />
-            <element signature="e#10160#12253#0" />
-            <element signature="e#12333#12674#0" />
-            <element signature="e#12809#12970#0" />
-            <element signature="e#13074#13808#0" />
-            <element signature="e#16887#36503#0" />
-            <element signature="e#36414#42212#0" />
+            <element signature="e#1417#2715#0" />
+            <element signature="e#12161#16624#0" />
+            <element signature="e#16671#17454#0" />
+            <element signature="e#10431#12575#0" />
+            <element signature="e#13061#15797#0" />
+            <element signature="e#17934#18043#0" />
+            <element signature="e#21553#22805#0" />
+            <element signature="e#23360#24358#0" />
+            <element signature="e#26020#32065#0" />
+            <element signature="e#32597#35337#0" />
+            <element signature="e#35622#36778#0" />
+            <element signature="e#36835#38391#0" />
+            <element signature="e#38631#44429#0" />
+            <element signature="e#38723#39829#0" />
+            <element signature="e#39905#41397#0" />
+            <element signature="e#41462#42568#0" />
+            <element signature="e#42619#44370#0" />
+            <marker date="1554878553221" expanded="true" signature="2792:6381" ph="..." />
+            <marker date="1554878553221" expanded="true" signature="19481:22250" ph="..." />
+            <marker date="1554878553221" expanded="true" signature="23565:23719" ph="..." />
           </folding>
         </state>
       </provider>

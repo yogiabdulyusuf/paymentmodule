@@ -24,7 +24,7 @@
                         <group>
                             <group>
                                 <field name="unit_kerja" attrs="{'readonly': [('state', '!=', 'open')]}"/>
-                                <field name="stiker_id" attrs="{'readonly': ['|',('jenis_transaksi','=','langganan_baru'), ('state','=','done')], 'required': [('jenis_transaksi','!=','langganan_baru')]}" />
+                                <field name="stiker_id" attrs="{'readonly': ['|',('state', '!=', 'open')], 'required': [('jenis_transaksi','!=','langganan_baru')]}" />
                             </group>
 
                             <group style="border: 1px solid #D2D2FF; border-radius:10px;">
@@ -67,28 +67,28 @@
                                 <group string="Description">
                                     <group>
                                         <field name="jenis_transaksi" attrs="{'readonly': [('state', '!=', 'open')]}" />
-                                        <field name="name" attrs="{'readonly': [('jenis_transaksi','!=','langganan_baru')], 'required': [('jenis_transaksi','=', 'langganan_baru')], }" />
-                                        <field name="alamat" attrs="{'readonly': [('jenis_transaksi','!=','langganan_baru')], 'required': [('jenis_transaksi','=', 'langganan_baru')],}"/>
-                                        <field name="telphone" attrs="{'readonly': [('jenis_transaksi','!=','langganan_baru')], 'required': [('jenis_transaksi','=', 'langganan_baru')],} "/>
+                                        <field name="name" attrs="{'readonly': ['|',('jenis_transaksi','!=','langganan_baru'), ('state', '!=', 'open')], 'required': [('jenis_transaksi','=', 'langganan_baru')], }" />
+                                        <field name="alamat" attrs="{'readonly': ['|',('jenis_transaksi','!=','langganan_baru'), ('state', '!=', 'open')], }"/>
+                                        <field name="telphone" attrs="{'readonly': ['|',('jenis_transaksi','!=','langganan_baru'), ('state', '!=', 'open')], } "/>
                                         <field name="no_id" />
-                                        <field name="duration" attrs="{'readonly': [('state', '!=', 'open')], 'invisible': [('jenis_transaksi','!=','langganan_baru'), ('jenis_transaksi','!=','perpanjang'),]}" />
-                                        <field name="awal" attrs="{'invisible': [('jenis_transaksi','!=','langganan_baru'), ('jenis_transaksi','!=','perpanjang'), ('jenis_transaksi','!=','stop')], }" />
-                                        <field name="akhir" attrs="{'invisible': [('jenis_transaksi','!=','langganan_baru'), ('jenis_transaksi','!=','perpanjang'), ('jenis_transaksi','!=','stop')], }" />
+                                        <field name="duration" attrs="{'readonly': [('state', '!=', 'open')], 'invisible': [('jenis_transaksi','not in',('langganan_baru','perpanjang','perpanjang_baru'))], 'required': [('jenis_transaksi','in', ['langganan_baru','perpanjang','perpanjang_baru'])]}" />
+                                        <field name="awal" />
+                                        <field name="akhir" />
                                         <field name="val_harga"/>
                                         <field name="tanggal"/>
                                         <field name="adm"/>
-                                        <field name="awal_old" attrs="{'invisible': [('jenis_transaksi','!=','langganan_baru'), ('jenis_transaksi','!=','perpanjang'), ('jenis_transaksi','!=','stop')], }" />
-                                        <field name="akhir_old" attrs="{'invisible': [('jenis_transaksi','!=','langganan_baru'), ('jenis_transaksi','!=','perpanjang'), ('jenis_transaksi','!=','stop')], }" />
+                                        <field name="awal_old" />
+                                        <field name="akhir_old" />
                                     </group>
                                     <group>
-                                        <field name="cara_bayar" attrs="{'readonly': ['|',('jenis_transaksi','=','stop'),('state','=','done')], 'invisible': [('jenis_transaksi','=', False)], 'required': [('jenis_transaksi','=', 'langganan_baru')],}" />
-                                        <field name="nopol" attrs="{'readonly': [('jenis_transaksi','!=','langganan_baru')], 'required': [('jenis_transaksi','=', 'langganan_baru')],}" />
-                                        <field name="jenis_mobil" attrs="{'readonly': [('jenis_transaksi','!=','langganan_baru')], 'required': [('jenis_transaksi','=', 'langganan_baru')],}" />
-                                        <field name="jenis_member" attrs="{'readonly': [('jenis_transaksi','!=','langganan_baru')], 'required': [('jenis_transaksi','=', 'langganan_baru')],}"/>
-                                        <field name="merk" attrs="{'readonly': [('jenis_transaksi','!=','langganan_baru')], 'required': [('jenis_transaksi','=', 'langganan_baru')],}" />
-                                        <field name="tipe" attrs="{'readonly': [('jenis_transaksi','!=','langganan_baru')], 'required': [('jenis_transaksi','=', 'langganan_baru')],}" />
-                                        <field name="tahun" attrs="{'readonly': [('jenis_transaksi','!=','langganan_baru')], 'required': [('jenis_transaksi','=', 'langganan_baru')],}" />
-                                        <field name="warna" attrs="{'readonly': [('jenis_transaksi','!=','langganan_baru')], 'required': [('jenis_transaksi','=', 'langganan_baru')],}" />
+                                        <field name="cara_bayar"    attrs="{'readonly': ['|',('jenis_transaksi','=','stop'),('state', '!=', 'open')], 'invisible': [('jenis_transaksi','=', False)], 'required': [('jenis_transaksi','in', ['langganan_baru','perpanjang','perpanjang_baru'])],}" />
+                                        <field name="nopol"         attrs="{'readonly': ['|',('jenis_transaksi','not in',('langganan_baru','perpanjang_baru')),('state', '!=', 'open')], 'required': [('jenis_transaksi','in', ('langganan_baru','perpanjang_baru'))],}" />
+                                        <field name="jenis_mobil"   attrs="{'readonly': ['|',('jenis_transaksi','not in',('langganan_baru','perpanjang_baru')),('state', '!=', 'open')], 'required': [('jenis_transaksi','in', ('langganan_baru','perpanjang_baru'))],}" />
+                                        <field name="jenis_member"  attrs="{'readonly': ['|',('jenis_transaksi','!=','langganan_baru'),('state', '!=', 'open')], 'required': [('jenis_transaksi','in', ('langganan_baru','perpanjang_baru'))],}" />
+                                        <field name="merk"          attrs="{'readonly': ['|',('jenis_transaksi','not in',('langganan_baru','perpanjang_baru')),('state', '!=', 'open')], 'required': [('jenis_transaksi','in', ('langganan_baru','perpanjang_baru'))],}" />
+                                        <field name="tipe"          attrs="{'readonly': ['|',('jenis_transaksi','not in',('langganan_baru','perpanjang_baru')),('state', '!=', 'open')], 'required': [('jenis_transaksi','in', ('langganan_baru','perpanjang_baru'))],}" />
+                                        <field name="tahun"         attrs="{'readonly': ['|',('jenis_transaksi','not in',('langganan_baru','perpanjang_baru')),('state', '!=', 'open')], 'required': [('jenis_transaksi','in', ('langganan_baru','perpanjang_baru'))],}" />
+                                        <field name="warna"         attrs="{'readonly': ['|',('jenis_transaksi','not in',('langganan_baru','perpanjang_baru')),('state', '!=', 'open')], 'required': [('jenis_transaksi','in', ('langganan_baru','perpanjang_baru'))],}" />
                                     </group>
 
                                     <field name="keterangan" attrs="{'readonly': [('state', '!=', 'open')]}" />
@@ -104,7 +104,6 @@
                                 </group>
                             </page>
                             <page string="GANTI NOPOL" attrs="{'invisible': [('ganti_nopol','!=', True), ]}">
-
                                 <group >
                                     <group string="New NOPOL">
                                         <field name="new_nopol" attrs="{'required': [('ganti_nopol','=', True), ]}" />
@@ -120,7 +119,6 @@
                                 </group>
                             </page>
                             <page string="KARTU PARKIR" attrs="{'invisible': [('kartu_hilang','!=', True), ]}" >
-
                                 <group >
                                     <group>
                                         <field name="harga_kartu_hilang"  />
@@ -185,10 +183,9 @@
             <field name="name">Request Transaction Stiker</field>
             <field name="res_model">request.transstiker</field>
             <field name="view_type">form</field>
-            <field name="context">{'search_default_payment': 1,'search_default_request_cancel': 1,'search_default_status': 1}</field>
+            <field name="context">{'search_default_payment': 1,'search_default_request_cancel': 1,'search_default_status': 1,}</field>
             <field name="view_mode">tree,form,graph,pivot</field>
         </record>
-
 
         <record model="ir.ui.view" id="view_request_transstiker_filter">
             <field name="name">Request Transaction Stiker</field>
