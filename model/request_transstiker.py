@@ -195,6 +195,44 @@ class RequestTransStiker(models.Model):
 
             if self.jenis_transaksi == 'perpanjang_baru':
 
+                name = ''
+                alamat = ''
+                telphone = ''
+                no_id = ''
+
+                # AMBIL DATA STIKER DARI TRANS STIKER
+                for data_detail in self.stiker_id:
+                    name = data_detail.name
+                    alamat = data_detail.alamat
+                    telphone = data_detail.telphone
+                    no_id = data_detail.no_id
+                    awal = data_detail.awal
+                    akhir = data_detail.akhir
+
+                self.name = name
+                self.alamat = alamat
+                self.telphone = telphone
+                self.no_id = no_id
+                self.awal_old = awal
+                self.akhir_old = akhir
+
+                if self.no_id:
+                    check_row = self.no_id[4]
+                else:
+                    check_row = ''
+
+                if check_row == "1":
+                    self.jenis_member = "1st"
+                elif check_row == "2":
+                    self.jenis_member = "2nd"
+                elif check_row == "3":
+                    self.jenis_member = "3rd"
+                elif check_row == "4":
+                    self.jenis_member = "4th"
+                elif check_row == "":
+                    self.val_harga = 0
+                    self.jenis_member = ""
+
                 check_row = self.jenis_member
                 if check_row == "1st":
                     self.val_harga = jenis_member_st_ids
