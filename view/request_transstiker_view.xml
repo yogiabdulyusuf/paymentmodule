@@ -9,8 +9,10 @@
             <field name="arch" type="xml">
                 <form string="Request Transaction Stiker Form">
                     <header>
-                        <button name="trans_done_payment" string="Done Payment" type="object" class="oe_highlight" confirm="has the customer paid?" states="payment" groups="paymentmodule.group_fo_cashier"/>
-                        <button name="send_mail" string="Request for Cancel" type="object" states="done" groups="paymentmodule.group_fo_user"/>
+                        <button name="trans_done_payment" string="Done Payment" type="object" class="oe_highlight" confirm="has the customer paid?" states="payment" groups="paymentmodule.group_fo_cashier, paymentmodule.group_fo_duty_manager"/>
+                        <button name="request_cancel_send_mail" string="Request for Cancel" type="object" states="done" groups="paymentmodule.group_fo_user"/>
+                        <button name="trans_confirm" string="Confirm" type="object" states="confirm" class="oe_highlight" groups="paymentmodule.group_fo_user"/>
+                        <button name="wizard_add_card_member" string="Add Card Member" type="object" class="oe_highlight" states="card_member" groups="paymentmodule.group_fo_user"/> <!-- attrs="{'invisible': ['|', ('jenis_transaksi', '!=', 'langganan_baru'), ('state','!=', 'card_member')]}" -->
                         <button name="trans_approve" string="Approve" type="object" class="oe_highlight" states="request_cancel" groups="paymentmodule.group_fo_manager" />
                         <button name="trans_reject" string="Reject" type="object" class="oe_highlight" states="request_cancel" groups="paymentmodule.group_fo_manager" />
                         <field name="state" widget="statusbar" statusbar_visible="open,payment,done"/>
@@ -66,7 +68,7 @@
                             <page string="KONTRIBUSI" attrs="{'invisible': [('baru','!=', True), ]}">
                                 <group string="Description">
                                     <group>
-                                        <field name="jenis_transaksi" attrs="{'readonly': [('state', '!=', 'open')]}" />
+                                        <field name="jenis_transaksi" attrs="{'readonly': [('state', '!=', 'open')], 'required': [('baru','=', True)],}" />
                                         <field name="name" attrs="{'readonly': ['|',('jenis_transaksi','!=','langganan_baru'), ('state', '!=', 'open')], 'required': [('jenis_transaksi','=', 'langganan_baru')], }" />
                                         <field name="alamat" attrs="{'readonly': ['|',('jenis_transaksi','!=','langganan_baru'), ('state', '!=', 'open')], }"/>
                                         <field name="telphone" attrs="{'readonly': ['|',('jenis_transaksi','!=','langganan_baru'), ('state', '!=', 'open')], } "/>
@@ -119,9 +121,14 @@
                                 </group>
                             </page>
                             <page string="KARTU PARKIR" attrs="{'invisible': [('kartu_hilang','!=', True), ]}" >
-                                <group >
-                                    <group>
+                                <group>
+                                    <field name="old_no_kartu" />
+                                    <field name="old_no_urut" />
+                                </group>
+                                <group>
+                                    <group string="Change">
                                         <field name="harga_kartu_hilang"  />
+                                        <field name="no_urut" />
                                         <field name="no_kartu" />
                                     </group>
                                 </group>
@@ -183,7 +190,7 @@
             <field name="name">Request Transaction Stiker</field>
             <field name="res_model">request.transstiker</field>
             <field name="view_type">form</field>
-            <field name="context">{'search_default_payment': 1,'search_default_request_cancel': 1,'search_default_status': 1,}</field>
+            <field name="context">{'search_default_payment': 1,'search_default_request_cancel': 1,'search_default_card_member': 1,'search_default_status': 1,}</field>
             <field name="view_mode">tree,form,graph,pivot</field>
         </record>
 
@@ -197,6 +204,7 @@
                     <field name="no_id"/>
                     <filter icon="terp-gtk-media-pause" string="Payment" name="payment" domain="[('state','=','payment')]" />
                     <filter icon="terp-gtk-media-pause" string="Request Cancel" name="request_cancel" domain="[('state','=','request_cancel')]" />
+                    <filter icon="terp-gtk-media-pause" string="Add Card Member" name="card_member" domain="[('state','=','card_member')]" />
                     <group expand="0" string="Group By">
                         <filter string="Status" name="status" domain="[]" context="{'group_by':'state'}" />
                     </group>

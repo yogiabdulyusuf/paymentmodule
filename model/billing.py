@@ -42,15 +42,16 @@ class BillingPeriode(models.Model):
         akhir = date_akhir + relativedelta(months=+2)
 
         for row in res:
-            #_logger.info(row.no_id) ('approvedstatus', '=', '1'), ('status', '=', '1'),
-
             arg = [('no_id', '=', row.no_id), ('jenis_member', '!=', '1st') ]
-
             list = self.env['request.transstiker'].search(arg, order='notrans desc')
             #_logger.info(line_check.no_id)
 
             for line in list:
+                dt1 = datetime.strptime(str(line.tanggal), '%Y-%m-%d %H:%M:%S')
+                dt2 = datetime.now()
                 if line.jenis_transaksi == 'stop' or line.cara_bayar == 'non_billing':
+                    break
+                if line.jenis_transaksi in ['langganan_baru','perpanjang_baru'] and dt2.month == dt1.month:    # ini tambahan filter jika 'langganan_baru','perpanjang_baru' di bulan yang sama maka tidak dapat billing
                     break
                 if line.akhir <= str(akhir):
                     continue

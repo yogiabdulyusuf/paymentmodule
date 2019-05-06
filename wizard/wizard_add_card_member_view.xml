@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_wizard_add_card_member" model="ir.ui.view">
+        <field name="name">wizard.add.card.member</field>
+        <field name="model">wizard.add.card.member</field>
+        <field name="arch" type="xml">
+            <form string="Card Member">
+                <group>
+                    <field name="card_member"/>
+                </group>
+                <footer>
+                    <button name="add_card_member" string="Add Card" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-default" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="act_wizard_add_card_member" model="ir.actions.act_window">
+        <field name="name">wizard.add.card.member</field>
+        <field name="res_model">wizard.add.card.member</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_wizard_add_card_member"/>
+        <field name="target">new</field>
+    </record>
+
+</odoo>

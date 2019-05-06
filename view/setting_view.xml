@@ -21,8 +21,13 @@
                             </group>
                             <group string="Denda">
                                 <field name="beli_stiker_ids" />
-                                <field name="ganti_nopol_ids" />
                                 <field name="kartu_hilang_ids" />
+                            </group>
+                            <group string="Ganti Nopol">
+                                <field name="ganti_nopol_ids" />
+                                <field name="ganti_nopol_dua_ids" />
+                                <field name="ganti_nopol_tiga_ids" />
+                                <field name="ganti_nopol_empat_ids" />
                             </group>
                         </group>
                     </page>

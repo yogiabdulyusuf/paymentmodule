@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_wizard_not_approve" model="ir.ui.view">
+        <field name="name">wizard.not.approve</field>
+        <field name="model">wizard.not.approve</field>
+        <field name="arch" type="xml">
+            <form string="Not Approve">
+                <group>
+                    <field name="rts_ids"/>
+                    <field name="note"/>
+                </group>
+                <footer>
+                    <button name="not_approve_message" string="Apply" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-default" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="act_wizard_not_approve" model="ir.actions.act_window">
+        <field name="name">wizard.not.approve</field>
+        <field name="res_model">wizard.not.approve</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_wizard_not_approve"/>
+        <field name="target">new</field>
+    </record>
+
+</odoo>

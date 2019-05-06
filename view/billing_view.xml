@@ -8,9 +8,9 @@
            <field name="arch" type="xml">
                <form string="Form Billing Periode">
                     <header>
-                        <button name="trans_generate" string="Generate" type="object" class="oe_highlight" states="generate" groups="paymentmodule.group_fo_user"/>
-                        <button name="trans_confirm" string="Confirm" type="object" class="oe_highlight" states="transfer" groups="paymentmodule.group_fo_user"/>
-                        <button name="trans_generate_file" string="Export to CSV" type="object" class="oe_highlight" states="close" groups="paymentmodule.group_fo_user"/>
+                        <button name="trans_generate" string="Generate" type="object" class="oe_highlight" states="generate" groups="paymentmodule.group_fo_billing"/>
+                        <button name="trans_confirm" string="Confirm" type="object" class="oe_highlight" states="transfer" groups="paymentmodule.group_fo_billing"/>
+                        <button name="trans_generate_file" string="Export to CSV" type="object" class="oe_highlight" states="close" groups="paymentmodule.group_fo_billing"/>
                         <field name="state" widget="statusbar" statusbar_visible="open,generate,transfer,close"/>
                     </header>
                    <sheet>

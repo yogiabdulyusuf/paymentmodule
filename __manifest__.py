@@ -32,6 +32,8 @@ Payment Module
 		"report/report_requestdetails.xml",
 		"report/report_request_details.xml",
 		"wizard/wizard_report_request_details_view.xml",
+		"wizard/wizard_add_card_member_view.xml",
+		"wizard/wizard_not_approve_view.xml",
 		"view/top_menu.xml",
 	],
 	"installable": True,
