@@ -1285,6 +1285,28 @@ class RequestTransStiker(models.Model):
 
             self.state = "cancel"
 
+        if self.kartu_hilang == True:
+            # Process perpanjang to Server Database Parkir and update trans_id
+            base_external_dbsource_obj = self.env['base.external.dbsource']
+            postgresconn = base_external_dbsource_obj.sudo().browse(1)
+            postgresconn.connection_open()
+            _logger.info("Connection Open")
+
+            DATE = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+
+            # Insert Data Trans Stiker with Odoo to Database Server Parkir
+            _logger.info('Update NOPOL')
+            strSQLUpdate_cardmember = """UPDATE card_member """ \
+                                      """ SET """ \
+                                      """no_card='{}', no_urut='{}', tanggal='{}'""" \
+                                      """ WHERE """ \
+                                      """notrans='{}'""".format(self.old_no_kartu, self.old_no_urut, DATE, self.stiker_id.notrans)
+
+            postgresconn.execute_general(strSQLUpdate_cardmember)
+
+            self.state = "cancel"
+
+
         self.message_post("Request for Cancel - Approve")
 
     # Buttom Payment
