@@ -4,6 +4,7 @@
     <list default="true" id="7d06e309-00d6-43d7-ab4f-0f81211e74d1" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/model/request_transstiker.py" beforeDir="false" afterPath="$PROJECT_DIR$/model/request_transstiker.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/view/request_transstiker_view.xml" beforeDir="false" afterPath="$PROJECT_DIR$/view/request_transstiker_view.xml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -15,7 +16,7 @@
     <session id="557566045">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="24" />
+          <entry key="project.closed" value="26" />
           <entry key="project.open.time.0" value="4" />
           <entry key="project.open.time.1" value="1" />
           <entry key="project.open.time.10" value="1" />
@@ -34,22 +35,23 @@
           <entry key="project.open.time.48" value="1" />
           <entry key="project.open.time.6" value="1" />
           <entry key="project.open.time.7" value="1" />
-          <entry key="project.opened" value="27" />
+          <entry key="project.open.time.8" value="1" />
+          <entry key="project.opened" value="28" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="csv" value="206" />
-          <entry key="py" value="16863" />
+          <entry key="py" value="17728" />
           <entry key="txt" value="47" />
-          <entry key="xml" value="4044" />
+          <entry key="xml" value="4141" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="PLAIN_TEXT" value="253" />
-          <entry key="Python" value="16863" />
-          <entry key="XML" value="4044" />
+          <entry key="Python" value="17728" />
+          <entry key="XML" value="4141" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -76,7 +78,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/model/billing.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-867">
+            <state relative-caret-position="255">
               <caret line="15" selection-start-line="15" selection-end-line="15" />
               <folding>
                 <element signature="e#0#36#0" expanded="true" />
@@ -98,35 +100,26 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/model/request_transstiker.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3298">
-              <caret line="1309" column="57" lean-forward="true" selection-start-line="1309" selection-start-column="57" selection-end-line="1309" selection-end-column="57" />
+            <state relative-caret-position="275">
+              <caret line="110" column="29" lean-forward="true" selection-start-line="110" selection-start-column="29" selection-end-line="110" selection-end-column="29" />
               <folding>
                 <element signature="e#0#36#0" expanded="true" />
-                <element signature="e#1225#1338#0" />
-                <element signature="e#1429#3574#0" />
-                <element signature="e#3660#7234#0" />
-                <element signature="e#7357#17757#0" />
-                <element signature="e#8327#10122#0" />
-                <element signature="e#10196#13179#0" />
-                <element signature="e#13247#17757#0" />
-                <element signature="e#17943#18830#0" />
-                <element signature="e#21349#28788#0" />
-                <element signature="e#24384#25174#0" />
-                <element signature="e#25599#26689#0" />
-                <element signature="e#26771#28921#0" />
-                <element signature="e#29002#44590#0" />
-                <element signature="e#44661#45817#0" />
-                <element signature="e#45874#47437#0" />
-                <element signature="e#47566#48554#0" />
-                <element signature="e#48742#49848#0" />
-                <element signature="e#49924#51603#0" />
-                <element signature="e#51668#52774#0" />
-                <element signature="e#52825#54576#0" />
-                <element signature="e#59948#61104#0" />
-                <marker date="1557205090804" expanded="true" signature="3657:7246" ph="..." />
-                <marker date="1557205090804" expanded="true" signature="19379:20608" ph="..." />
-                <marker date="1557205090804" expanded="true" signature="21362:28815" ph="..." />
-                <marker date="1557205090804" expanded="true" signature="30130:30279" ph="..." />
+                <element signature="e#1435#3580#0" />
+                <element signature="e#7057#10587#0" />
+                <element signature="e#13712#17106#0" />
+                <element signature="e#20697#21045#0" />
+                <element signature="e#30483#31573#0" />
+                <element signature="e#49545#50701#0" />
+                <element signature="e#53486#63036#0" />
+                <element signature="e#54053#55159#0" />
+                <element signature="e#55235#56914#0" />
+                <element signature="e#56979#58085#0" />
+                <element signature="e#58136#59887#0" />
+                <element signature="e#59939#60913#0" />
+                <marker date="1557297049285" expanded="true" signature="3679:5266" ph="..." />
+                <marker date="1557297049285" expanded="true" signature="18685:19914" ph="..." />
+                <marker date="1557297049285" expanded="true" signature="20668:28121" ph="..." />
+                <marker date="1557297049285" expanded="true" signature="29436:29585" ph="..." />
               </folding>
             </state>
           </provider>
@@ -135,8 +128,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/view/request_transstiker_view.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="238">
-              <caret line="14" column="80" selection-start-line="14" selection-start-column="80" selection-end-line="14" selection-end-column="80" />
+            <state relative-caret-position="321">
+              <caret line="94" column="72" selection-start-line="94" selection-start-column="72" selection-end-line="94" selection-end-column="72" />
             </state>
           </provider>
         </entry>
@@ -144,7 +137,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/security/payment_module_security.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="404">
+            <state relative-caret-position="714">
               <caret line="42" column="76" selection-start-line="42" selection-start-column="76" selection-end-line="42" selection-end-column="76" />
             </state>
           </provider>
@@ -185,6 +178,10 @@
       <find>day</find>
       <find>month</find>
       <find>payment</find>
+      <find>_generate_stiker_id</find>
+      <find>calculate_rts</find>
+      <find>_change_ganti_nopol</find>
+      <find>self.no_id</find>
     </findStrings>
     <replaceStrings>
       <replace>awal</replace>
@@ -252,53 +249,10 @@
     <navigator proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
     </navigator>
-    <panes>
-      <pane id="Scope" />
-      <pane id="ProjectPane">
-        <subPane>
-          <expand>
-            <path>
-              <item name="paymentmodule" type="b2602c69:ProjectViewProjectNode" />
-              <item name="paymentmodule" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="paymentmodule" type="b2602c69:ProjectViewProjectNode" />
-              <item name="paymentmodule" type="462c0819:PsiDirectoryNode" />
-              <item name="data" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="paymentmodule" type="b2602c69:ProjectViewProjectNode" />
-              <item name="paymentmodule" type="462c0819:PsiDirectoryNode" />
-              <item name="model" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="paymentmodule" type="b2602c69:ProjectViewProjectNode" />
-              <item name="paymentmodule" type="462c0819:PsiDirectoryNode" />
-              <item name="report" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="paymentmodule" type="b2602c69:ProjectViewProjectNode" />
-              <item name="paymentmodule" type="462c0819:PsiDirectoryNode" />
-              <item name="security" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="paymentmodule" type="b2602c69:ProjectViewProjectNode" />
-              <item name="paymentmodule" type="462c0819:PsiDirectoryNode" />
-              <item name="view" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="paymentmodule" type="b2602c69:ProjectViewProjectNode" />
-              <item name="paymentmodule" type="462c0819:PsiDirectoryNode" />
-              <item name="wizard" type="462c0819:PsiDirectoryNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
-    </panes>
+    <panes />
   </component>
   <component name="PropertiesComponent">
-    <property name="last_opened_file_path" value="D:/rdm" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Mappings" />
   </component>
   <component name="RunDashboard">
@@ -499,11 +453,18 @@
       <option name="project" value="LOCAL" />
       <updated>1557109780633</updated>
     </task>
-    <option name="localTasksCounter" value="26" />
+    <task id="LOCAL-00026" summary="init">
+      <created>1557213032773</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1557213032773</updated>
+    </task>
+    <option name="localTasksCounter" value="27" />
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1616" height="876" extended-state="7" />
+    <frame x="-8" y="-8" width="1616" height="876" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" type="SLIDING" weight="0.22179975" />
@@ -549,13 +510,18 @@
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/model/request_transstiker.py</url>
-          <line>564</line>
-          <option name="timeStamp" value="7" />
+          <line>1173</line>
+          <option name="timeStamp" value="9" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/model/request_transstiker.py</url>
-          <line>1146</line>
-          <option name="timeStamp" value="8" />
+          <line>104</line>
+          <option name="timeStamp" value="11" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/model/request_transstiker.py</url>
+          <line>746</line>
+          <option name="timeStamp" value="13" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
@@ -786,13 +752,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/wizard/wizard_add_card_member_view.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="5" column="38" selection-start-line="5" selection-start-column="38" selection-end-line="5" selection-end-column="38" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://D:/Project-0034-10.0/jakc_jewerly/product_old.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-1721">
@@ -831,26 +790,12 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/model/billing.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-867">
+        <state relative-caret-position="255">
           <caret line="15" selection-start-line="15" selection-end-line="15" />
           <folding>
             <element signature="e#0#36#0" expanded="true" />
             <element signature="e#616#1160#0" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/security/payment_module_security.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="404">
-          <caret line="42" column="76" selection-start-line="42" selection-start-column="76" selection-end-line="42" selection-end-column="76" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/view/request_transstiker_view.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="14" column="80" selection-start-line="14" selection-start-column="80" selection-end-line="14" selection-end-column="80" />
         </state>
       </provider>
     </entry>
@@ -861,37 +806,49 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/security/payment_module_security.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="714">
+          <caret line="42" column="76" selection-start-line="42" selection-start-column="76" selection-end-line="42" selection-end-column="76" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wizard/wizard_add_card_member_view.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="85">
+          <caret line="5" column="38" selection-start-line="5" selection-start-column="38" selection-end-line="5" selection-end-column="38" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/view/request_transstiker_view.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="321">
+          <caret line="94" column="72" selection-start-line="94" selection-start-column="72" selection-end-line="94" selection-end-column="72" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/model/request_transstiker.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3298">
-          <caret line="1309" column="57" lean-forward="true" selection-start-line="1309" selection-start-column="57" selection-end-line="1309" selection-end-column="57" />
+        <state relative-caret-position="275">
+          <caret line="110" column="29" lean-forward="true" selection-start-line="110" selection-start-column="29" selection-end-line="110" selection-end-column="29" />
           <folding>
             <element signature="e#0#36#0" expanded="true" />
-            <element signature="e#1225#1338#0" />
-            <element signature="e#1429#3574#0" />
-            <element signature="e#3660#7234#0" />
-            <element signature="e#7357#17757#0" />
-            <element signature="e#8327#10122#0" />
-            <element signature="e#10196#13179#0" />
-            <element signature="e#13247#17757#0" />
-            <element signature="e#17943#18830#0" />
-            <element signature="e#21349#28788#0" />
-            <element signature="e#24384#25174#0" />
-            <element signature="e#25599#26689#0" />
-            <element signature="e#26771#28921#0" />
-            <element signature="e#29002#44590#0" />
-            <element signature="e#44661#45817#0" />
-            <element signature="e#45874#47437#0" />
-            <element signature="e#47566#48554#0" />
-            <element signature="e#48742#49848#0" />
-            <element signature="e#49924#51603#0" />
-            <element signature="e#51668#52774#0" />
-            <element signature="e#52825#54576#0" />
-            <element signature="e#59948#61104#0" />
-            <marker date="1557205090804" expanded="true" signature="3657:7246" ph="..." />
-            <marker date="1557205090804" expanded="true" signature="19379:20608" ph="..." />
-            <marker date="1557205090804" expanded="true" signature="21362:28815" ph="..." />
-            <marker date="1557205090804" expanded="true" signature="30130:30279" ph="..." />
+            <element signature="e#1435#3580#0" />
+            <element signature="e#7057#10587#0" />
+            <element signature="e#13712#17106#0" />
+            <element signature="e#20697#21045#0" />
+            <element signature="e#30483#31573#0" />
+            <element signature="e#49545#50701#0" />
+            <element signature="e#53486#63036#0" />
+            <element signature="e#54053#55159#0" />
+            <element signature="e#55235#56914#0" />
+            <element signature="e#56979#58085#0" />
+            <element signature="e#58136#59887#0" />
+            <element signature="e#59939#60913#0" />
+            <marker date="1557297049285" expanded="true" signature="3679:5266" ph="..." />
+            <marker date="1557297049285" expanded="true" signature="18685:19914" ph="..." />
+            <marker date="1557297049285" expanded="true" signature="20668:28121" ph="..." />
+            <marker date="1557297049285" expanded="true" signature="29436:29585" ph="..." />
           </folding>
         </state>
       </provider>
