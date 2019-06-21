@@ -10,8 +10,11 @@ class WizardReportRequestDetails(models.TransientModel):
     _name = 'wizard.report.request.details'
     _description = 'Open Sale Details Report'
 
+
     start_date = fields.Date(required=True, )
     end_date = fields.Date(required=True, )
+    billing_status = fields.Selection(string="Billing Status", selection=[('billing', 'Billing'), ('non_billing', 'Non Billing'), ], required=False, default='billing')
+    transaction_status = fields.Selection(string="Transaction Status", selection=[('done', 'Done'),('cancel', 'Cancel')], required=False, default='done')
 
     @api.onchange('start_date')
     def _onchange_start_date(self):
@@ -25,5 +28,10 @@ class WizardReportRequestDetails(models.TransientModel):
 
     @api.multi
     def generate_report(self):
-        data = {'date_start': self.start_date, 'date_stop': self.end_date,}
+        data = {
+            'date_start': self.start_date,
+            'date_stop': self.end_date,
+            'billing': self.billing_status,
+            'transaction': self.transaction_status,
+        }
         return self.env['report'].get_action([], 'paymentmodule.report_requestdetails', data=data)

@@ -45,10 +45,10 @@
        </record>
 
         <record id="tree_billing_periode" model="ir.ui.view">
-            <field name="name">Tree Billing Periode</field>
+            <field name="name">billing.periode</field>
             <field name="model">billing.periode</field>
             <field name="arch" type="xml">
-                <tree string="Tree Billing Periode">
+                <tree string="tree_billing_periode">
                     <field name="billing_id"/>
                     <field name="billing_year"/>
                     <field name="billing_month"/>
@@ -58,14 +58,14 @@
         </record>
 
         <record id="act_billing_periode" model="ir.actions.act_window">
-            <field name="name">Action Billing Periode</field>
+            <field name="name">Billing Periode</field>
             <field name="res_model">billing.periode</field>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
         </record>
 
         <record id="group_access_user_form_billing" model="ir.ui.view">
-            <field name="name">Action Billing Periode</field>
+            <field name="name">Access Billing Periode</field>
             <field name="model">billing.periode</field>
             <field name="inherit_id" ref="form_billing_periode"/>
             <field name="groups_id" eval="[(6,0,[ref('paymentmodule.group_fo_user')])]"/>

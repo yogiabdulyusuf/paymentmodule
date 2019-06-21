@@ -10,11 +10,11 @@
                 <form string="Request Transaction Stiker Form">
                     <header>
                         <button name="trans_done_payment" string="Done Payment" type="object" class="oe_highlight" confirm="has the customer paid?" states="payment" groups="paymentmodule.group_fo_cashier, paymentmodule.group_fo_duty_manager"/>
-                        <button name="request_cancel_send_mail" string="Request for Cancel" type="object" states="done" groups="paymentmodule.group_fo_user"/>
-                        <button name="trans_confirm" string="Confirm" type="object" states="confirm" class="oe_highlight" groups="paymentmodule.group_fo_user"/>
+                        <button name="request_cancel_send_mail" string="Request for Cancel" type="object" confirm="Are you sure you want to cancel?" states="done" groups="paymentmodule.group_fo_user"/>
+                        <button name="trans_confirm" string="Confirm" type="object" states="confirm" class="oe_highlight"  groups="paymentmodule.group_fo_user"/>
                         <button name="wizard_add_card_member" string="Add Card Member" type="object" class="oe_highlight" states="card_member" groups="paymentmodule.group_fo_user"/> <!-- attrs="{'invisible': ['|', ('jenis_transaksi', '!=', 'langganan_baru'), ('state','!=', 'card_member')]}" -->
-                        <button name="trans_approve" string="Approve" type="object" class="oe_highlight" states="request_cancel" groups="paymentmodule.group_fo_manager" />
-                        <button name="trans_reject" string="Reject" type="object" class="oe_highlight" states="request_cancel" groups="paymentmodule.group_fo_manager" />
+                        <button name="trans_approve" string="Approve" type="object" class="oe_highlight" confirm="Are you sure you want to Approve?" states="request_cancel" groups="paymentmodule.group_fo_manager" />
+                        <button name="trans_reject" string="Reject" type="object" class="oe_highlight" confirm="Are you sure you want to Reject?" states="request_cancel" groups="paymentmodule.group_fo_manager" />
                         <field name="state" widget="statusbar" statusbar_visible="open,payment,done"/>
                     </header>
                     <sheet>
@@ -113,15 +113,18 @@
                                 </group>
                             </page>
                             <page string="GANTI NOPOL" attrs="{'invisible': [('ganti_nopol','!=', True), ]}">
-                                <group >
-                                    <group string="New NOPOL">
+                                <group string="New NOPOL">
+                                    <group >
                                         <field name="new_nopol" attrs="{'required': [('ganti_nopol','=', True), ]}" />
                                         <field name="new_jenis_mobil" attrs="{'required': [('ganti_nopol','=', True), ]}" />
                                         <field name="new_merk" attrs="{'required': [('ganti_nopol','=', True), ]}" />
+                                    </group>
+                                    <group>
                                         <field name="new_tipe" attrs="{'required': [('ganti_nopol','=', True), ]}" />
                                         <field name="new_tahun" attrs="{'required': [('ganti_nopol','=', True), ]}" />
                                         <field name="new_warna" attrs="{'required': [('ganti_nopol','=', True), ]}" />
                                     </group>
+                                        <field name="ket_nopol" attrs="{'required': [('ganti_nopol','=', True), ]}" />
                                     <group>
                                         <field name="harga_ganti_nopol"/>
                                     </group>
@@ -135,8 +138,8 @@
                                 <group>
                                     <group string="Change">
                                         <field name="harga_kartu_hilang"  />
-                                        <field name="no_urut" />
-                                        <field name="no_kartu" />
+                                        <field name="no_urut" attrs="{'required': [('kartu_hilang','=', True), ]}"/>
+                                        <field name="no_kartu" attrs="{'required': [('kartu_hilang','=', True), ]}"/>
                                     </group>
                                 </group>
                             </page>
@@ -154,7 +157,7 @@
             <field name="name">Request Transaction Stiker Tree</field>
             <field name="model">request.transstiker</field>
             <field name="arch" type="xml">
-                <tree string="request_transaction_stiker_tree" >
+                <tree string="request_transaction_stiker_tree" colors="red:state=='request_cancel'; blue:state=='payment';">
                     <field name="notrans"/>
                     <field name="unit_kerja"/>
                     <field name="stiker_id"/>

@@ -6,6 +6,7 @@
         <field name="arch" type="xml">
             <form string="Card Member">
                 <group>
+                    <field name="no_urut"/>
                     <field name="card_member"/>
                 </group>
                 <footer>
@@ -25,5 +26,4 @@
         <field name="view_id" ref="view_wizard_add_card_member"/>
         <field name="target">new</field>
     </record>
-
 </odoo>

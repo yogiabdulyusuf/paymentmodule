@@ -9,14 +9,14 @@ class ReportSaleDetails(models.AbstractModel):
 
 
     @api.model
-    def get_sale_details(self, date_start=False, date_stop=False):
+    def get_sale_details(self, date_start=False, date_stop=False, transaction=False, billing=False):
         """ Serialise the orders of the day information
         params: date_start, date_stop string representing the datetime of order
         """
 
         transstikers = self.env['request.transstiker'].search([
             ('tanggal', '>=', date_start),
-            ('tanggal', '<=', date_stop), ('state', '=', 'done'),])
+            ('tanggal', '<=', date_stop), ('cara_bayar', '=', billing), ('state', '=', transaction),])
 
         transstiker_datas = []
 
@@ -51,7 +51,7 @@ class ReportSaleDetails(models.AbstractModel):
     @api.multi
     def render_html(self, docids, data=None):
         data = dict(data or {})
-        data.update(self.get_sale_details(data['date_start'], data['date_stop'],))
+        data.update(self.get_sale_details(data['date_start'], data['date_stop'], data['billing'], data['transaction'],))
         return self.env['report'].render('paymentmodule.report_requestdetails', data)
 
 

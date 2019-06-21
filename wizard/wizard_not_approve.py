@@ -15,7 +15,7 @@ class WizardNotApprove(models.TransientModel):
     def _get_default_rts(self):
         return self.env['request.transstiker'].browse(self.env.context.get('active_id'))
 
-    rts_ids = fields.Many2one(comodel_name="request.transstiker", string="RTS ID", required=False, default=_get_default_rts)
+    rts_ids = fields.Many2one(comodel_name="request.transstiker", string="RTS ID", required=False, readonly=True, default=_get_default_rts)
     note = fields.Text(string="Message", required=False, )
 
     @api.multi

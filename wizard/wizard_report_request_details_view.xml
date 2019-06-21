@@ -8,6 +8,8 @@
                 <group>
                     <field name="start_date"/>
                     <field name="end_date"/>
+                    <field name="billing_status"/>
+                    <field name="transaction_status"/>
                 </group>
                 <footer>
                     <button name="generate_report" string="Print" type="object" class="btn-primary"/>
