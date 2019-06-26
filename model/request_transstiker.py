@@ -74,67 +74,67 @@ class RequestTransStiker(models.Model):
             self.harga_ganti_nopol = 0
 
 
-    @api.onchange('stiker_id','jenis_transaksi')
-    def langganan_baru(self):
-
-        self.duration = 0
-
-        if self.jenis_transaksi == 'perpanjang_baru':
-
-            if self.stiker_id:
-
-                name = ''
-                alamat = ''
-                telphone = ''
-                no_id = ''
-                awal = ''
-                akhir = ''
-
-                # AMBIL DATA STIKER DARI TRANS STIKER
-                for data_detail in self.stiker_id:
-                    name = data_detail.name
-                    alamat = data_detail.alamat
-                    telphone = data_detail.telphone
-                    no_id = data_detail.no_id
-                    awal = data_detail.awal
-                    akhir = data_detail.akhir
-
-                if self.stiker_id.notrans:
-                    check_row = self.stiker_id.notrans[4]
-                else:
-                    check_row = ''
-
-                if check_row == "1":
-                    self.jenis_member = "1st"
-                elif check_row == "2":
-                    self.jenis_member = "2nd"
-                elif check_row == "3":
-                    self.jenis_member = "3rd"
-                elif check_row == "4":
-                    self.jenis_member = "4th"
-                elif check_row == "":
-                    self.val_harga = 0
-                    self.jenis_member = ""
-
-                self.name = name
-                self.alamat = alamat
-                self.telphone = telphone
-                self.no_id = no_id
-                self.awal_old = awal
-                self.akhir_old = akhir
-
-            else:
-                raise ValidationError("Stiker not defined,  please define Stiker!")
-
-        elif self.jenis_transaksi == 'perpanjang_baru':
-            self.alamat = ""
-            self.telphone = ""
-            self.nopol = ""
-            self.jenis_mobil = ""
-            self.merk = ""
-            self.tipe = ""
-            self.tahun = ""
-            self.warna = ""
+    # @api.onchange('stiker_id','jenis_transaksi')
+    # def langganan_baru(self):
+    #
+    #     self.duration = 0
+    #
+    #     if self.jenis_transaksi == 'perpanjang_baru':
+    #
+    #         if self.stiker_id:
+    #
+    #             name = ''
+    #             alamat = ''
+    #             telphone = ''
+    #             no_id = ''
+    #             awal = ''
+    #             akhir = ''
+    #
+    #             # AMBIL DATA STIKER DARI TRANS STIKER
+    #             for data_detail in self.stiker_id:
+    #                 name = data_detail.name
+    #                 alamat = data_detail.alamat
+    #                 telphone = data_detail.telphone
+    #                 no_id = data_detail.no_id
+    #                 awal = data_detail.awal
+    #                 akhir = data_detail.akhir
+    #
+    #             if self.stiker_id.notrans:
+    #                 check_row = self.stiker_id.notrans[4]
+    #             else:
+    #                 check_row = ''
+    #
+    #             if check_row == "1":
+    #                 self.jenis_member = "1st"
+    #             elif check_row == "2":
+    #                 self.jenis_member = "2nd"
+    #             elif check_row == "3":
+    #                 self.jenis_member = "3rd"
+    #             elif check_row == "4":
+    #                 self.jenis_member = "4th"
+    #             elif check_row == "":
+    #                 self.val_harga = 0
+    #                 self.jenis_member = ""
+    #
+    #             self.name = name
+    #             self.alamat = alamat
+    #             self.telphone = telphone
+    #             self.no_id = no_id
+    #             self.awal_old = awal
+    #             self.akhir_old = akhir
+    #
+    #         else:
+    #             raise ValidationError("Stiker not defined,  please define Stiker!")
+    #
+    #     elif self.jenis_transaksi == 'perpanjang_baru':
+    #         self.alamat = ""
+    #         self.telphone = ""
+    #         self.nopol = ""
+    #         self.jenis_mobil = ""
+    #         self.merk = ""
+    #         self.tipe = ""
+    #         self.tahun = ""
+    #         self.warna = ""
 
     @api.onchange('baru','jenis_transaksi','stiker_id')
     def _get_stiker(self):
@@ -425,7 +425,7 @@ class RequestTransStiker(models.Model):
             yield date1 + timedelta(n)
 
 
-    @api.onchange('baru','cara_bayar','jenis_transaksi','stiker_id')
+    @api.onchange('baru','cara_bayar','jenis_transaksi','stiker_id','duration')
     def calculate_harga_kontribusi(self):
 
         if self.baru == True:
@@ -578,24 +578,24 @@ class RequestTransStiker(models.Model):
                         self.val_harga = int(jenis_member_nd_ids) * int(self.duration)
                     elif self.cara_bayar == "billing":
                         self.val_harga = int(jenis_member_nd_ids) * 2
-                    else:
-                        raise ValidationError("Please define on Mobil!")
+                    # else:
+                    #     raise ValidationError("Please define on Mobil!")
 
                 elif self.jenis_member == "3rd":
                     if self.cara_bayar == "non_billing":
                         self.val_harga = int(jenis_member_rd_ids) * int(self.duration)
                     elif self.cara_bayar == "billing":
                         self.val_harga = int(jenis_member_rd_ids) * 2
-                    else:
-                        raise ValidationError("Please define on Mobil!")
+                    # else:
+                    #     raise ValidationError("Please define on Mobil!")
 
                 elif self.jenis_member == "4th":
                     if self.cara_bayar == "non_billing":
                         self.val_harga = int(jenis_member_th_ids) * int(self.duration)
                     elif self.cara_bayar == "billing":
                         self.val_harga = int(jenis_member_th_ids) * 2
-                    else:
-                        raise ValidationError("Please define on Mobil!")
+                    # else:
+                    #     raise ValidationError("Please define on Mobil!")
 
             elif self.jenis_transaksi == "stop":
                 self.val_harga = jenis_member_st_ids
@@ -1326,7 +1326,7 @@ class RequestTransStiker(models.Model):
     alamat = fields.Char(string="Alamat", required=False, readonly=False)
     telphone = fields.Char(string="No Telphone", required=False, readonly=False)
     no_id = fields.Char(string="No ID", readonly=True, )
-    duration = fields.Integer('Duration', default=1, required=False, readonly=False)
+    duration = fields.Integer('Duration', required=False, readonly=False)
     awal = fields.Datetime(string="New Start Date", required=False, readonly=True, )
     akhir = fields.Datetime(string="New End Date", required=False, readonly=True, )
     awal_old = fields.Datetime(string="Start Date", required=False, readonly=True, store=True)

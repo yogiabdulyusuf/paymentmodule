@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <report
+            id="action_report_monthly_billing"
+            model="report.paymentmodule.report_monthly_billing"
+            string="Monthly Report Billing"
+            report_type="qweb-pdf"
+            name="paymentmodule.report_monthly_billing_template"
+            file="paymentmodule.report_monthly_billing_template"
+            />
+    </data>
+</odoo>

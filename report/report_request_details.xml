@@ -4,7 +4,7 @@
         <report
             id="action_report_trans"
             model="report.paymentmodule.report_requestdetails"
-            string="Transaktion report"
+            string="Transaction report"
             report_type="qweb-pdf"
             name="paymentmodule.report_requestdetails"
             file="paymentmodule.report_requestdetails"

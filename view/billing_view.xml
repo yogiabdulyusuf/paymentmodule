@@ -10,8 +10,8 @@
                     <header>
                         <button name="trans_generate" string="Generate" type="object" class="oe_highlight" states="generate" groups="paymentmodule.group_fo_billing"/>
                         <button name="trans_confirm" string="Confirm" type="object" class="oe_highlight" states="transfer" groups="paymentmodule.group_fo_billing"/>
-                        <button name="trans_generate_file" string="Export to CSV" type="object" class="oe_highlight" states="close" groups="paymentmodule.group_fo_billing"/>
-                        <field name="state" widget="statusbar" statusbar_visible="open,generate,transfer,close"/>
+                        <button name="trans_generate_file" string="Export to CSV" type="object" class="oe_highlight" states="export" groups="paymentmodule.group_fo_billing"/>
+                        <field name="state" widget="statusbar" statusbar_visible="open,generate,transfer,export,close"/>
                     </header>
                    <sheet>
                         <label for="billing_id" class="oe_edit_only" string="Billing ID" />
@@ -45,14 +45,13 @@
        </record>
 
         <record id="tree_billing_periode" model="ir.ui.view">
-            <field name="name">billing.periode</field>
+            <field name="name">Tree Billing Periode</field>
             <field name="model">billing.periode</field>
             <field name="arch" type="xml">
                 <tree string="tree_billing_periode">
                     <field name="billing_id"/>
                     <field name="billing_year"/>
                     <field name="billing_month"/>
-                    <field name="state"/>
                 </tree>
             </field>
         </record>

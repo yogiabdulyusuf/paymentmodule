@@ -16,7 +16,7 @@ class ReportSaleDetails(models.AbstractModel):
 
         transstikers = self.env['request.transstiker'].search([
             ('tanggal', '>=', date_start),
-            ('tanggal', '<=', date_stop), ('cara_bayar', '=', billing), ('state', '=', transaction),])
+            ('tanggal', '<=', date_stop), ('state', '=', transaction), ('cara_bayar', '=', billing)])
 
         transstiker_datas = []
 
@@ -26,6 +26,7 @@ class ReportSaleDetails(models.AbstractModel):
             vals.update({'unit_kerja' : stiker.unit_kerja.kode})
             vals.update({'name' : stiker.name})
             vals.update({'tanggal' : stiker.tanggal})
+            vals.update({'cara_bayar' : stiker.cara_bayar})
             if stiker.baru:
                 vals.update({'periode' : stiker.awal+' - '+stiker.akhir})
                 vals.update({'duration' : stiker.duration})
@@ -35,6 +36,7 @@ class ReportSaleDetails(models.AbstractModel):
                 vals.update({'duration':''})
                 vals.update({'nopol': ''})
 
+            vals.update({'state': stiker.state})
             vals.update({'val_harga' : stiker.val_harga})
             vals.update({'harga_beli_stiker' : stiker.harga_beli_stiker})
             vals.update({'harga_kartu_hilang' : stiker.harga_kartu_hilang})
@@ -51,7 +53,7 @@ class ReportSaleDetails(models.AbstractModel):
     @api.multi
     def render_html(self, docids, data=None):
         data = dict(data or {})
-        data.update(self.get_sale_details(data['date_start'], data['date_stop'], data['billing'], data['transaction'],))
+        data.update(self.get_sale_details(data['date_start'], data['date_stop'],data['transaction'],data['billing']))
         return self.env['report'].render('paymentmodule.report_requestdetails', data)
 
 

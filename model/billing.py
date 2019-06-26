@@ -33,6 +33,7 @@ class BillingPeriode(models.Model):
             output.write(content)
         self.billing_csv_file = base64.encodestring(output.getvalue())
 
+        self.state = "close"
 
     @api.one
     def trans_generate_line(self):
@@ -123,7 +124,7 @@ class BillingPeriode(models.Model):
 
     @api.one
     def trans_confirm(self):
-        self.state = "close"
+        self.state = "export"
 
     @api.one
     def trans_open(self):
@@ -137,7 +138,7 @@ class BillingPeriode(models.Model):
     billing_csv_filename = fields.Char('File Name', readonly=True, default="billing.csv")
     billing_csv_file = fields.Binary('Billing File', readonly=True)
     line_ids = fields.One2many('billingperiode.line', 'billing_periode', 'Details', readonly=True)
-    state = fields.Selection(string="", selection=[('open', 'Open'), ('generate', 'Waiting Generate'), ('transfer', 'Waiting Transfer'), ('close', 'Close'), ], required=False, default="open" )
+    state = fields.Selection(string="", selection=[('open', 'Open'), ('generate', 'Waiting Generate'), ('transfer', 'Waiting Transfer'), ('export', 'Export Data'), ('close', 'Close'), ], required=False, default="open" )
 
     @api.model
     def create(self, vals):

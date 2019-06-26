@@ -16,15 +16,15 @@ class WizardReportRequestDetails(models.TransientModel):
     billing_status = fields.Selection(string="Billing Status", selection=[('billing', 'Billing'), ('non_billing', 'Non Billing'), ], required=False, default='billing')
     transaction_status = fields.Selection(string="Transaction Status", selection=[('done', 'Done'),('cancel', 'Cancel')], required=False, default='done')
 
-    @api.onchange('start_date')
-    def _onchange_start_date(self):
-        if self.start_date and self.end_date and self.end_date < self.start_date:
-            self.end_date = self.start_date
-
-    @api.onchange('end_date')
-    def _onchange_end_date(self):
-        if self.end_date and self.end_date < self.start_date:
-            self.start_date = self.end_date
+    # @api.onchange('start_date')
+    # def _onchange_start_date(self):
+    #     if self.start_date and self.end_date and self.end_date < self.start_date:
+    #         self.end_date = self.start_date
+    #
+    # @api.onchange('end_date')
+    # def _onchange_end_date(self):
+    #     if self.end_date and self.end_date < self.start_date:
+    #         self.start_date = self.end_date
 
     @api.multi
     def generate_report(self):
