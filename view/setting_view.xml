@@ -13,21 +13,25 @@
                    <!-- Add your fields or attributes here -->
                    <page string="Settings">
                         <group>
-                            <group string="Jenis Member">
+                            <group string="Biaya Tagihan Kontribusi">
                                 <field name="jenis_member_st" />
                                 <field name="jenis_member_nd" />
                                 <field name="jenis_member_rd" />
                                 <field name="jenis_member_th" />
                             </group>
-                            <group string="Denda">
+                            <group string="Biaya Tagihan Denda">
                                 <field name="beli_stiker_ids" />
                                 <field name="kartu_hilang_ids" />
                             </group>
-                            <group string="Ganti Nopol">
+                            <group string="Biaya Tagihan Ganti Nopol">
                                 <field name="ganti_nopol_ids" />
                                 <field name="ganti_nopol_dua_ids" />
                                 <field name="ganti_nopol_tiga_ids" />
                                 <field name="ganti_nopol_empat_ids" />
+                            </group>
+                            <group string="Biaya Tagihan Motor">
+                                <field name="tagihan_motor_ids" />
+
                             </group>
                         </group>
                     </page>

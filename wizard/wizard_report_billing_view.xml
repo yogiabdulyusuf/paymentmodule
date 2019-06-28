@@ -6,7 +6,7 @@
         <field name="arch" type="xml">
             <form string="Report Monthly Billing Form">
                 <group>
-                    <field name="billing_periode_ids"/>
+                    <field name="billing_periode_ids" options="{'no_quick_create':True,'no_create_edit':True,'no_open': True,}"/>
                 </group>
                 <footer>
                     <button name="generate_report" string="Print" type="object" class="btn-primary"/>

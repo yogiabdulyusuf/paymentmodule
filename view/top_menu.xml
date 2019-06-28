@@ -6,6 +6,7 @@
 	<menuitem id="payment_menu_group" parent="payment_menu_root" name="Payment"  sequence="1"/>
 		<menuitem	id="menu_transaction_payment"	name="Transaction" parent="payment_menu_group"	action="act_request_trans_stiker" groups="paymentmodule.group_fo_user,paymentmodule.group_fo_cashier,paymentmodule.group_fo_manager,paymentmodule.group_fo_duty_manager"/>
 		<menuitem	id="menu_transaction_stiker"	name="Transaction Stiker" parent="payment_menu_group"	action="act_trans_stiker" groups="paymentmodule.group_fo_user,paymentmodule.group_fo_cashier,paymentmodule.group_fo_manager,paymentmodule.group_fo_duty_manager"/>
+		<menuitem	id="menu_unit"	name="Unit #" parent="payment_menu_group"	action="act_unit" groups="paymentmodule.group_fo_user,paymentmodule.group_fo_cashier,paymentmodule.group_fo_manager,paymentmodule.group_fo_duty_manager"/>
 		<menuitem	id="menu_billing_periode"	name="Billing Periode" parent="payment_menu_group"	action="act_billing_periode" groups="paymentmodule.group_fo_billing"/>
 		<menuitem	id="menu_detail_billing_periode"	name="Detail Billing" parent="payment_menu_group"	action="act_detail_billing" groups="paymentmodule.group_fo_billing"/>
 

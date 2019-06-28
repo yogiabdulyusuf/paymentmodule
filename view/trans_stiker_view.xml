@@ -7,10 +7,10 @@
             <field name="name">Transaction Stiker Form</field>
             <field name="model">trans.stiker</field>
             <field name="arch" type="xml">
-                <form string="transaction_stiker_form" create="false" edit="true" delete="false">
+                <form string="transaction_stiker_form" > <!-- create="false" edit="true" delete="false" -->
                     <sheet>
                         <div class="oe_title">
-                            <label for="notrans" class="oe_edit_only" string="Unit Kerja" />
+                            <label for="unit_kerja" class="oe_edit_only" string="Unit Kerja" />
                             <h1>
                                 <field name="unit_kerja"/>
                             </h1>
@@ -53,7 +53,7 @@
                                 <field name="stasiun_kerja_id" />
                             </group>
                             <field name="detail_ids">
-                                <tree string="Detail Transaction Stiker" create="false" edit="false" delete="false">
+                                <tree string="Detail Transaction Stiker" > <!-- create="false" edit="false" delete="false" -->
                                     <field name="nopol"/>
                                     <field name="jenis_mobil"/>
                                     <field name="adm"/>
@@ -73,7 +73,7 @@
             <field name="name">Transaction Stiker Tree</field>
             <field name="model">trans.stiker</field>
             <field name="arch" type="xml">
-                <tree string="transaction_stiker_tree" create="false" edit="false" delete="false">
+                <tree string="transaction_stiker_tree" > <!-- create="false" edit="false" delete="false" -->
                     <field name="name"/>
                     <field name="alamat"/>
                     <field name="telphone"/>

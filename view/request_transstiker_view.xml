@@ -12,7 +12,7 @@
                         <button name="trans_done_payment" string="Done Payment" type="object" class="oe_highlight" confirm="has the customer paid?" states="payment" groups="paymentmodule.group_fo_cashier, paymentmodule.group_fo_duty_manager"/>
                         <button name="request_cancel_send_mail" string="Request for Cancel" type="object" confirm="Are you sure you want to cancel?" states="done" groups="paymentmodule.group_fo_user"/>
                         <button name="trans_confirm" string="Confirm" type="object" states="confirm" class="oe_highlight"  groups="paymentmodule.group_fo_user"/>
-                        <button name="wizard_add_card_member" string="Add Card Member" type="object" class="oe_highlight" states="card_member" groups="paymentmodule.group_fo_user"/> <!-- attrs="{'invisible': ['|', ('jenis_transaksi', '!=', 'langganan_baru'), ('state','!=', 'card_member')]}" -->
+                        <button name="wizard_add_card_member" string="Add Card Member" type="object" class="oe_highlight" states="card_member" groups="paymentmodule.group_fo_user"/>  <!--attrs="{'invisible': ['|', ('jenis_transaksi', '!=', 'langganan_baru'), ('state','!=', 'card_member')]}" -->
                         <button name="trans_approve" string="Approve" type="object" class="oe_highlight" confirm="Are you sure you want to Approve?" states="request_cancel" groups="paymentmodule.group_fo_manager" />
                         <button name="trans_reject" string="Reject" type="object" class="oe_highlight" confirm="Are you sure you want to Reject?" states="request_cancel" groups="paymentmodule.group_fo_manager" />
                         <field name="state" widget="statusbar" statusbar_visible="open,payment,done"/>
@@ -26,7 +26,7 @@
                         <group>
                             <group>
                                 <field name="unit_kerja" attrs="{'readonly': [('state', '!=', 'open')]}"/>
-                                <field name="stiker_id" attrs="{'readonly': ['|',('state', '!=', 'open')], 'required': [('jenis_transaksi','!=','langganan_baru')]}" />
+                                <field name="stiker_id" attrs="{'readonly': ['|',('state', '!=', 'open'),('jenis_transaksi','=','langganan_baru')], 'required': [('jenis_transaksi','!=','langganan_baru')]}" />
                             </group>
 
                             <group style="border: 1px solid #D2D2FF; border-radius:10px;">
@@ -72,7 +72,7 @@
                                         <field name="name" attrs="{'readonly': ['|',('jenis_transaksi','!=','langganan_baru'), ('state', '!=', 'open')], 'required': [('jenis_transaksi','=', 'langganan_baru')], }" />
                                         <field name="alamat" attrs="{'readonly': ['|',('jenis_transaksi','!=','langganan_baru'), ('state', '!=', 'open')], }"/>
                                         <field name="telphone" attrs="{'readonly': ['|',('jenis_transaksi','!=','langganan_baru'), ('state', '!=', 'open')], } "/>
-                                        <field name="no_id" />
+                                        <field name="no_id" attrs="{'readonly': [('jenis_mobil', '!=', 'S')], 'required': [('jenis_mobil', '=', 'S')],}"/>
                                         <field name="duration" attrs="{'readonly': [('state', '!=', 'open')], 'invisible': [('jenis_transaksi','not in',('langganan_baru','perpanjang','perpanjang_baru'))], 'required': [('jenis_transaksi','in', ['langganan_baru','perpanjang','perpanjang_baru'])]}" />
                                         <field name="awal" />
                                         <field name="akhir" />
@@ -85,7 +85,7 @@
                                     <group>
                                         <field name="cara_bayar"    attrs="{'readonly': ['|',('jenis_transaksi','=','stop'),('state', '!=', 'open')], 'invisible': [('jenis_transaksi','=', False)], 'required': [('jenis_transaksi','in', ['langganan_baru','perpanjang','perpanjang_baru'])],}" />
                                         <field name="nopol"         attrs="{'readonly': ['|',('jenis_transaksi','not in',('langganan_baru')),('state', '!=', 'open')], 'required': [('jenis_transaksi','in', ('langganan_baru','perpanjang_baru'))],}" />
-                                        <field name="jenis_mobil"   attrs="{'readonly': ['|',('jenis_transaksi','not in',('langganan_baru')),('state', '!=', 'open')], 'required': [('jenis_transaksi','in', ('langganan_baru','perpanjang_baru'))],}" />
+                                        <field name="jenis_mobil"   attrs="{'readonly': ['|',('jenis_transaksi','=','stop'),('state', '!=', 'open')], 'required': [('jenis_transaksi','in', ('langganan_baru','perpanjang_baru','perpanjang'))],}" />
                                         <field name="jenis_member"  attrs="{'readonly': ['|',('jenis_transaksi','!=','langganan_baru'),('state', '!=', 'open')], 'required': [('jenis_transaksi','in', ('langganan_baru','perpanjang_baru'))],}" />
                                         <field name="merk"          attrs="{'readonly': ['|',('jenis_transaksi','not in',('langganan_baru')),('state', '!=', 'open')], 'required': [('jenis_transaksi','in', ('langganan_baru','perpanjang_baru'))],}" />
                                         <field name="tipe"          attrs="{'readonly': ['|',('jenis_transaksi','not in',('langganan_baru')),('state', '!=', 'open')], 'required': [('jenis_transaksi','in', ('langganan_baru','perpanjang_baru'))],}" />
@@ -200,7 +200,7 @@
             <field name="name">Request Transaction Stiker</field>
             <field name="res_model">request.transstiker</field>
             <field name="view_type">form</field>
-            <field name="context">{'search_default_payment': 1,'search_default_request_cancel': 1,'search_default_card_member': 1,'search_default_status': 1,}</field>
+            <field name="context">{'search_default_payment': 1,'search_default_request_cancel': 1,'search_default_confirm': 1,'search_default_status': 1,}</field>
             <field name="view_mode">tree,form,graph,pivot</field>
         </record>
 
@@ -214,7 +214,7 @@
                     <field name="no_id"/>
                     <filter icon="terp-gtk-media-pause" string="Payment" name="payment" domain="[('state','=','payment')]" />
                     <filter icon="terp-gtk-media-pause" string="Request Cancel" name="request_cancel" domain="[('state','=','request_cancel')]" />
-                    <filter icon="terp-gtk-media-pause" string="Add Card Member" name="card_member" domain="[('state','=','card_member')]" />
+                    <filter icon="terp-gtk-media-pause" string="Confirm" name="confirm" domain="[('state','=','confirm')]" />
                     <group expand="0" string="Group By">
                         <filter string="Status" name="status" domain="[]" context="{'group_by':'state'}" />
                     </group>

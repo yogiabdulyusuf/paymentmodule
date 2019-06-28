@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="unit_form_view" model="ir.ui.view">
+           <field name="name">Unit Form</field>
+           <field name="model">stasiun.kerja</field>
+           <field name="arch" type="xml">
+               <form string="Unit Form">
+                   <sheet>
+                       <group>
+                           <field name="kode"/>
+                           <field name="nama"/>
+                           <field name="margin"/>
+                           <field name="spv"/>
+                           <field name="target"/>
+                           <field name="status"/>
+                       </group>
+                   </sheet>
+               </form>
+           </field>
+        </record>
+
+        <record id="unit_tree_view" model="ir.ui.view">
+            <field name="name">Unit Tree</field>
+            <field name="model">stasiun.kerja</field>
+            <field name="arch" type="xml">
+                <tree string="Unit Tree" > <!-- create="false" edit="false" delete="false" -->
+                    <field name="kode"/>
+                    <field name="nama"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="act_unit" model="ir.actions.act_window">
+            <field name="name">Action Unit</field>
+            <field name="res_model">stasiun.kerja</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+    </data>
+</odoo>

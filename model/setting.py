@@ -19,4 +19,5 @@ class Setting(models.Model):
     ganti_nopol_dua_ids = fields.Integer('2nd Membership', )
     ganti_nopol_tiga_ids = fields.Integer('3rd Membership', )
     ganti_nopol_empat_ids = fields.Integer('4th Membership', )
-    kartu_hilang_ids = fields.Integer('Kartu Hilang', )
+    kartu_hilang_ids = fields.Integer('Kartu Parkir', )
+    tagihan_motor_ids = fields.Integer('Motor', )

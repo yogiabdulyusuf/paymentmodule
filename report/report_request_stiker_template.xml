@@ -84,7 +84,7 @@
                                             <tr> <!--  t-foreach="o.spm_line_ids" t-as="l"   -->
                                                 <td><span t-esc="i" /></td>
                                                 <t t-set="i" t-value="i+1"/>
-                                                <td>Langganan</td>
+                                                <td>Kontribusi</td>
                                                 <td class="text-right"><span t-field="o.val_harga" /></td>
                                             </tr>
                                         </t>
@@ -100,7 +100,7 @@
                                             <tr> <!--  t-foreach="o.spm_line_ids" t-as="l"   -->
                                                 <td><span t-esc="i" /></td>
                                                 <t t-set="i" t-value="i+1"/>
-                                                <td>Pergantian Nomor Polisi</td>
+                                                <td>Ganti NOPOL</td>
                                                 <td class="text-right"><span t-field="o.harga_ganti_nopol" /></td>
                                             </tr>
                                         </t>
@@ -108,7 +108,7 @@
                                             <tr> <!--  t-foreach="o.spm_line_ids" t-as="l"   -->
                                                 <td><span t-esc="i" /></td>
                                                 <t t-set="i" t-value="i+1"/>
-                                                <td>Kartu Hilang</td>
+                                                <td>Kartu Parkir</td>
                                                 <td class="text-right"><span t-field="o.harga_kartu_hilang" /></td>
                                             </tr>
                                         </t>

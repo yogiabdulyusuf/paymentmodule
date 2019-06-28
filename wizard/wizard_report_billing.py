@@ -7,7 +7,7 @@ class WizardReportMonthlyBilling(models.TransientModel):
     _name = 'wizard.report.billing'
     _description = 'Monthly Report Billing'
 
-    billing_periode_ids = fields.Many2one(comodel_name="billing.periode", string="Billing Periode", required=True, )
+    billing_periode_ids = fields.Many2one(comodel_name="billing.periode", string="Billing Periode", required=True,)
 
 
     @api.multi
