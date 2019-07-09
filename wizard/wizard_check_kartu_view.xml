@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_wizard_check_kartu" model="ir.ui.view">
+        <field name="name">Form Check Kartu Parkir</field>
+        <field name="model">wizard.check.kartu</field>
+        <field name="arch" type="xml">
+            <form string="Check Kartu Parkir Form">
+                <group string="Check kartu parkir berdasarkan No Urut atau No Card">
+                    <field name="no_urut"/>
+                    <field name="no_card"/>
+                </group>
+                <footer>
+                    <button name="proses_check_kartu_parkir" string="Check" type="object" class="btn-primary"/> or
+                    <button string="Cancel" class="btn-default" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="act_wizard_check_kartu" model="ir.actions.act_window">
+        <field name="name">Check Kartu Parkir</field>
+        <field name="res_model">wizard.check.kartu</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_wizard_check_kartu"/>
+        <field name="target">new</field>
+    </record>
+
+</odoo>
