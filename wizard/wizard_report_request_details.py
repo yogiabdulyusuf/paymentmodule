@@ -32,10 +32,16 @@ class WizardReportRequestDetails(models.TransientModel):
         """ Serialise the orders of the day information
         params: date_start, date_stop string representing the datetime of order
         """
+        if self.billing_status == 'billing_non_billing':
+            billing_status = ''
+            operator = '!='
+        else:
+            billing_status = self.billing_status
+            operator = '='
 
         transstikers = self.env['request.transstiker'].sudo().search([
             ('tanggal', '>=', self.start_date),
-            ('tanggal', '<=', self.end_date), ('state', '=', self.transaction_status), ('cara_bayar', '=', self.billing_status)])
+            ('tanggal', '<=', self.end_date), ('state', '=', self.transaction_status), ('cara_bayar', operator, billing_status)])
 
         # _logger.info(transstikers)
 
@@ -49,7 +55,8 @@ class WizardReportRequestDetails(models.TransientModel):
             vals.update({'tanggal': stiker.tanggal})
             vals.update({'cara_bayar': stiker.cara_bayar})
             if stiker.baru:
-                vals.update({'periode': stiker.awal + ' - ' + stiker.akhir})
+                vals.update({'start_date': stiker.awal})
+                vals.update({'end_date': stiker.akhir})
                 vals.update({'duration': stiker.duration})
                 vals.update({'nopol': stiker.nopol})
             else:
@@ -72,7 +79,7 @@ class WizardReportRequestDetails(models.TransientModel):
 
     start_date = fields.Date(required=True, )
     end_date = fields.Date(required=True, )
-    billing_status = fields.Selection(string="Billing Status", selection=[('billing', 'Billing'), ('non_billing', 'Non Billing'), ], required=False, default='billing')
+    billing_status = fields.Selection(string="Billing Status", selection=[('billing', 'Billing'), ('non_billing', 'Non Billing'), ('billing_non_billing', 'Billing & Non Billing'), ], required=False, default='billing')
     transaction_status = fields.Selection(string="Transaction Status", selection=[('done', 'Done'),('payment', 'Waiting for Payment'),('cancel', 'Cancel')], required=False, default='done')
     report_filename = fields.Char('Filename', size=100, readonly=True, default='ReportTransaction.xlsx')
     report_file = fields.Binary('File', readonly=True)
@@ -93,15 +100,16 @@ class WizardReportRequestDetails(models.TransientModel):
             worksheet.write(0, 2, _('NAMA'))
             worksheet.write(0, 3, _('TANGGAL'))
             worksheet.write(0, 4, _('BILLING STATUS'))
-            worksheet.write(0, 5, _('PERIODE'))
-            worksheet.write(0, 6, _('DURASI'))
-            worksheet.write(0, 7, _('NOPOL'))
-            worksheet.write(0, 8, _('STATUS'))
-            worksheet.write(0, 9, _('HARGA KONTRIBUSI'))
-            worksheet.write(0, 10, _('HARGA STIKER'))
-            worksheet.write(0, 11, _('HARGA KARTU PARKIR'))
-            worksheet.write(0, 12, _('HARGA GANTI NOPOL'))
-            worksheet.write(0, 13, _('TOTAL'))
+            worksheet.write(0, 5, _('START DATE'))
+            worksheet.write(0, 6, _('END DATE'))
+            worksheet.write(0, 7, _('DURASI'))
+            worksheet.write(0, 8, _('NOPOL'))
+            worksheet.write(0, 9, _('STATUS'))
+            worksheet.write(0, 10, _('HARGA KONTRIBUSI'))
+            worksheet.write(0, 11, _('HARGA STIKER'))
+            worksheet.write(0, 12, _('HARGA KARTU PARKIR'))
+            worksheet.write(0, 13, _('HARGA GANTI NOPOL'))
+            worksheet.write(0, 14, _('TOTAL'))
             row = 1
             for order in request_details['transstikers']:
                 worksheet.write(row, 0, order['notrans'])
@@ -109,15 +117,16 @@ class WizardReportRequestDetails(models.TransientModel):
                 worksheet.write(row, 2, order['name'])
                 worksheet.write(row, 3, order['tanggal'])
                 worksheet.write(row, 4, order['cara_bayar'])
-                worksheet.write(row, 5, order['periode'])
-                worksheet.write(row, 6, order['duration'])
-                worksheet.write(row, 7, order['nopol'])
-                worksheet.write(row, 8, order['state'])
-                worksheet.write(row, 9, order['val_harga'])
-                worksheet.write(row, 10, order['harga_beli_stiker'])
-                worksheet.write(row, 11, order['harga_kartu_hilang'])
-                worksheet.write(row, 12, order['harga_ganti_nopol'])
-                worksheet.write(row, 13, order['amount'])
+                worksheet.write(row, 5, order['start_date'])
+                worksheet.write(row, 6, order['end_date'])
+                worksheet.write(row, 7, order['duration'])
+                worksheet.write(row, 8, order['nopol'])
+                worksheet.write(row, 9, order['state'])
+                worksheet.write(row, 10, order['val_harga'])
+                worksheet.write(row, 11, order['harga_beli_stiker'])
+                worksheet.write(row, 12, order['harga_kartu_hilang'])
+                worksheet.write(row, 13, order['harga_ganti_nopol'])
+                worksheet.write(row, 14, order['amount'])
                 row += 1
 
             workbook.close()

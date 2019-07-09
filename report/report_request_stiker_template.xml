@@ -8,21 +8,14 @@
                 <div class="oe_structure"/>
                     <div class="container">
                         <div class="row">
-                            <div style="float: left;">
+                            <div class="col-sm-4" style="float: left;">
                                 <img src='/web/binary/company_logo' style="width:100%"/>
                             </div>
-                        </div>
-                    </div>
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-sm-12">
+                              <div class="col-sm-8">
                                 <center><h2>PAYMENT RECEIPT</h2></center>
                             </div>
                         </div>
                     </div>
-                    <br/>
-                    <br/>
-                    <br/>
                     <br/>
                     <br/>
                     <div class="container">
@@ -34,7 +27,7 @@
                     </div>
                     <br/>
                     <br/>
-                    <div class="container">
+                    <div class="container" style="font-size:19px;">
                         <div class="row">
                             <div class="col-sm-8">
                                 <table style="width: 536px;">
@@ -44,7 +37,7 @@
                                     <td style="width: 403.017px; height: 25px;"><span t-field="o.unit_kerja"/></td>
                                     </tr>
                                     <tr style="height: 25px;">
-                                    <td style="width: 130.983px; height: 25px;">No Trans</td>
+                                    <td style="width: 130.983px; height: 25px;">Stiker #</td>
                                     <td style="width: 403.017px; height: 25px;"><span t-field="o.stiker_id"/></td>
                                     </tr>
                                     <tr style="height: 25px;">
@@ -54,6 +47,10 @@
                                     <tr style="height: 25px;">
                                     <td style="width: 130.983px; height: 25px;">Plate Number</td>
                                     <td style="width: 403.017px; height: 25px;"><span t-field="o.nopol"/></td>
+                                    </tr>
+                                        <tr style="height: 25px;">
+                                    <td style="width: 130.983px; height: 25px;">Periode</td>
+                                    <td style="width: 403.017px; height: 25px;"><span t-field="o.awal"/> to <span t-field="o.akhir"/></td>
                                     </tr>
                                     <tr style="height: 25px;">
                                     <td style="width: 130.983px; height: 25px;">Payment Method</td>
@@ -66,8 +63,7 @@
                     </div>
                     <br/>
                     <br/>
-                    <br/>
-                    <div class="container">
+                    <div class="container" style="font-size:18px;">
                         <div class="row">
                             <div class="col-sm-4 pull-center">
                                 <table class="table">
@@ -84,7 +80,7 @@
                                             <tr> <!--  t-foreach="o.spm_line_ids" t-as="l"   -->
                                                 <td><span t-esc="i" /></td>
                                                 <t t-set="i" t-value="i+1"/>
-                                                <td>Kontribusi</td>
+                                                <td><span t-field="o.jenis_transaksi" /></td>
                                                 <td class="text-right"><span t-field="o.val_harga" /></td>
                                             </tr>
                                         </t>
@@ -131,13 +127,10 @@
                             <br/>
                             <br/>
                             <br/>
-                            <br/>
-                            <br/>
-                            <br/>
                         </div>
                     </div>
-                
-                    <table style="width: 590.467px;" class="table table-condensed">
+
+                    <table style="width: 590.467px; font-size:18px;" class="table table-condensed">
                     <tbody>
                     <tr>
                     <td style="width: 196px; text-align: center;"><strong>Resident</strong></td>

@@ -1,5 +1,5 @@
 from odoo import api, fields, models
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 from odoo.exceptions import ValidationError, Warning
 from dateutil.relativedelta import *
 
@@ -41,15 +41,20 @@ class RequestTransStiker(models.Model):
         return res
 
 
-
-    @api.onchange('stiker_id', 'baru', 'jenis_transaksi', 'jenis_member')
-    def _get_stiker(self):
-
+    @api.onchange('stiker_id','ganti_nopol')
+    def calculate_harga_ganti_nopol(self):
         if self.ganti_nopol == True:
             ganti_nopol_id = self.env.user.company_id.ganti_nopol_ids
+            ganti_nopol_dua_id = self.env.user.company_id.ganti_nopol_dua_ids
+            ganti_nopol_tiga_id = self.env.user.company_id.ganti_nopol_tiga_ids
+            ganti_nopol_empat_id = self.env.user.company_id.ganti_nopol_empat_ids
 
-            if not ganti_nopol_id:
-                raise ValidationError("Price Ganti Nopol not defined,  please define on company information!")
+            if not ganti_nopol_dua_id:
+                raise ValidationError("Price Ganti Nopol 2nd not defined,  please define on company information!")
+            if not ganti_nopol_tiga_id:
+                raise ValidationError("Price Ganti Nopol 3rd not defined,  please define on company information!")
+            if not ganti_nopol_empat_id:
+                raise ValidationError("Price Ganti Nopol 4th not defined,  please define on company information!")
 
             if self.stiker_id:
                 check_no_id = self.stiker_id.notrans[4]
@@ -57,223 +62,331 @@ class RequestTransStiker(models.Model):
                 check_no_id = ''
 
             if check_no_id == "1":
-                self.harga_ganti_nopol = 0
-            else:
                 self.harga_ganti_nopol = ganti_nopol_id
-
-            nopol = ''
-            jenis_mobil = ''
-            merk = ''
-            tipe = ''
-            tahun = ''
-            color = ''
-
-            # AMBIL DATA STIKER DARI TRANS STIKER
-            for data_detail in self.stiker_id:
-                nopol = data_detail.detail_ids.nopol
-                jenis_mobil = data_detail.detail_ids.jenis_mobil
-                merk = data_detail.detail_ids.merk
-                tipe = data_detail.detail_ids.tipe
-                tahun = data_detail.detail_ids.tahun
-                color = data_detail.detail_ids.warna
-
-            self.nopol = nopol
-            self.jenis_mobil = jenis_mobil
-            self.merk = merk
-            self.tipe = tipe
-            self.tahun = tahun
-            self.warna = color
-
-        elif self.baru == True:
-            if self.stiker_id:
-                # Ambil data dari trans_id
-                name = ''
-                alamat = ''
-                telphone = ''
-                no_id = ''
-                jenis_transaksi = ''
-                awal = ''
-                akhir = ''
-                nopol = ''
-                jenis_mobil = ''
-                merk = ''
-                tipe = ''
-                tahun = ''
-                color = ''
-
-                # AMBIL DATA STIKER DARI TRANS STIKER
-                for data_detail in self.stiker_id:
-                    name = data_detail.name
-                    alamat = data_detail.alamat
-                    telphone = data_detail.telphone
-                    no_id = data_detail.no_id
-                    jenis_transaksi = data_detail.jenis_transaksi
-                    awal = data_detail.awal
-                    akhir = data_detail.akhir
-                    nopol = data_detail.detail_ids.nopol
-                    jenis_mobil = data_detail.detail_ids.jenis_mobil
-                    merk = data_detail.detail_ids.merk
-                    tipe = data_detail.detail_ids.tipe
-                    tahun = data_detail.detail_ids.tahun
-                    color = data_detail.detail_ids.warna
-                self.name = name
-                self.alamat = alamat
-                self.telphone = telphone
-                self.no_id = no_id
-                if self.jenis_transaksi == "stop":
-                    self.jenis_transaksi = "stop"
-                elif self.jenis_transaksi == "perpanjang":
-                    self.jenis_transaksi = "perpanjang"
-                else:
-                    self.jenis_transaksi = jenis_transaksi
-                self.awal_old = awal
-                if self.jenis_transaksi == "stop":
-                    akhir = datetime.now() + relativedelta(months=1)
-                    self.akhir = akhir
-                    self.cara_bayar = "non_billing"
-
-                else:
-                    self.akhir_old = akhir
-                self.nopol = nopol
-                self.jenis_mobil = jenis_mobil
-                self.merk = merk
-                self.tipe = tipe
-                self.tahun = tahun
-                self.warna = color
-
-                jenis_member_st_ids = self.env.user.company_id.jenis_member_st
-                jenis_member_nd_ids = self.env.user.company_id.jenis_member_nd
-                if not jenis_member_nd_ids:
-                    raise ValidationError("Price 2nd Membership not defined,  please define on company information!")
-                jenis_member_rd_ids = self.env.user.company_id.jenis_member_rd
-                if not jenis_member_rd_ids:
-                    raise ValidationError("Price 3rd Membership not defined,  please define on company information!")
-                jenis_member_th_ids = self.env.user.company_id.jenis_member_th
-                if not jenis_member_th_ids:
-                    raise ValidationError("Price 4th Membership not defined,  please define on company information!")
-
-                if self.no_id:
-                    check_row = self.no_id[4]
-                else:
-                    check_row = ''
-
-                if check_row == "1":
-                    self.jenis_member = "1st"
-                elif check_row == "2":
-
-                    self.jenis_member = "2nd"
-                elif check_row == "3":
-
-                    self.jenis_member = "3rd"
-                elif check_row == "4":
-                    self.jenis_member = "4th"
-
-                elif check_row == "":
-                    self.val_harga = 0
-                    self.jenis_member = ""
-
-
-            else:
-                # kosongkan data
-                if self.jenis_transaksi == 'langganan_baru':
-                    # check langganan baru mobil ke berapa
-                    jenis_member_st_ids = self.env.user.company_id.jenis_member_st
-                    jenis_member_nd_ids = self.env.user.company_id.jenis_member_nd
-                    if not jenis_member_nd_ids:
-                        raise ValidationError("Price 2nd Membership not defined,  please define on company information!")
-                    jenis_member_rd_ids = self.env.user.company_id.jenis_member_rd
-                    if not jenis_member_rd_ids:
-                        raise ValidationError("Price 3rd Membership not defined,  please define on company information!")
-                    jenis_member_th_ids = self.env.user.company_id.jenis_member_th
-                    if not jenis_member_th_ids:
-                        raise ValidationError("Price 4th Membership not defined,  please define on company information!")
-
-                    check_row = self.jenis_member
-
-                    if check_row == "1st":
-                        self.val_harga = jenis_member_st_ids
-
-                    elif check_row == "2nd":
-                        self.val_harga = jenis_member_nd_ids
-
-                    elif check_row == "3rd":
-                        self.val_harga = jenis_member_rd_ids
-
-                    elif check_row == "4th":
-                        self.val_harga = jenis_member_th_ids
-
-                    else:
-                        self.val_harga = 0
-
-
-                elif not self.jenis_transaksi:
-                    # kosongkan
-                    name = ''
-                    alamat = ''
-                    telphone = ''
-                    no_id = ''
-                    jenis_transaksi = ''
-                    awal = ''
-                    akhir = ''
-                    cara_bayar = ''
-                    nopol = ''
-                    jenis_mobil = ''
-                    merk = ''
-                    tipe = ''
-                    tahun = ''
-                    color = ''
-
-                    self.name = name
-                    self.alamat = alamat
-                    self.telphone = telphone
-                    self.no_id = no_id
-                    self.jenis_transaksi = jenis_transaksi
-                    self.awal = awal
-                    self.akhir = akhir
-                    self.cara_bayar = cara_bayar
-                    self.nopol = nopol
-                    self.jenis_mobil = jenis_mobil
-                    self.merk = merk
-                    self.tipe = tipe
-                    self.tahun = tahun
-                    self.warna = color
+            elif check_no_id == "2":
+                self.harga_ganti_nopol = ganti_nopol_dua_id
+            elif check_no_id == "3":
+                self.harga_ganti_nopol = ganti_nopol_tiga_id
+            elif check_no_id == "4":
+                self.harga_ganti_nopol = ganti_nopol_empat_id
 
         else:
-            # kosongkan
-            name = ''
-            alamat = ''
-            telphone = ''
-            no_id = ''
-            jenis_transaksi = ''
-            awal = ''
-            akhir = ''
-            cara_bayar = ''
-            nopol = ''
-            jenis_mobil = ''
-            merk = ''
-            tipe = ''
-            tahun = ''
-            color = ''
-
-            self.name = name
-            self.alamat = alamat
-            self.telphone = telphone
-            self.no_id = no_id
-            self.jenis_transaksi = jenis_transaksi
-            self.awal_old = awal
-            self.akhir_old = akhir
-            self.cara_bayar = cara_bayar
-            self.nopol = nopol
-            self.jenis_mobil = jenis_mobil
-            self.merk = merk
-            self.tipe = tipe
-            self.tahun = tahun
-            self.warna = color
+            self.harga_ganti_nopol = 0
 
 
-    @api.onchange('beli_stiker','ganti_nopol','kartu_hilang')
-    def _change_harga_beli_stiker(self):
+    # @api.onchange('stiker_id','jenis_transaksi')
+    # def langganan_baru(self):
+    #
+    #     self.duration = 0
+    #
+    #     if self.jenis_transaksi == 'perpanjang_baru':
+    #
+    #         if self.stiker_id:
+    #
+    #             name = ''
+    #             alamat = ''
+    #             telphone = ''
+    #             no_id = ''
+    #             awal = ''
+    #             akhir = ''
+    #
+    #             # AMBIL DATA STIKER DARI TRANS STIKER
+    #             for data_detail in self.stiker_id:
+    #                 name = data_detail.name
+    #                 alamat = data_detail.alamat
+    #                 telphone = data_detail.telphone
+    #                 no_id = data_detail.no_id
+    #                 awal = data_detail.awal
+    #                 akhir = data_detail.akhir
+    #
+    #             if self.stiker_id.notrans:
+    #                 check_row = self.stiker_id.notrans[4]
+    #             else:
+    #                 check_row = ''
+    #
+    #             if check_row == "1":
+    #                 self.jenis_member = "1st"
+    #             elif check_row == "2":
+    #                 self.jenis_member = "2nd"
+    #             elif check_row == "3":
+    #                 self.jenis_member = "3rd"
+    #             elif check_row == "4":
+    #                 self.jenis_member = "4th"
+    #             elif check_row == "":
+    #                 self.val_harga = 0
+    #                 self.jenis_member = ""
+    #
+    #             self.name = name
+    #             self.alamat = alamat
+    #             self.telphone = telphone
+    #             self.no_id = no_id
+    #             self.awal_old = awal
+    #             self.akhir_old = akhir
+    #
+    #         else:
+    #             raise ValidationError("Stiker not defined,  please define Stiker!")
+    #
+    #     elif self.jenis_transaksi == 'perpanjang_baru':
+    #         self.alamat = ""
+    #         self.telphone = ""
+    #         self.nopol = ""
+    #         self.jenis_mobil = ""
+    #         self.merk = ""
+    #         self.tipe = ""
+    #         self.tahun = ""
+    #         self.warna = ""
 
+    @api.onchange('baru','jenis_transaksi','stiker_id')
+    def _get_stiker(self):
+        # check langganan baru mobil ke berapa
+        jenis_member_st_ids = self.env.user.company_id.jenis_member_st
+        jenis_member_nd_ids = self.env.user.company_id.jenis_member_nd
+        jenis_member_rd_ids = self.env.user.company_id.jenis_member_rd
+        jenis_member_th_ids = self.env.user.company_id.jenis_member_th
+        if not jenis_member_nd_ids:
+            raise ValidationError("Price 2nd Membership not defined,  please define on company information!")
+        if not jenis_member_rd_ids:
+            raise ValidationError("Price 3rd Membership not defined,  please define on company information!")
+        if not jenis_member_th_ids:
+            raise ValidationError("Price 4th Membership not defined,  please define on company information!")
+
+            # ======================================================================================
+
+        if self.baru == True:
+
+            if self.jenis_transaksi == 'perpanjang_baru':
+
+                if self.stiker_id:
+
+                    # Process perpanjang to Server Database Parkir and update trans_id
+                    base_external_dbsource_obj = self.env['base.external.dbsource']
+                    postgresconn = base_external_dbsource_obj.sudo().browse(1)
+                    postgresconn.connection_open()
+                    _logger.info("Connection Open")
+                    _logger.info("Check mobil di dalam")
+
+                    # Kondisi pengecekan stiker
+                    strSQL = """SELECT no_card FROM card_member WHERE notrans='{}'""".format(self.stiker_id.notrans)
+                    cardmember = postgresconn.execute(query=strSQL, metadata=False)
+                    _logger.info(cardmember)
+
+                    stikers = self.stiker_id.notrans
+
+                    for record in cardmember:
+                        # Kondisi pengecekan stiker
+                        strSQL = """SELECT no_pol FROM transaksi_parkir WHERE no_pol='{}'""".format(record[0])
+                        trans_parkir = postgresconn.execute(query=strSQL, metadata=False)
+                        _logger.info(trans_parkir)
+
+                        for row in trans_parkir:
+                            if row[0]:
+                                raise ValidationError(
+                                    "Mobil anda masih di dalam, Stiker : " + stikers + ", No Card : " + row[0] + "")
+
+                    # AMBIL DATA STIKER DARI TRANS STIKER
+                    for data_detail in self.stiker_id:
+                        self.name = data_detail.name
+                        self.alamat = data_detail.alamat
+                        self.telphone = data_detail.telphone
+                        self.no_id = data_detail.no_id
+                        self.awal_old = data_detail.awal
+                        self.akhir_old = data_detail.akhir
+                        self.nopol = data_detail.detail_ids.nopol
+                        self.merk = data_detail.detail_ids.merk
+                        self.tipe = data_detail.detail_ids.tipe
+                        self.tahun = data_detail.detail_ids.tahun
+                        self.warna = data_detail.detail_ids.warna
+
+                    if self.stiker_id.notrans:
+                        check_row = self.stiker_id.notrans[4]
+                    else:
+                        check_row = ''
+
+                    if self.stiker_id.notrans:
+                        check_motor = self.stiker_id.notrans[0]
+                    else:
+                        check_motor = ''
+
+                    if check_motor == "K" or check_motor == "k":
+                        self.jenis_member = "1st"
+                    else:
+                        if check_row == "1":
+                            self.jenis_member = "1st"
+                        elif check_row == "2":
+                            self.jenis_member = "2nd"
+                        elif check_row == "3":
+                            self.jenis_member = "3rd"
+                        elif check_row == "4":
+                            self.jenis_member = "4th"
+                        elif check_row == "":
+                            self.jenis_member = ""
+
+                else:
+                    raise ValidationError("Stiker not defined,  please define Stiker!")
+
+            elif self.jenis_transaksi == 'perpanjang':
+
+                if self.stiker_id:
+
+                    # AMBIL DATA STIKER DARI TRANS STIKER
+                    for data_detail in self.stiker_id:
+                        self.name = data_detail.name
+                        self.alamat = data_detail.alamat
+                        self.telphone = data_detail.telphone
+                        self.no_id = data_detail.no_id
+                        self.awal_old = data_detail.awal
+                        self.akhir_old = data_detail.akhir
+                        self.nopol = data_detail.detail_ids.nopol
+                        self.merk = data_detail.detail_ids.merk
+                        self.tipe = data_detail.detail_ids.tipe
+                        self.tahun = data_detail.detail_ids.tahun
+                        self.warna = data_detail.detail_ids.warna
+
+
+                    if self.stiker_id.notrans:
+                        check_row = self.stiker_id.notrans[4]
+                    else:
+                        check_row = ''
+
+                    if self.stiker_id.notrans:
+                        check_motor = self.stiker_id.notrans[0]
+                    else:
+                        check_motor = ''
+
+                    if check_motor == "K" or check_motor == "k":
+                        self.jenis_member = "1st"
+                    else:
+                        if check_row == "1":
+                            self.jenis_member = "1st"
+                        elif check_row == "2":
+                            self.jenis_member = "2nd"
+                        elif check_row == "3":
+                            self.jenis_member = "3rd"
+                        elif check_row == "4":
+                            self.jenis_member = "4th"
+                        elif check_row == "":
+                            self.jenis_member = ""
+
+                    dt1 = datetime.strptime(str(self.akhir_old), '%Y-%m-%d %H:%M:%S')
+                    start_dt = date(dt1.year, dt1.month, dt1.day)
+                    dt2 = datetime.now()
+                    end_dt = date(dt2.year, dt2.month, dt2.day)
+
+
+                    if self.cara_bayar == "billing":
+                        jml = 0
+                        month = ""
+                        for dt in self.daterange(start_dt, end_dt):
+                            if dt.strftime("%m") == month:
+                                continue
+                            else:
+                                month = dt.strftime("%m")
+                                jml = jml + 1
+
+                        self.duration = jml
+
+                else:
+                    raise ValidationError("Stiker not defined,  please define Stiker!")
+
+            elif self.jenis_transaksi == 'stop':
+
+                if self.stiker_id:
+
+                    # AMBIL DATA STIKER DARI TRANS STIKER
+                    for data_detail in self.stiker_id:
+                        self.name = data_detail.name
+                        self.alamat = data_detail.alamat
+                        self.telphone = data_detail.telphone
+                        self.no_id = data_detail.no_id
+                        self.awal_old = data_detail.awal
+                        self.akhir_old = data_detail.akhir
+                        self.nopol = data_detail.detail_ids.nopol
+                        self.jenis_mobil = data_detail.detail_ids.jenis_mobil
+                        self.merk = data_detail.detail_ids.merk
+                        self.tipe = data_detail.detail_ids.tipe
+                        self.tahun = data_detail.detail_ids.tahun
+                        self.warna = data_detail.detail_ids.warna
+
+                    if self.jenis_transaksi == "stop":
+                        akhir = datetime.now() + relativedelta(months=1)
+                        self.akhir = akhir
+                        self.cara_bayar = "non_billing"
+                    else:
+                        self.akhir_old = akhir
+
+                    self.duration = 0
+
+                    if self.stiker_id.notrans:
+                        check_row = self.stiker_id.notrans[4]
+                    else:
+                        check_row = ''
+
+                    if self.stiker_id.notrans:
+                        check_motor = self.stiker_id.notrans[0]
+                    else:
+                        check_motor = ''
+
+                    if check_motor == "K" or check_motor == "k":
+                        self.jenis_member = "1st"
+                    else:
+                        if check_row == "1":
+                            self.jenis_member = "1st"
+                        elif check_row == "2":
+                            self.jenis_member = "2nd"
+                        elif check_row == "3":
+                            self.jenis_member = "3rd"
+                        elif check_row == "4":
+                            self.jenis_member = "4th"
+                        elif check_row == "":
+                            self.jenis_member = ""
+
+                else:
+                    raise ValidationError("Stiker not defined,  please define Stiker!")
+
+        else:
+            self.jenis_transaksi = ""
+            self.duration = 0
+            self.awal_old = ""
+            self.akhir_old = ""
+            self.awal = ""
+            self.akhir = ""
+            self.cara_bayar = ""
+            self.keterangan = ""
+            self.nopol = ""
+            self.jenis_mobil = ""
+            self.jenis_member = ""
+            self.merk = ""
+            self.tipe = ""
+            self.tahun = ""
+            self.warna = ""
+
+    # END DATE UPDATe
+    @api.onchange('duration','jenis_transaksi','stiker_id','jenis_mobil')
+    @api.depends('stiker_id','name','duration','jenis_mobil')
+    def calculate_start_end_date(self):
+
+        # Pengecekan jika field duration & start_date tidak diisi, maka field end_date akan di update sama seperti field start_date
+        if not self.jenis_transaksi:
+            self.awal = ""
+            self.akhir = ""
+        elif self.jenis_transaksi == 'langganan_baru':
+            self.awal = datetime.now()
+            self.akhir = datetime.now() + relativedelta(months=self.duration)
+        elif self.jenis_transaksi == 'perpanjang_baru':
+            self.awal = datetime.now()
+            self.akhir = datetime.now() + relativedelta(months=self.duration)
+        elif self.jenis_transaksi == 'perpanjang':
+            start_date = fields.Datetime.from_string(self.akhir_old)
+            # Mengupdate field end_date dari perhitungan variabel start ditambah variabel duration
+            if start_date:
+                self.awal = start_date
+                self.akhir = start_date + relativedelta(months=self.duration)
+
+
+    @api.onchange('beli_stiker')
+    def calculate_harga_beli_stiker(self):
+
+        # PILIH STIKER
         if self.beli_stiker == True:
             beli_stiker_id = self.env.user.company_id.beli_stiker_ids
             if not beli_stiker_id:
@@ -283,135 +396,322 @@ class RequestTransStiker(models.Model):
         else:
             self.harga_beli_stiker = 0
 
-        if self.ganti_nopol == True:
-            ganti_nopol_id = self.env.user.company_id.ganti_nopol_ids
 
-            if not ganti_nopol_id:
-                raise ValidationError("Price Ganti Nopol not defined,  please define on company information!")
-
-            if self.stiker_id:
-                check_row = self.stiker_id.notrans[4]
-            else:
-                check_row = ''
-
-            if check_row == "1":
-                self.harga_ganti_nopol = 0
-            elif check_row == "2":
-                self.harga_ganti_nopol = ganti_nopol_id
-
-            nopol = ''
-            jenis_mobil = ''
-            merk = ''
-            tipe = ''
-            tahun = ''
-            color = ''
-
-            # AMBIL DATA STIKER DARI TRANS STIKER
-            for data_detail in self.stiker_id:
-                nopol = data_detail.detail_ids.nopol
-                jenis_mobil = data_detail.detail_ids.jenis_mobil
-                merk = data_detail.detail_ids.merk
-                tipe = data_detail.detail_ids.tipe
-                tahun = data_detail.detail_ids.tahun
-                color = data_detail.detail_ids.warna
-
-            self.nopol = nopol
-            self.jenis_mobil = jenis_mobil
-            self.merk = merk
-            self.tipe = tipe
-            self.tahun = tahun
-            self.warna = color
-
-        else:
-            self.harga_ganti_nopol = 0
-
-
+    @api.onchange('kartu_hilang','stiker_id')
+    def calculate_harga_kartu_hilang(self):
         if self.kartu_hilang == True:
+            base_external_dbsource_obj = self.env['base.external.dbsource']
+            postgresconn = base_external_dbsource_obj.sudo().browse(1)
+            postgresconn.connection_open()
+            _logger.info("Connection Open")
+
+            _logger.info('Get Card Member')
+            strSQL = """SELECT """ \
+                     """no_card, no_urut """ \
+                     """FROM card_member WHERE notrans='{}'""".format(self.stiker_id.notrans)
+
+            select_card_member = postgresconn.execute(query=strSQL, metadata=False)
+            _logger.info(select_card_member)
+            no_kartu_old = ""
+            no_urut_old = ""
+
+            for row in select_card_member:
+                no_kartu_old = row[0]
+                no_urut_old = row[1]
+
+            self.old_no_kartu = no_kartu_old
+            self.old_no_urut = no_urut_old
+
             kartu_hilang_id = self.env.user.company_id.kartu_hilang_ids
             if not kartu_hilang_id:
-                raise ValidationError("Price Kartu Hilang not defined,  please define on company information!")
+                raise ValidationError("Price Kartu Parkir not defined,  please define on company information!")
 
             self.harga_kartu_hilang = kartu_hilang_id
         else:
             self.harga_kartu_hilang = 0
+            self.no_kartu = ""
+            self.no_urut = ""
+
+
+    # Buttom request for cancel
+    @api.one
+    def request_cancel_send_mail(self):
+        args = [('name','=','Request for Cancel')]
+        template_ids = self.env['mail.template'].search(args) # search tamplate dengan nama : Request for Cancel
+        template_ids[0].sudo().send_mail(self.id, force_send=True)
+
+        self.message_post("Send Email notification for cancel transaction to Manager")
+        self.state = 'request_cancel'
+
+    # Calculate date range perpanjang
+    def daterange(self, date1, date2):
+        for n in range(int((date2 - date1).days) + 1):
+            yield date1 + timedelta(n)
+
+
+    @api.onchange('baru','cara_bayar','jenis_transaksi','stiker_id','duration','jenis_mobil','jenis_member')
+    def calculate_harga_kontribusi(self):
+
+        if self.baru == True:
+
+            jenis_member_st_ids = self.env.user.company_id.jenis_member_st
+            jenis_member_nd_ids = self.env.user.company_id.jenis_member_nd
+            jenis_member_rd_ids = self.env.user.company_id.jenis_member_rd
+            jenis_member_th_ids = self.env.user.company_id.jenis_member_th
+            tagihan_motor_ids = self.env.user.company_id.tagihan_motor_ids
+
+            if not jenis_member_nd_ids:
+                raise ValidationError("Price 2nd Membership not defined,  please define on company information!")
+            if not jenis_member_rd_ids:
+                raise ValidationError("Price 3rd Membership not defined,  please define on company information!")
+            if not jenis_member_th_ids:
+                raise ValidationError("Price 4th Membership not defined,  please define on company information!")
+
+
+            if self.jenis_transaksi == "perpanjang": # ,'perpanjang_baru'
+                if self.jenis_member == "1st":
+                    # 'S' - Jenis kendaraan Motor
+                    if self.jenis_mobil == "S":
+                        self.val_harga = int(tagihan_motor_ids) * int(self.duration)
+                    else:
+                        self.val_harga = int(jenis_member_st_ids)
+
+                elif self.jenis_member == "2nd":
+                    if self.cara_bayar == "non_billing":
+                        # 'S' - Jenis kendaraan Motor
+                        if self.jenis_mobil == "S":
+                            self.val_harga = int(tagihan_motor_ids) * int(self.duration)
+                        else:
+                            self.val_harga = int(jenis_member_nd_ids) * int(self.duration)
+
+                    elif self.cara_bayar == "billing":
+
+                        tgl = fields.Datetime.from_string(self.akhir_old) # tgl akhir
+                        DATE = datetime.now()   # tgl saat ini
+
+                        if tgl < DATE:
+
+                            dt1 = datetime.strptime(str(self.akhir_old), '%Y-%m-%d %H:%M:%S')
+                            start_dt = date(dt1.year, dt1.month, dt1.day)
+                            dt2 = datetime.now()
+                            end_dt = date(dt2.year, dt2.month, dt2.day)
+                            jml = 0
+                            month = ""
+                            for dt in self.env['request.transstiker'].daterange(start_dt, end_dt):
+                                if dt.strftime("%m") == month:
+                                    continue
+                                else:
+                                    month = dt.strftime("%m")
+                                    jml = jml + 1
+
+                            hasil = int(jenis_member_nd_ids) * jml
+                            jml_dp = int(jenis_member_nd_ids) * 2
+                            self.val_harga = hasil + jml_dp
+
+                        elif tgl > DATE:
+
+                            date1 = datetime.strptime(str(self.akhir_old), '%Y-%m-%d %H:%M:%S')
+                            date2 = datetime.now()
+                            r = relativedelta(date1, date2)
+                            sum_month = r.months
+                            if sum_month == 0:
+                                self.val_harga = int(jenis_member_nd_ids) * 2
+                            elif sum_month == 1:
+                                self.val_harga = int(jenis_member_nd_ids)
+                            else:
+                                self.val_harga = 0
+
+                elif self.jenis_member == "3rd":
+                    if self.cara_bayar == "non_billing":
+                        # 'S' - Jenis kendaraan Motor
+                        if self.jenis_mobil == "S":
+                            self.val_harga = int(tagihan_motor_ids) * int(self.duration)
+                        else:
+                            self.val_harga = int(jenis_member_rd_ids) * int(self.duration)
+
+                    elif self.cara_bayar == "billing":
+
+                        tgl = fields.Datetime.from_string(self.akhir_old)  # tgl akhir
+                        DATE = datetime.now()  # tgl saat ini
+
+                        if tgl < DATE:
+
+                            dt1 = datetime.strptime(str(self.akhir_old), '%Y-%m-%d %H:%M:%S')
+                            start_dt = date(dt1.year, dt1.month, dt1.day)
+                            dt2 = datetime.now()
+                            end_dt = date(dt2.year, dt2.month, dt2.day)
+                            jml = 0
+                            month = ""
+                            for dt in self.env['request.transstiker'].daterange(start_dt, end_dt):
+                                if dt.strftime("%m") == month:
+                                    continue
+                                else:
+                                    month = dt.strftime("%m")
+                                    jml = jml + 1
+
+                            hasil = int(jenis_member_rd_ids) * jml
+                            jml_dp = int(jenis_member_rd_ids) * 2
+                            self.val_harga = hasil + jml_dp
+
+                        elif tgl > DATE:
+                            date1 = datetime.strptime(str(self.akhir_old), '%Y-%m-%d %H:%M:%S')
+                            date2 = datetime.now()
+                            r = relativedelta(date1, date2)
+                            sum_month = r.months
+                            if sum_month == 0:
+                                self.val_harga = int(jenis_member_rd_ids) * 2
+                            elif sum_month == 1:
+                                self.val_harga = int(jenis_member_rd_ids)
+                            else:
+                                self.val_harga = 0
+
+                elif self.jenis_member == "4th":
+                    if self.cara_bayar == "non_billing":
+                        # 'S' - Jenis kendaraan Motor
+                        if self.jenis_mobil == "S":
+                            self.val_harga = int(tagihan_motor_ids) * int(self.duration)
+                        else:
+                            self.val_harga = int(jenis_member_th_ids) * int(self.duration)
+
+                    elif self.cara_bayar == "billing":
+                        tgl = fields.Datetime.from_string(self.akhir_old)  # tgl akhir
+                        DATE = datetime.now()  # tgl saat ini
+
+                        if tgl < DATE:
+
+                            dt1 = datetime.strptime(str(self.akhir_old), '%Y-%m-%d %H:%M:%S')
+                            start_dt = date(dt1.year, dt1.month, dt1.day)
+                            dt2 = datetime.now()
+                            end_dt = date(dt2.year, dt2.month, dt2.day)
+                            jml = 0
+                            month = ""
+                            for dt in self.env['request.transstiker'].daterange(start_dt, end_dt):
+                                if dt.strftime("%m") == month:
+                                    continue
+                                else:
+                                    month = dt.strftime("%m")
+                                    jml = jml + 1
+
+                            hasil = int(jenis_member_th_ids) * jml
+                            jml_dp = int(jenis_member_th_ids) * 2
+                            self.val_harga = hasil + jml_dp
+
+                        elif tgl > DATE:
+                            date1 = datetime.strptime(str(self.akhir_old), '%Y-%m-%d %H:%M:%S')
+                            date2 = datetime.now()
+                            r = relativedelta(date1, date2)
+                            sum_month = r.months
+                            if sum_month == 0:
+                                self.val_harga = int(jenis_member_th_ids) * 2
+                            elif sum_month == 1:
+                                self.val_harga = int(jenis_member_th_ids)
+                            else:
+                                self.val_harga = 0
+
+
+            elif self.jenis_transaksi in ["langganan_baru","perpanjang_baru"]:
+
+                if self.jenis_member == "1st":
+                    # 'S' - Jenis kendaraan Motor
+                    if self.jenis_mobil == "S":
+                        self.val_harga = int(tagihan_motor_ids) * int(self.duration)
+                    else:
+                        self.val_harga = int(jenis_member_st_ids)
+
+                elif self.jenis_member == "2nd":
+                    if self.cara_bayar == "non_billing":
+                        # 'S' - Jenis kendaraan Motor
+                        if self.jenis_mobil == "S":
+                            self.val_harga = int(tagihan_motor_ids) * int(self.duration)
+                        else:
+                            self.val_harga = int(jenis_member_nd_ids) * int(self.duration)
+
+                    elif self.cara_bayar == "billing":
+                        self.val_harga = int(jenis_member_nd_ids) * 2
+                    # else:
+                    #     raise ValidationError("Please define on Mobil!")
+
+                elif self.jenis_member == "3rd":
+                    if self.cara_bayar == "non_billing":
+                        # 'S' - Jenis kendaraan Motor
+                        if self.jenis_mobil == "S":
+                            self.val_harga = int(tagihan_motor_ids) * int(self.duration)
+                        else:
+                            self.val_harga = int(jenis_member_rd_ids) * int(self.duration)
+
+                    elif self.cara_bayar == "billing":
+                        self.val_harga = int(jenis_member_rd_ids) * 2
+                    # else:
+                    #     raise ValidationError("Please define on Mobil!")
+
+                elif self.jenis_member == "4th":
+                    if self.cara_bayar == "non_billing":
+                        # 'S' - Jenis kendaraan Motor
+                        if self.jenis_mobil == "S":
+                            self.val_harga = int(tagihan_motor_ids) * int(self.duration)
+                        else:
+                            self.val_harga = int(jenis_member_th_ids) * int(self.duration)
+
+                    elif self.cara_bayar == "billing":
+                        self.val_harga = int(jenis_member_th_ids) * 2
+                    # else:
+                    #     raise ValidationError("Please define on Mobil!")
+
+            elif self.jenis_transaksi == "stop":
+                self.val_harga = jenis_member_st_ids
+        else:
+            self.val_harga = 0
 
 
     @api.onchange('val_harga', 'harga_beli_stiker', 'harga_ganti_nopol', 'harga_kartu_hilang')
-    def calculate_rts(self):
+    def calculate_total_harga(self):
         total = self.val_harga + self.harga_beli_stiker + self.harga_ganti_nopol + self.harga_kartu_hilang
         self.amount = total
         self.adm = self.create_uid
 
 
-    # END DATE UPDATE
-    @api.onchange('duration','cara_bayar')
-    @api.depends('awal', 'duration','val_harga')
-    def _get_end_date(self):
-        # akhir_old = ''
-        #
-        # # AMBIL DATA STIKER DARI TRANS STIKER
-        # for data_detail in self.stiker_id:
-        #     akhir = data_detail.akhir
+    # GENERATE TRANS ID WHERE langganan_baru
+    @api.onchange('jenis_member')
+    def generate_stiker_id(self):
+        unit = self.unit_kerja.kode
+        check = self.jenis_member
 
-        # Pengecekan jika field duration & start_date tidak diisi, maka field end_date akan di update sama seperti field start_date
-        if self.jenis_transaksi == 'langganan_baru':
-            self.awal = datetime.now()
-            self.akhir = datetime.now() + relativedelta(months=self.duration)
+        if check == "1st":
+            n = "1"
+        elif check == "2nd":
+            n = "2"
+        elif check == "3rd":
+            n = "3"
+        elif check == "4th":
+            n = "4"
 
-        else:
-            start_date = fields.Datetime.from_string(self.akhir_old)
+        if self.jenis_transaksi == "langganan_baru":
 
-            # Mengupdate field end_date dari perhitungan variabel start ditambah variabel duration
-            if start_date:
-                self.awal = start_date
-                self.akhir = start_date + relativedelta(months=self.duration)
+            if self.jenis_mobil == "M":
+                # _logger.info(unit)
+                tex = unit[1:5]
+                # self.stiker_id = tex + str(n)
+                # _logger.info(tex)
+                trans = tex + str(n)
 
-        jenis_member_st_ids = self.env.user.company_id.jenis_member_st
-        jenis_member_nd_ids = self.env.user.company_id.jenis_member_nd
-        if not jenis_member_nd_ids:
-            raise ValidationError("Price 2nd Membership not defined,  please define on company information!")
-        jenis_member_rd_ids = self.env.user.company_id.jenis_member_rd
-        if not jenis_member_rd_ids:
-            raise ValidationError("Price 3rd Membership not defined,  please define on company information!")
-        jenis_member_th_ids = self.env.user.company_id.jenis_member_th
-        if not jenis_member_th_ids:
-            raise ValidationError("Price 4th Membership not defined,  please define on company information!")
+                if not self.stiker_id:
+                    args = [('no_id', '=', trans)]
+                    res = self.env['trans.stiker'].search(args, limit=1)
 
-        if self.no_id:
-            check_row = self.no_id[4]
-        else:
-            check_row = ''
+                    if res.no_id:
+                        raise ValidationError("this trans id : " + trans + " already exists!")
 
-        if check_row == "1":
-            self.val_harga = jenis_member_st_ids
+                    self.no_id = trans
 
-        elif check_row == "2":
-            if self.jenis_transaksi == "stop":
-                self.val_harga = 0
-            else:
-                if self.cara_bayar == "non_billing":
-                    self.val_harga = int(jenis_member_nd_ids) * int(self.duration)
-                else:
-                    self.val_harga = int(jenis_member_nd_ids) * 2
 
-        elif check_row == "3":
-            if self.jenis_transaksi == "stop":
-                self.val_harga = 0
-            else:
-                if self.cara_bayar == "non_billing":
-                    self.val_harga = int(jenis_member_rd_ids) * int(self.duration)
-                else:
-                    self.val_harga = int(jenis_member_rd_ids) * 2
-
-        elif check_row == "4":
-            if self.jenis_transaksi == "stop":
-                self.val_harga = 0
-            else:
-                if self.cara_bayar == "non_billing":
-                    self.val_harga = int(jenis_member_th_ids) * int(self.duration)
-                else:
-                    self.val_harga = int(jenis_member_th_ids) * 2
-
+    @api.onchange('edit_info_mobil')
+    def change_info_mobil(self):
+        self.merk = ""
+        self.jenis_mobil = ""
+        self.nopol = ""
+        self.tipe = ""
+        self.tahun = ""
+        self.warna = ""
 
 
     # BUTTON DONE PAYMENT
@@ -419,7 +719,6 @@ class RequestTransStiker(models.Model):
     def trans_done_payment(self):
         for v in self:
             if v.baru == True:
-
                 if v.jenis_transaksi == "perpanjang":
 
                     # Process perpanjang to Server Database Parkir and update trans_id
@@ -434,13 +733,56 @@ class RequestTransStiker(models.Model):
                     strSQLUpdate_akhir = """UPDATE transaksi_stiker_tes """ \
                              """ SET akhir='{}'""" \
                              """ WHERE """ \
-                             """notrans='{}'""".format(v.akhir, self.no_id)
+                             """notrans='{}'""".format(v.akhir, self.stiker_id.notrans)
 
                     postgresconn.execute_general(strSQLUpdate_akhir)
 
                     # UPDATE TO TRANS STIKER ODOO
                     args = [('id', '=', v.stiker_id.id)]
-                    res = self.env['trans.stiker'].search(args).write({'akhir': v.akhir})
+                    res = self.env['trans.stiker'].search(args).sudo().write({'akhir': v.akhir})
+
+                    v.state = "done"
+
+                if v.jenis_transaksi == "perpanjang_baru":
+
+                    if self.ganti_nopol_pb == True:
+                        base_external_dbsource_obj = self.env['base.external.dbsource']
+                        postgresconn = base_external_dbsource_obj.sudo().browse(1)
+                        postgresconn.connection_open()
+                        _logger.info('Update NOPOL')
+                        strSQLUpdate_nopol = """UPDATE detail_transaksi_stiker_tes """ \
+                                             """ SET """ \
+                                             """nopol='{}', jenis_mobil='{}', merk='{}', tipe='{}',""" \
+                                             """tahun='{}', warna='{}'""" \
+                                             """ WHERE """ \
+                                             """notrans='{}'""".format(self.new_nopol_pb, self.new_jenis_mobil_pb, self.new_merk_pb,
+                                                                       self.new_tipe_pb, self.new_tahun_pb, self.new_warna_pb,
+                                                                       self.stiker_id.notrans)
+                        postgresconn.execute_general(strSQLUpdate_nopol)
+
+                        # UPDATE TO TRANS STIKER ODOO
+                        args = [('trans_stiker_id', '=', v.stiker_id.id)]
+                        self.env['detail.transstiker'].search(args).write({
+                            'nopol': self.new_nopol_pb,
+                            'jenis_mobil': self.new_jenis_mobil_pb,
+                            'merk': self.new_merk_pb,
+                            'tipe': self.new_tipe_pb,
+                            'tahun': self.new_tahun_pb,
+                            'warna': self.new_warna_pb,
+                        })
+
+                        # Insert Data Trans Stiker with Odoo to Database Server Parkir
+                        _logger.info('Update Data Trans Stiker')
+                        strSQLUpdate_akhir = """UPDATE transaksi_stiker_tes """ \
+                                             """ SET akhir='{}'""" \
+                                             """ WHERE """ \
+                                             """notrans='{}'""".format(v.akhir, v.no_id)
+
+                        postgresconn.execute_general(strSQLUpdate_akhir)
+
+                    # UPDATE TO TRANS STIKER ODOO
+                    args = [('id', '=', v.stiker_id.id)]
+                    self.env['trans.stiker'].search(args).sudo().write({'akhir': v.akhir})
 
                     v.state = "done"
 
@@ -480,51 +822,62 @@ class RequestTransStiker(models.Model):
                     else:
                         cb = 1
 
-                    strSQL = """SELECT notrans FROM transaksi_stiker_tes WHERE notrans='{}'""".format(self.no_id)
-                    transaksistikers1 = postgresconn.execute_general(strSQL)
 
-                    if len(transaksistikers1) == 0:
-                        base_external_dbsource_obj = self.env['base.external.dbsource']
-                        postgresconn = base_external_dbsource_obj.sudo().browse(1)
-                        postgresconn.connection_open()
-                        _logger.info("Connection Open")
-                        _logger.info("Sync Stasiun Kerja")
-                        # Insert Data Trans Stiker with Odoo to Database Server Parkir
-                        _logger.info('Insert Data Trans Stiker')
-                        strSQL = """INSERT INTO transaksi_stiker_tes """ \
-                                    """(notrans, nama, alamat, telepon, jenis_transaksi, awal, harga, keterangan, tanggal, operator, akhir,""" \
-                                    """maks, no_id, unit_kerja, no_induk, jenis_stiker, hari_ke, jenis_langganan, exit_pass, no_kuitansi, tgl_edited,""" \
-                                    """tipe_exit_pass, seq_code, unitno, area, reserved, cara_bayar)""" \
-                                    """ VALUES """ \
-                                    """('{}', '{}', '{}', '{}', '{}', '{}', 0, '{}', '{}', '{}', '{}', 1,""" \
-                                    """'{}', '{}', NULL, 0, NULL, '{}', 0, '{}', '{}', 1, 0, NULL, NULL, 0, '{}')""".format(
-                            self.no_id, self.name, self.alamat, self.telphone, jt, self.awal,self.keterangan, self.tanggal, self.adm.name,
-                            self.akhir, self.no_id, self.unit_kerja.kode, j_member, self.no_id, DATE, cb)
+                # ================================  CHECK & CREATE DATA KE SERVER PARKIR  ==================================
 
-                        postgresconn.execute_general(strSQL)
+                    # Kondisi pengecekan stiker
+                    # strSQL = """SELECT notrans FROM transaksi_stiker_tes WHERE notrans='{}'""".format(self.no_id)
+                    # stikercheck = postgresconn.execute(query=strSQL, metadata=False)
+                    # _logger.info(stikercheck)
+                    #
+                    # for record in stikercheck:
+                    #     record_one = self.find_detail_stiker(record[0])
+                    #     # Kondisi ketika stiker tidak ada maka di jalankan
+                    #     if not record_one:
+                    #         # Insert Data Trans Stiker with Odoo to Database Server Parkir
+                    _logger.info('Insert Data Trans Stiker')
+                    strSQL = """INSERT INTO transaksi_stiker_tes """ \
+                                """(notrans, nama, alamat, telepon, jenis_transaksi, awal, harga, keterangan, tanggal, operator, akhir,""" \
+                                """maks, no_id, unit_kerja, no_induk, jenis_stiker, hari_ke, jenis_langganan, exit_pass, no_kuitansi, tgl_edited,""" \
+                                """tipe_exit_pass, seq_code, unitno, area, reserved, cara_bayar)""" \
+                                """ VALUES """ \
+                                """('{}', '{}', '{}', '{}', '{}', '{}', 0, '{}', '{}', '{}', '{}', 1,""" \
+                                """'{}', '{}', NULL, 0, NULL, '{}', 0, '{}', '{}', 1, 0, NULL, NULL, 0, '{}')""".format(
+                        self.no_id, self.name, self.alamat, self.telphone, jt, self.awal,self.keterangan, self.tanggal, self.adm.name,
+                        self.akhir, self.no_id, self.unit_kerja.kode, j_member, self.no_id, DATE, cb)
 
-                    strSQL = """SELECT notrans FROM detail_transaksi_stiker_tes WHERE notrans='{}'""".format(self.no_id)
-                    transaksistikers2 = postgresconn.execute_general(strSQL)
+                    ts1 = postgresconn.execute_general(strSQL)
 
-                    if len(transaksistikers2) == 0:
-                        base_external_dbsource_obj = self.env['base.external.dbsource']
-                        postgresconn = base_external_dbsource_obj.sudo().browse(1)
-                        postgresconn.connection_open()
-                        _logger.info("Connection Open")
-                        _logger.info("Sync Stasiun Kerja")
-                        # Insert Detail Trans Stiker with Odoo to Database Server Parkir
-                        _logger.info('Insert Detail Trans Stiker')
-                        strSQL2 = """INSERT INTO detail_transaksi_stiker_tes """ \
-                                    """(notrans, nopol, jenis_mobil, adm, kategori, jenis_member, akses, akses_out, status, merk, tipe,""" \
-                                    """tahun, warna, keterangan)""" \
-                                    """ VALUES """ \
-                                    """('{}', '{}', '{}', '{}', 0, '{}', NULL, NULL, 1, '{}', '{}', '{}',""" \
-                                    """'{}', '{}')""".format(
-                            self.no_id, self.nopol, self.jenis_mobil, self.adm.name, self.jenis_member, self.merk,
-                            self.tipe, self.tahun, self.warna, self.keterangan)
+                    _logger.info(ts1)
 
-                        # _logger.info()
-                        postgresconn.execute_general(strSQL2)
+                    # Kondisi pengecekan stiker
+                    # strSQL = """SELECT notrans FROM detail_transaksi_stiker_tes WHERE notrans='{}'""".format(self.no_id)
+                    # detailstikercheck = postgresconn.execute(query=strSQL, metadata=False)
+                    # _logger.info(detailstikercheck)
+                    #
+                    # for detailrecord in detailstikercheck:
+                    #     record_two = self.find_detail_stiker(detailrecord[0])
+                    #     # Kondisi ketika stiker tidak ada maka di jalankan
+                    #     if not record_two:
+                    # Insert Detail Trans Stiker with Odoo to Database Server Parkir
+                    _logger.info('Insert Detail Trans Stiker')
+                    strSQL2 = """INSERT INTO detail_transaksi_stiker_tes """ \
+                                """(notrans, nopol, jenis_mobil, adm, kategori, jenis_member, akses, akses_out, status, merk, tipe,""" \
+                                """tahun, warna, keterangan)""" \
+                                """ VALUES """ \
+                                """('{}', '{}', '{}', '{}', 0, '{}', NULL, NULL, 1, '{}', '{}', '{}',""" \
+                                """'{}', '{}')""".format(
+                        self.no_id, self.nopol, self.jenis_mobil, self.adm.name, self.jenis_member, self.merk,
+                        self.tipe, self.tahun, self.warna, self.keterangan)
+
+                    # _logger.info()
+                    ts2 = postgresconn.execute_general(strSQL2)
+                    _logger.info(ts2)
+
+                # ============================================   END   =========================================================
+
+
+                # ==============================  SELECT DATA KE SERVER PARKIR & CREATE KE ODOO  ===============================
 
                     _logger.info('Sync Transaksi Stiker')
                     strSQL = """SELECT """ \
@@ -554,7 +907,7 @@ class RequestTransStiker(models.Model):
                             else:
                                 vals.update({'jenis_transaksi': 'stop'})
                             vals.update({'awal': transaksistiker[5]})
-                            vals.update({'harga': transaksistiker[6]})    
+                            vals.update({'harga': transaksistiker[6]})
                             vals.update({'keterangan': transaksistiker[7]})
                             vals.update({'tanggal': transaksistiker[8]})
                             vals.update({'operator': transaksistiker[9]})
@@ -578,7 +931,7 @@ class RequestTransStiker(models.Model):
                                 vals.update({'cara_bayar': 'non_billing'})
                             else:
                                 vals.update({'cara_bayar': 'billing'})
-                            current_record.write(vals)
+                            current_record.sudo().write(vals)
                             _logger.info('Transaksi Stiker Updated')
                         else:
                             stasiunkerja = self.find_stasiun_kerja(transaksistiker[13])
@@ -598,7 +951,7 @@ class RequestTransStiker(models.Model):
                                 vals.update({'jenis_transaksi': 'stop'})
                             _logger.info(transaksistiker[5])
                             vals.update({'awal': transaksistiker[5]})
-                            vals.update({'harga': transaksistiker[6]})            
+                            vals.update({'harga': transaksistiker[6]})
                             vals.update({'keterangan': transaksistiker[7]})
                             vals.update({'tanggal': transaksistiker[8]})
                             vals.update({'operator': transaksistiker[9]})
@@ -624,9 +977,8 @@ class RequestTransStiker(models.Model):
                                 vals.update({'cara_bayar': 'non_billing'})
                             else:
                                 vals.update({'cara_bayar': 'billing'})
-                            transaksi_stiker_obj.create(vals)
+                            transaksi_stiker_obj.sudo().create(vals)
                             _logger.info('Transaksi Stiker Created')
-
 
                     _logger.info('Sync Detail Transaksi Stiker')
                     strSQL = """SELECT notrans,nopol,jenis_mobil,adm,kategori,""" \
@@ -654,7 +1006,7 @@ class RequestTransStiker(models.Model):
                             vals.update({'tahun': detailstiker[11]})
                             vals.update({'warna': detailstiker[12]})
                             vals.update({'keterangan': detailstiker[13]})
-                            current_record.write(vals)
+                            current_record.sudo().write(vals)
                             _logger.info("Detail Updated")
                         else:
                             transaksistiker = self.find_transaksi_stiker(detailstiker[0])
@@ -674,14 +1026,14 @@ class RequestTransStiker(models.Model):
                             vals.update({'tahun': detailstiker[11]})
                             vals.update({'warna': detailstiker[12]})
                             vals.update({'keterangan': detailstiker[13]})
-                            detail_stiker_obj.create(vals)
+                            detail_stiker_obj.sudo().create(vals)
                             _logger.info("Detail Created")
-
 
                     args = [('no_id', '=', self.no_id)]
                     res = self.env['trans.stiker'].search(args, limit=1)
-
                     self.stiker_id = res.id
+
+                # =============================================   END   =======================================================
 
                     v.state = "done"
 
@@ -699,13 +1051,13 @@ class RequestTransStiker(models.Model):
                     strSQLUpdate_akhir = """UPDATE transaksi_stiker_tes """ \
                                          """ SET akhir='{}', cara_bayar='{}'""" \
                                          """ WHERE """ \
-                                         """notrans='{}'""".format(v.akhir,v.cara_bayar, self.no_id)
+                                         """notrans='{}'""".format(v.akhir,v.cara_bayar, self.stiker_id.notrans)
 
                     postgresconn.execute_general(strSQLUpdate_akhir)
 
                     # UPDATE TO TRANS STIKER ODOO
                     args = [('id', '=', v.stiker_id.id)]
-                    res = self.env['trans.stiker'].search(args).write({'akhir': v.akhir})
+                    res = self.env['trans.stiker'].search(args).sudo().write({'akhir': v.akhir})
 
                     v.state = "done"
 
@@ -725,11 +1077,11 @@ class RequestTransStiker(models.Model):
                          """nopol='{}', jenis_mobil='{}', merk='{}', tipe='{}',""" \
                          """tahun='{}', warna='{}'""" \
                          """ WHERE """ \
-                         """notrans='{}'""".format(v.new_nopol, v.new_jenis_mobil, v.new_merk, v.new_tipe, v.new_tahun, v.new_warna, v.stiker_id.notrans)
+                         """notrans='{}'""".format(v.new_nopol, v.new_jenis_mobil, v.new_merk, v.new_tipe, v.new_tahun, v.new_warna, self.stiker_id.notrans)
 
                 postgresconn.execute_general(strSQLUpdate_nopol)
 
-                args = [('notrans', '=', v.stiker_id.notrans)]
+                args = [('notrans', '=', self.stiker_id.notrans)]
                 res = self.env['detail.transstiker'].search(args)
                 vals = {}
                 vals.update({'nopol': v.new_nopol})
@@ -740,13 +1092,62 @@ class RequestTransStiker(models.Model):
                 vals.update({'warna': v.new_warna})
                 res.write(vals)
 
-                v.state = "done"
+                # AMBIL DATA STIKER DARI TRANS STIKER
+                for data_detail in self.stiker_id:
+                    self.nopol = data_detail.detail_ids.nopol
+                    self.jenis_mobil = data_detail.detail_ids.jenis_mobil
+                    self.merk = data_detail.detail_ids.merk
+                    self.tipe = data_detail.detail_ids.tipe
+                    self.tahun = data_detail.detail_ids.tahun
+                    self.warna = data_detail.detail_ids.warna
+
+                v.state = "card_member"
 
             if v.beli_stiker == True:
                 v.state = "done"
+
             if v.kartu_hilang == True:
+                # Process perpanjang to Server Database Parkir and update trans_id
+                base_external_dbsource_obj = self.env['base.external.dbsource']
+                postgresconn = base_external_dbsource_obj.sudo().browse(1)
+                postgresconn.connection_open()
+                _logger.info("Connection Open")
+
+                DATE = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+                RTS_stiker_id = self.no_id
+                RTS_adm = self.adm.name
+
+                if v.jenis_transaksi == "langganan_baru":
+
+                    # Insert Data Trans Stiker with Odoo to Database Server Parkir
+                    _logger.info('Update NOPOL')
+                    strSQL_cardmember = """UPDATE card_member """ \
+                                         """ SET """ \
+                                         """no_card='{}', no_urut='{}', tanggal='{}', adm='{}'""" \
+                                         """ WHERE """ \
+                                         """notrans='{}'""".format(v.no_kartu, v.no_urut, DATE, RTS_adm, self.stiker_id.notrans)
+                else:
+
+                    # Insert Data Trans Stiker with Odoo to Database Server Parkir
+                    _logger.info('INSERT CARD MEMBER')
+                    strSQL_cardmember = """INSERT INTO card_member """ \
+                                   """(notrans,no_card,no_urut,tanggal,adm)""" \
+                                   """ VALUES """ \
+                                   """('{}','{}','{}','{}','{}')""".format(RTS_stiker_id, self.card_member, self.no_urut,
+                                                                           DATE,
+                                                                           RTS_adm)
+
+                postgresconn.execute_general(strSQL_cardmember)
+
                 v.state = "done"
 
+        user = self.env['res.users'].browse(self.env.uid)
+        if user.name == "Duty Manager":
+            args = [('name', '=', 'Done Payment')]
+            template_ids = self.env['mail.template'].search(args)  # search tamplate dengan nama : Request for Cancel
+            template_ids[0].sudo().send_mail(self.id, force_send=True)
+
+            self.message_post("Send Email notification done payment from Duty Manager")
         self.message_post("Done Payment")
 
     @api.one
@@ -767,13 +1168,60 @@ class RequestTransStiker(models.Model):
                 strSQLUpdate_akhir = """UPDATE transaksi_stiker_tes """ \
                                      """ SET akhir='{}'""" \
                                      """ WHERE """ \
-                                     """notrans='{}'""".format(self.akhir_old, self.no_id)
+                                     """notrans='{}'""".format(self.akhir_old, self.stiker_id.notrans)
 
                 postgresconn.execute_general(strSQLUpdate_akhir)
 
                 # UPDATE TO TRANS STIKER ODOO
                 args = [('id', '=', self.stiker_id.id)]
                 res = self.env['trans.stiker'].search(args).write({'awal':self.awal_old, 'akhir': self.akhir_old})
+
+                self.state = "cancel"
+
+            if self.jenis_transaksi == "perpanjang_baru":
+                # Process perpanjang to Server Database Parkir and update trans_id
+                base_external_dbsource_obj = self.env['base.external.dbsource']
+                postgresconn = base_external_dbsource_obj.sudo().browse(1)
+                postgresconn.connection_open()
+                _logger.info("Connection Open")
+                _logger.info("Sync Stasiun Kerja")
+
+                # Insert Data Trans Stiker with Odoo to Database Server Parkir
+                _logger.info('Update Data Trans Stiker')
+                strSQLUpdate_akhir = """UPDATE transaksi_stiker_tes """ \
+                                     """ SET akhir='{}'""" \
+                                     """ WHERE """ \
+                                     """notrans='{}'""".format(self.akhir_old, self.stiker_id.notrans)
+
+                postgresconn.execute_general(strSQLUpdate_akhir)
+
+                if self.ganti_nopol_pb == True:
+                    # Insert Data Trans Stiker with Odoo to Database Server Parkir
+                    _logger.info('Update NOPOL')
+                    strSQLUpdate_nopol = """UPDATE detail_transaksi_stiker_tes """ \
+                                         """ SET """ \
+                                         """nopol='{}', jenis_mobil='{}', merk='{}', tipe='{}',""" \
+                                         """tahun='{}', warna='{}'""" \
+                                         """ WHERE """ \
+                                         """notrans='{}'""".format(self.nopol, self.jenis_mobil, self.merk, self.tipe,
+                                                                   self.tahun, self.warna, self.stiker_id.notrans)
+
+                    postgresconn.execute_general(strSQLUpdate_nopol)
+
+                    args = [('notrans', '=', self.stiker_id.notrans)]
+                    res = self.env['detail.transstiker'].search(args)
+                    vals = {}
+                    vals.update({'nopol': self.nopol})
+                    vals.update({'jenis_mobil': self.jenis_mobil})
+                    vals.update({'merk': self.merk})
+                    vals.update({'tipe': self.tipe})
+                    vals.update({'tahun': self.tahun})
+                    vals.update({'warna': self.warna})
+                    res.write(vals)
+
+                # UPDATE TO TRANS STIKER ODOO
+                args = [('id', '=', self.stiker_id.id)]
+                self.env['trans.stiker'].search(args).write({'awal':self.awal_old, 'akhir': self.akhir_old})
 
                 self.state = "cancel"
 
@@ -789,22 +1237,27 @@ class RequestTransStiker(models.Model):
                 _logger.info("Sync Stasiun Kerja")
 
 
-                # Insert Data Trans Stiker with Odoo to Database Server Parkir
+                # DELETE Data Trans Stiker
                 _logger.info('DELETE Data Trans Stiker')
-                strSQL = """DELETE FROM transaksi_stiker_tes WHERE notrans='{}'""".format(self.no_id)
+                strSQL = """DELETE FROM transaksi_stiker_tes WHERE notrans='{}'""".format(self.stiker_id.notrans)
 
                 postgresconn.execute_general(strSQL)
 
-                # Insert Detail Trans Stiker with Odoo to Database Server Parkir
-
-                _logger.info('DELETE Data Trans Stiker')
-                strSQL2 = """DELETE FROM detail_transaksi_stiker_tes WHERE notrans='{}'""".format(self.no_id)
+                # DELETE Data Detail Trans Stiker
+                _logger.info('DELETE Data Detail Trans Stiker')
+                strSQL2 = """DELETE FROM detail_transaksi_stiker_tes WHERE notrans='{}'""".format(self.stiker_id.notrans)
 
                 # _logger.info()
                 postgresconn.execute_general(strSQL2)
 
+                # DELETE Data Card Member
+                _logger.info('DELETE Data Card Member')
+                strSQL3 = """DELETE FROM card_member WHERE notrans='{}'""".format(self.stiker_id.notrans)
+
+                postgresconn.execute_general(strSQL3)
+
                 # delete cancel
-                args1 = [('notrans', '=', self.no_id)]
+                args1 = [('notrans', '=', self.stiker_id.notrans)]
                 self.env['detail.transstiker'].search(args1).unlink()
 
                 # delete cancel
@@ -826,7 +1279,7 @@ class RequestTransStiker(models.Model):
                 strSQLUpdate_akhir = """UPDATE transaksi_stiker_tes """ \
                                      """ SET akhir='{}', cara_bayar='billing'""" \
                                      """ WHERE """ \
-                                     """notrans='{}'""".format(self.akhir_old, self.no_id)
+                                     """notrans='{}'""".format(self.akhir_old, self.stiker_id.notrans)
 
                 postgresconn.execute_general(strSQLUpdate_akhir)
 
@@ -877,111 +1330,115 @@ class RequestTransStiker(models.Model):
 
             self.state = "cancel"
 
+        if self.kartu_hilang == True:
+            # Process perpanjang to Server Database Parkir and update trans_id
+            base_external_dbsource_obj = self.env['base.external.dbsource']
+            postgresconn = base_external_dbsource_obj.sudo().browse(1)
+            postgresconn.connection_open()
+            _logger.info("Connection Open")
+
+            DATE = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+
+            # Insert Data Trans Stiker with Odoo to Database Server Parkir
+            _logger.info('Update NOPOL')
+            strSQLUpdate_cardmember = """UPDATE card_member """ \
+                                      """ SET """ \
+                                      """no_card='{}', no_urut='{}', tanggal='{}'""" \
+                                      """ WHERE """ \
+                                      """notrans='{}'""".format(self.old_no_kartu, self.old_no_urut, DATE, self.stiker_id.notrans)
+
+            postgresconn.execute_general(strSQLUpdate_cardmember)
+
+            self.state = "cancel"
+
+
         self.message_post("Request for Cancel - Approve")
-
-    @api.one
-    def trans_reject(self):
-        self.message_post("Request for Cancel - Reject")
-        self.state = 'done'
-
-    # Buttom request for cancel
-    @api.one
-    def send_mail(self):
-        args = [('name','=','Request for Cancel')]
-        template_ids = self.env['mail.template'].search(args) # search tamplate dengan nama : Request for Cancel
-        template_ids[0].send_mail(self.id, force_send=True)
-
-        self.message_post("Send Email notification for cancel transaction to Manager")
-        self.state = 'request_cancel'
-
 
     # Buttom Payment
     @api.one
     def trans_payment(self):
         self.message_post("Save Request Transaction Stiker")
+        self.state = "confirm"
+
+    # Buttom Confirm
+    @api.one
+    def trans_confirm(self):
+        self.message_post("Confirm Request Transaction Stiker")
         self.state = "payment"
 
-    # GENERATE TRANS ID WHERE langganan_baru
-    @api.one
-    def _generate_stiker_id(self):
-        unit = self.unit_kerja.kode
-        check = self.jenis_member
 
-        if check == "1st":
-            n = "1"
-        elif check == "2nd":
-            n = "2"
-        elif check == "3rd":
-            n = "3"
-        elif check == "4th":
-            n = "4"
+    @api.multi
+    def trans_reject(self):
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'Not Approve Message',
+            'res_model': 'wizard.not.approve',
+            'view_type': 'form',
+            'view_mode': 'form',
+            'view_id': self.env.ref('view_wizard_not_approve', False),
+            'target': 'new',
+        }
 
-        if self.jenis_transaksi == "langganan_baru":
-            #_logger.info(unit)
-            tex = unit[1:5]
-            # self.stiker_id = tex + str(n)
-            #_logger.info(tex)
-            trans = tex + str(n)
-            self.no_id = trans
-
-            args = [('no_id', '=', trans)]
-            res = self.env['trans.stiker'].search(args, limit=1)
-
-            if res.no_id:
-                raise ValidationError("this trans id : "+ trans +" already exists!")
+    @api.multi
+    def wizard_add_card_member(self):
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'ADD CARD MEMBER',
+            'res_model': 'wizard.add.card.member',
+            'view_type': 'form',
+            'view_mode': 'form',
+            'view_id': self.env.ref('view_wizard_add_card_member', False),
+            'target': 'new',
+        }
 
 
-    @api.model
-    def create(self, vals):
-        vals['notrans'] = self.env['ir.sequence'].next_by_code('request.transstiker')
-        res = super(RequestTransStiker, self).create(vals)
-        res._get_stiker()
-        res._change_harga_beli_stiker()
-        res._get_end_date()
-        res.trans_payment()
-        res._generate_stiker_id()
-        res.calculate_rts()
-        return res
-
-    notrans = fields.Char(string="ID #", readonly=True)  #
-    unit_kerja = fields.Many2one('stasiun.kerja', 'UNIT #', required=True, readonly=False)  #
-    stiker_id = fields.Many2one('trans.stiker', 'STIKER #', required=True, readonly=True)
+    notrans = fields.Char(string="ID #", readonly=True)
+    unit_kerja = fields.Many2one('stasiun.kerja', 'UNIT #', required=True, readonly=False)
+    stiker_id = fields.Many2one('trans.stiker', 'STIKER #', required=False, readonly=False)
     name = fields.Char(string="Nama", required=False, readonly=False)
     alamat = fields.Char(string="Alamat", required=False, readonly=False)
     telphone = fields.Char(string="No Telphone", required=False, readonly=False)
-    no_id = fields.Char(string="No ID", readonly=True, )  #
-    duration = fields.Integer('Duration', default=1, required=False, readonly=False)
-    awal = fields.Datetime(string="New Start Date", required=False, readonly=True, )  #
-    akhir = fields.Datetime(string="New End Date", required=False, readonly=True, )  #
-    awal_old = fields.Datetime(string="Start Date", required=False, readonly=True, )  #
-    akhir_old = fields.Datetime(string="End Date", required=False, readonly=True, )  #
-    val_harga = fields.Integer(string="Harga", required=False, readonly=True, store=True)  #
-    tanggal = fields.Datetime(string="Date", required=False, default=fields.Datetime().now(), readonly=True, )  #
+    no_id = fields.Char(string="No ID", readonly=True, )
+    duration = fields.Integer('Duration', required=False, readonly=False, store=True)
+    awal = fields.Datetime(string="New Start Date", required=False, readonly=True, store=True)
+    akhir = fields.Datetime(string="New End Date", required=False, readonly=True, store=True)
+    awal_old = fields.Datetime(string="Start Date", required=False, readonly=True, store=True)
+    akhir_old = fields.Datetime(string="End Date", required=False, readonly=True, store=True)
+    val_harga = fields.Integer(string="Kontribusi", required=False, readonly=True, store=True)
+    tanggal = fields.Datetime(string="Date", required=False, default=fields.Datetime().now(), readonly=True, )
     adm = fields.Many2one(comodel_name="res.users", string="Created By", required=False,
-                          default=lambda self: self.env.user and self.env.user.id or False, readonly=True)  #
+                          default=lambda self: self.env.user and self.env.user.id or False, readonly=True)
     no_kartu = fields.Char(string="No Card", required=False, )
+    no_urut = fields.Char(string="No Urut", required=False, )
+    old_no_kartu = fields.Char(string="No Card", required=False, readonly=True)
+    old_no_urut = fields.Char(string="No Urut", required=False, readonly=True)
     jenis_member = fields.Selection(string="Mobil",
                                     selection=[('1st', '1st'), ('2nd', '2nd'), ('3rd', '3rd'), ('4th', '4th'), ],
                                     required=False, readonly=False)
     jenis_transaksi = fields.Selection(string="Jenis Transaksi",
-                                       selection=[('langganan_baru', 'LANGGANAN BARU'), ('perpanjang', 'PERPANJANG'),
+                                       selection=[('langganan_baru', 'LANGGANAN BARU'), ('perpanjang_baru', 'PERPANJANG BARU'), ('perpanjang', 'PERPANJANG'),
                                                   ('stop', 'STOP'), ],
                                        required=False, readonly=False)
     keterangan = fields.Text(string="Keterangan", required=False, readonly=False)
     cara_bayar = fields.Selection(string="Cara Pembayaran",
                                   selection=[('billing', 'Billing'), ('non_billing', 'Non Billing'), ],
-                                  required=False, readonly=True)
+                                  required=False, readonly=False)
     nopol = fields.Char(string="No Polisi", required=False, readonly=False)
-    jenis_mobil = fields.Char(string="Jenis Mobil", required=False, readonly=False)
+    # jenis_mobil = fields.Char(string="Jenis Kendaraan", required=False, readonly=False)
+    jenis_mobil = fields.Selection(string="Jenis Kendaraan",
+                                    selection=[('M', 'MOBIL (M)'), ('S', 'MOTOR (S)'), ],
+                                    required=False, readonly=False)
     merk = fields.Char(string="Merk Mobil", required=False, readonly=False)
     tipe = fields.Char(string="Tipe Mobil", required=False, readonly=False)
     tahun = fields.Char(string="Tahun", required=False, readonly=False)
     warna = fields.Char(string="Warna", required=False, readonly=False)
     amount = fields.Integer(string="Total Amount", required=False, readonly=True, store=True)  #
+    edit_info_mobil = fields.Boolean(string="Edit Info Mobil", readonly=False)
     baru = fields.Boolean(string="KONTRIBUSI", readonly=False)
     perpanjang = fields.Boolean(string="PERPANJANG", default=False, readonly=False)
     beli_stiker = fields.Boolean(string="STIKER", default=False, readonly=False)
     ganti_nopol = fields.Boolean(string="GANTI NOPOL", default=False, readonly=False)
+    ganti_nopol_pb = fields.Boolean(string="NOPOL BARU", default=False, readonly=False)
     kartu_hilang = fields.Boolean(string="KARTU PARKIR", default=False, readonly=False)
     tipe_trans = fields.Selection(string="Tipe Transaksi",
                                   selection=[('ganti_nopol', 'GANTI NOPOL'), ('kartu_hilang', 'KARTU HILANG'), ],
@@ -993,95 +1450,62 @@ class RequestTransStiker(models.Model):
     start_date_status = new_field = fields.Char(string="Start Date Status", required=False, readonly=False)
     approvedstatus = fields.Char(string="Approve Status", required=False, readonly=False)
     status = fields.Char(string="Status", required=False, readonly=False)
-    harga_beli_stiker = fields.Integer(string="Beli Stiker", required=False, readonly=True)
-    harga_kartu_hilang = fields.Integer(string="Kartu Hilang", required=False, readonly=True)
-    harga_ganti_nopol = fields.Integer(string="Ganti Nomor Polisi", required=False, readonly=True)
+    harga_beli_stiker = fields.Integer(string="Stiker", required=False, readonly=True)
+    harga_kartu_hilang = fields.Integer(string="Kartu Parkir", required=False, readonly=True)
+    harga_ganti_nopol = fields.Integer(string="Ganti Nopol", required=False, readonly=True)
     new_nopol = fields.Char(string="No Polisi", required=False, readonly=False)
     new_jenis_mobil = fields.Char(string="Jenis Mobil", required=False, readonly=False)
     new_merk = fields.Char(string="Merk Mobil", required=False, readonly=False)
     new_tipe = fields.Char(string="Tipe Mobil", required=False, readonly=False)
     new_tahun = fields.Char(string="Tahun", required=False, readonly=False)
     new_warna = fields.Char(string="Warna", required=False, readonly=False)
+    new_nopol_pb = fields.Char(string="No Polisi", required=False, readonly=False)
+    new_jenis_mobil_pb = fields.Char(string="Jenis Mobil", required=False, readonly=False)
+    new_merk_pb = fields.Char(string="Merk Mobil", required=False, readonly=False)
+    new_tipe_pb = fields.Char(string="Tipe Mobil", required=False, readonly=False)
+    new_tahun_pb = fields.Char(string="Tahun", required=False, readonly=False)
+    new_warna_pb = fields.Char(string="Warna", required=False, readonly=False)
+    ket_nopol = fields.Text(string="Keterangan", required=False, readonly=False)
     state = fields.Selection(string="State",
-                             selection=[('open', 'Open'), ('payment', 'Waiting for Payment'),
+                             selection=[('open', 'Open'), ('confirm', 'Confirm'),('card_member', 'Add Card Member'),('payment', 'Waiting for Payment'),
                                         ('request_cancel', 'Request for Cancel'), ('cancel', 'Cancel'),
                                         ('done', 'Done')],
-                             required=False, default="open", )
+                             required=False, default='open')
 
+    @api.model
+    def create(self, vals):
+        vals['notrans'] = self.env['ir.sequence'].next_by_code('request.transstiker')
 
-class StasiunKerja(models.Model):
-    _name = 'stasiun.kerja'
-    _rec_name = 'kode'
-    _description = 'Stasiun Kerja'
+        res = super(RequestTransStiker, self).create(vals)
+        _logger.info(res.stiker_id)
+        res._get_stiker()
+        res.calculate_harga_beli_stiker()
+        res.calculate_harga_ganti_nopol()
+        res.calculate_harga_kartu_hilang()
+        res.calculate_start_end_date()
+        res.calculate_harga_kontribusi()
+        res.calculate_total_harga()
+        res.trans_payment()
+        res.generate_stiker_id()
+        return res
 
-    kode = fields.Char(string="Kode", required=False, )
-    nama = fields.Char(string="Nama", required=False, )
-    margin = fields.Integer(string="Margin", required=False, )
-    spv = fields.Char(string="SPV", required=False, )
-    target = fields.Integer(string="Target", required=False, )
-    status = fields.Integer(string="Status", required=False, )
-    trans_stiker_ids = fields.One2many(comodel_name="trans.stiker", inverse_name="stasiun_kerja_id",
-                                       string="Trans Stiker #", required=False, )
+    @api.multi
+    def unlink(self):
+        for status in self:
+           if status.state in ('done', 'cancel', 'request_cancel'):
+               raise ValidationError("Can't delete record")
 
+        return super(RequestTransStiker, self).unlink()
 
-# TRANSACTION PAYMENT
-class TransStiker(models.Model):
-    _name = 'trans.stiker'
-    _rec_name = 'notrans'
-    _description = 'Transaction Payment Module'
-
-    stasiun_kerja_id = fields.Many2one(comodel_name="stasiun.kerja", string="Stasiun Kerja", required=False, )
-    notrans = fields.Char(string="No Transaksi", required=False, )
-    name = fields.Char(string="Nama", required=False, )
-    alamat = fields.Char(string="Alamat", required=False, )
-    telphone = fields.Char(string="No Telphone", required=False, )
-    jenis_transaksi = fields.Selection(string="Jenis Transaksi",
-                                       selection=[('langganan_baru', 'Langganan Baru'), ('perpanjang', 'Perpanjang'),
-                                                  ('stop', 'Stop Langganan'), ], required=False, )
-    awal = fields.Date(string="Start Date", required=False, )
-    harga = fields.Integer(string="Harga", required=False, )
-    keterangan = fields.Text(string="Keterangan", required=False, )
-    tanggal = fields.Date(string="Date", required=False, default=datetime.now())
-    operator = fields.Char(string="Operator", required=False, )
-    akhir = fields.Date(string="End Date", required=True, )
-    maks = fields.Char(string="Maks", required=False, )
-    no_id = fields.Char(string="No ID", required=False, )
-    unit_kerja = fields.Char(string="Unit Kerja", required=False, )
-    no_induk = fields.Char(string="No Induk", required=False, )
-    jenis_stiker = fields.Char(string="Jenis Stiker", required=False, )
-    hari_ke = fields.Char(string="Hari ke", required=False, )
-    jenis_langganan = fields.Char(string="Jenis Langganan", required=False, )
-    exit_pass = fields.Char(string="Exit Pass", required=False, )
-    no_kuitansi = fields.Char(string="No Kuitansi", required=False, )
-    tgl_edited = fields.Date(string="Tanggal Edit", required=False, )
-    tipe_exit_pass = fields.Char(string="Tipe Exit Pass", required=False, )
-    seq_code = fields.Char(string="Seq Code", required=False, )
-    unitno = fields.Char(string="Unit No", required=False, )
-    area = fields.Char(string="Area", required=False, )
-    reserved = fields.Char(string="Reserved", required=False, )
-    cara_bayar = fields.Selection(string="Cara Pembayaran",
-                                  selection=[('billing', 'Billing'), ('non_billing', 'Non Billing'), ],
-                                  required=False, )
-    detail_ids = fields.One2many('detail.transstiker', 'trans_stiker_id', 'Details')
-
-
-class DetailTransStiker(models.Model):
-    _name = 'detail.transstiker'
-    _rec_name = 'nopol'
-    _description = 'Transaction Stiker'
-
-    trans_stiker_id = fields.Many2one('trans.stiker', 'Stiker #')
-    notrans = fields.Char(string="No Transaksi", required=False, )
-    nopol = fields.Char(string="No Polisi", required=False, )
-    jenis_mobil = fields.Char(string="Jenis Mobil", required=False, )
-    adm = fields.Char(string="Admin", required=False, )
-    kategori = fields.Integer(string="Kategori", required=False, )
-    jenis_member = fields.Char(string="Jenis Member", required=False, )
-    akses = fields.Char(string="Akses", required=False, )
-    akses_out = fields.Char(string="Akses Out", required=False, )
-    status = fields.Integer(string="Status", required=False, )
-    merk = fields.Char(string="Merk Mobil", required=False, )
-    tipe = fields.Char(string="Tipe Mobil", required=False, )
-    tahun = fields.Char(string="Tahun", required=False, )
-    warna = fields.Char(string="Warna", required=False, )
-    keterangan = fields.Text(string="Keterangan", required=False, )
+    # @api.multi
+    # def write(self, vals):
+    #     """Override default Odoo write function and extend."""
+    #     # Do your custom logic here
+    #     if self.state == 'done':
+    #         raise ValidationError("Can't edit record")
+    #     elif self.state == 'cancel':
+    #         raise ValidationError("Can't edit record")
+    #     elif self.state == 'request_cancel':
+    #         raise ValidationError("Can't edit record")
+    #
+    #     return super(RequestTransStiker, self).write(vals)

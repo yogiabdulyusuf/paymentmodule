@@ -3,15 +3,16 @@
 	<menuitem id="payment_menu_root" name="Parkir"/>
 
 	<!-- This Menu Group Payment -->
-	<menuitem id="payment_menu_group" parent="payment_menu_root" name="Payment"  sequence="1"/>
+	<menuitem id="payment_menu_group" parent="payment_menu_root" name="Payment" sequence="1"/>
 		<menuitem	id="menu_transaction_payment"	name="Transaction" parent="payment_menu_group"	action="act_request_trans_stiker" groups="paymentmodule.group_fo_user,paymentmodule.group_fo_cashier,paymentmodule.group_fo_manager,paymentmodule.group_fo_duty_manager"/>
 		<menuitem	id="menu_transaction_stiker"	name="Transaction Stiker" parent="payment_menu_group"	action="act_trans_stiker" groups="paymentmodule.group_fo_user,paymentmodule.group_fo_cashier,paymentmodule.group_fo_manager,paymentmodule.group_fo_duty_manager"/>
-		<menuitem	id="menu_unit"	name="Unit #" parent="payment_menu_group"	action="act_unit" groups="paymentmodule.group_fo_user,paymentmodule.group_fo_cashier,paymentmodule.group_fo_manager,paymentmodule.group_fo_duty_manager"/>
+		<menuitem	id="menu_check_kartu_parkir"	name="Check Parking Card" parent="payment_menu_group"	action="act_wizard_check_kartu" groups="paymentmodule.group_fo_user,paymentmodule.group_fo_cashier,paymentmodule.group_fo_manager,paymentmodule.group_fo_duty_manager"/>
+		<!-- <menuitem	id="menu_unit"	name="Unit #" parent="payment_menu_group"	action="act_unit" groups="paymentmodule.group_fo_user,paymentmodule.group_fo_cashier,paymentmodule.group_fo_manager,paymentmodule.group_fo_duty_manager"/> -->
 		<menuitem	id="menu_billing_periode"	name="Billing Periode" parent="payment_menu_group"	action="act_billing_periode" groups="paymentmodule.group_fo_billing"/>
 		<menuitem	id="menu_detail_billing_periode"	name="Detail Billing" parent="payment_menu_group"	action="act_detail_billing" groups="paymentmodule.group_fo_billing"/>
 
-	<menuitem id="report_menu_group" parent="payment_menu_root" name="Report"  sequence="2" groups="paymentmodule.group_fo_user,paymentmodule.group_fo_billing"/>
-		<menuitem	id="menu_wizard_request_stiker"	name="Monthly Transaction" parent="report_menu_group"	action="act_wizard_request_stiker" groups="paymentmodule.group_fo_user,paymentmodule.group_fo_billing"/>
+	<menuitem id="report_menu_group" parent="payment_menu_root" name="Report"  sequence="2" groups="paymentmodule.group_fo_user,paymentmodule.group_fo_billing,paymentmodule.group_fo_manager"/>
+		<menuitem	id="menu_wizard_request_stiker"	name="Monthly Transaction" parent="report_menu_group"	action="act_wizard_request_stiker" groups="paymentmodule.group_fo_user,paymentmodule.group_fo_billing,paymentmodule.group_fo_manager"/>
 		<menuitem	id="menu_wizard_report_billing"	name="Monthly Billing" parent="report_menu_group"	action="act_wizard_report_monthly_billing" groups="paymentmodule.group_fo_user,paymentmodule.group_fo_billing"/>
 
 </odoo>

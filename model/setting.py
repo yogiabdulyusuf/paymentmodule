@@ -14,7 +14,7 @@ class Setting(models.Model):
     jenis_member_rd = fields.Integer(string="3rd Membership", )
     jenis_member_th = fields.Integer(string="4th Membership", )
     perpanjang_ids = fields.Integer('PERPANJANG', )
-    beli_stiker_ids = fields.Integer('Beli Stiker', )
+    beli_stiker_ids = fields.Integer('Stiker', )
     ganti_nopol_ids = fields.Integer('1st Membership', )
     ganti_nopol_dua_ids = fields.Integer('2nd Membership', )
     ganti_nopol_tiga_ids = fields.Integer('3rd Membership', )

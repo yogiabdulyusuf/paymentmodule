@@ -20,7 +20,8 @@
                                 <th>DATE</th>
                                 <th>BILLING STATUS</th>
                                 <th>NOPOL</th>
-                                <th>PERIODE</th>
+                                <th>START DATE</th>
+                                <th>END DATE</th>
                                 <th>DURASI</th>
                                 <th>STATE</th>
                                 <th>BIAYA KONTRIBUSI</th>
@@ -43,7 +44,8 @@
                                     <td><t t-esc="line['tanggal']" /></td>
                                     <td><t t-esc="line['cara_bayar']" /></td>
                                     <td><t t-esc="line['nopol']" /></td>
-                                    <td><t t-esc="line['periode']" /></td>
+                                    <td><t t-esc="line['start_date']" /></td>
+                                    <td><t t-esc="line['end_date']" /></td>
                                     <td><t t-esc="line['duration']" /></td>
                                     <td><t t-esc="line['state']" /></td>
                                     <td class="text-right"><t t-esc="line['val_harga']" /></td>
@@ -59,6 +61,7 @@
                                     <t t-set="total" t-value="total + line['amount']"/>
                                 </tr>
                                 <tr>
+                                    <td></td>
                                     <td></td>
                                     <td></td>
                                     <td></td>

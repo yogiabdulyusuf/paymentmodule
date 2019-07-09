@@ -2,3 +2,4 @@ import wizard_report_request_details
 import wizard_add_card_member
 import wizard_not_approve
 import wizard_report_billing
+import wizard_check_kartu

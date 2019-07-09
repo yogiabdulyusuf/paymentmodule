@@ -14,9 +14,16 @@ class ReportSaleDetails(models.AbstractModel):
         params: date_start, date_stop string representing the datetime of order
         """
 
+        if billing == 'billing_non_billing':
+            billing_status = ''
+            operator = '!='
+        else:
+            billing_status = billing
+            operator = '='
+
         transstikers = self.env['request.transstiker'].search([
             ('tanggal', '>=', date_start),
-            ('tanggal', '<=', date_stop), ('state', '=', transaction), ('cara_bayar', '=', billing)])
+            ('tanggal', '<=', date_stop), ('state', '=', transaction), ('cara_bayar', operator, billing_status)])
 
         transstiker_datas = []
 
@@ -28,11 +35,13 @@ class ReportSaleDetails(models.AbstractModel):
             vals.update({'tanggal' : stiker.tanggal})
             vals.update({'cara_bayar' : stiker.cara_bayar})
             if stiker.baru:
-                vals.update({'periode' : stiker.awal+' - '+stiker.akhir})
+                vals.update({'start_date' : stiker.awal})
+                vals.update({'end_date' : stiker.akhir})
                 vals.update({'duration' : stiker.duration})
                 vals.update({'nopol' : stiker.nopol})
             else:
-                vals.update({'periode': ''})
+                vals.update({'start_date': ''})
+                vals.update({'end_date': ''})
                 vals.update({'duration':''})
                 vals.update({'nopol': ''})
 

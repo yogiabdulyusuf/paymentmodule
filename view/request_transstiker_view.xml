@@ -12,7 +12,7 @@
                         <button name="trans_done_payment" string="Done Payment" type="object" class="oe_highlight" confirm="has the customer paid?" states="payment" groups="paymentmodule.group_fo_cashier, paymentmodule.group_fo_duty_manager"/>
                         <button name="request_cancel_send_mail" string="Request for Cancel" type="object" confirm="Are you sure you want to cancel?" states="done" groups="paymentmodule.group_fo_user"/>
                         <button name="trans_confirm" string="Confirm" type="object" states="confirm" class="oe_highlight"  groups="paymentmodule.group_fo_user"/>
-                        <button name="wizard_add_card_member" string="Add Card Member" type="object" class="oe_highlight" states="card_member" groups="paymentmodule.group_fo_user"/>  <!--attrs="{'invisible': ['|', ('jenis_transaksi', '!=', 'langganan_baru'), ('state','!=', 'card_member')]}" -->
+                        <!-- <button name="wizard_add_card_member" string="Add Card Member" type="object" class="oe_highlight" states="card_member" groups="paymentmodule.group_fo_user"/>  attrs="{'invisible': ['|', ('jenis_transaksi', '!=', 'langganan_baru'), ('state','!=', 'card_member')]}" -->
                         <button name="trans_approve" string="Approve" type="object" class="oe_highlight" confirm="Are you sure you want to Approve?" states="request_cancel" groups="paymentmodule.group_fo_manager" />
                         <button name="trans_reject" string="Reject" type="object" class="oe_highlight" confirm="Are you sure you want to Reject?" states="request_cancel" groups="paymentmodule.group_fo_manager" />
                         <field name="state" widget="statusbar" statusbar_visible="open,payment,done"/>
@@ -25,8 +25,8 @@
 
                         <group>
                             <group>
-                                <field name="unit_kerja" attrs="{'readonly': [('state', '!=', 'open')]}"/>
-                                <field name="stiker_id" attrs="{'readonly': ['|',('state', '!=', 'open'),('jenis_transaksi','=','langganan_baru')], 'required': [('jenis_transaksi','!=','langganan_baru')]}" />
+                                <field name="unit_kerja" attrs="{'readonly': [('state', '!=', 'open')]}" options="{'no_quick_create':True,'no_create_edit':True,'no_open': True,}"/>
+                                <field name="stiker_id" attrs="{'readonly': ['|',('state', '!=', 'open')], 'required': [('jenis_transaksi','!=','langganan_baru')]}" options="{'no_quick_create':True,'no_create_edit':True,'no_open': True,}"/>
                             </group>
 
                             <group style="border: 1px solid #D2D2FF; border-radius:10px;">
@@ -68,12 +68,12 @@
                             <page string="KONTRIBUSI" attrs="{'invisible': [('baru','!=', True), ]}">
                                 <group string="Description">
                                     <group>
-                                        <field name="jenis_transaksi" attrs="{'readonly': [('state', '!=', 'open')], 'required': [('baru','=', True)],}" />
-                                        <field name="name" attrs="{'readonly': ['|',('jenis_transaksi','!=','langganan_baru'), ('state', '!=', 'open')], 'required': [('jenis_transaksi','=', 'langganan_baru')], }" />
-                                        <field name="alamat" attrs="{'readonly': ['|',('jenis_transaksi','!=','langganan_baru'), ('state', '!=', 'open')], }"/>
-                                        <field name="telphone" attrs="{'readonly': ['|',('jenis_transaksi','!=','langganan_baru'), ('state', '!=', 'open')], } "/>
+                                        <field name="jenis_transaksi" attrs="{'required': [('baru','=', True)],}" />
+                                        <field name="name" attrs="{'readonly': ['|',('jenis_transaksi','!=','langganan_baru')], 'required': [('jenis_transaksi','=', 'langganan_baru')], }" />
+                                        <field name="alamat" attrs="{'readonly': ['|',('jenis_transaksi','!=','langganan_baru')], }"/>
+                                        <field name="telphone" attrs="{'readonly': ['|',('jenis_transaksi','!=','langganan_baru')], } "/>
                                         <field name="no_id" attrs="{'readonly': [('jenis_mobil', '!=', 'S')], 'required': [('jenis_mobil', '=', 'S')],}"/>
-                                        <field name="duration" attrs="{'readonly': [('state', '!=', 'open')], 'invisible': [('jenis_transaksi','not in',('langganan_baru','perpanjang','perpanjang_baru'))], 'required': [('jenis_transaksi','in', ['langganan_baru','perpanjang','perpanjang_baru'])]}" />
+                                        <field name="duration" attrs="{'invisible': [('jenis_transaksi','not in',('langganan_baru','perpanjang','perpanjang_baru'))], 'required': [('jenis_transaksi','in', ['langganan_baru','perpanjang','perpanjang_baru'])]}" />
                                         <field name="awal" />
                                         <field name="akhir" />
                                         <field name="val_harga"/>
@@ -83,14 +83,14 @@
                                         <field name="akhir_old" />
                                     </group>
                                     <group>
-                                        <field name="cara_bayar"    attrs="{'readonly': ['|',('jenis_transaksi','=','stop'),('state', '!=', 'open')], 'invisible': [('jenis_transaksi','=', False)], 'required': [('jenis_transaksi','in', ['langganan_baru','perpanjang','perpanjang_baru'])],}" />
-                                        <field name="nopol"         attrs="{'readonly': ['|',('jenis_transaksi','not in',('langganan_baru')),('state', '!=', 'open')], 'required': [('jenis_transaksi','in', ('langganan_baru','perpanjang_baru'))],}" />
-                                        <field name="jenis_mobil"   attrs="{'readonly': ['|',('jenis_transaksi','=','stop'),('state', '!=', 'open')], 'required': [('jenis_transaksi','in', ('langganan_baru','perpanjang_baru','perpanjang'))],}" />
-                                        <field name="jenis_member"  attrs="{'readonly': ['|',('jenis_transaksi','!=','langganan_baru'),('state', '!=', 'open')], 'required': [('jenis_transaksi','in', ('langganan_baru','perpanjang_baru'))],}" />
-                                        <field name="merk"          attrs="{'readonly': ['|',('jenis_transaksi','not in',('langganan_baru')),('state', '!=', 'open')], 'required': [('jenis_transaksi','in', ('langganan_baru','perpanjang_baru'))],}" />
-                                        <field name="tipe"          attrs="{'readonly': ['|',('jenis_transaksi','not in',('langganan_baru')),('state', '!=', 'open')], 'required': [('jenis_transaksi','in', ('langganan_baru','perpanjang_baru'))],}" />
-                                        <field name="tahun"         attrs="{'readonly': ['|',('jenis_transaksi','not in',('langganan_baru')),('state', '!=', 'open')], 'required': [('jenis_transaksi','in', ('langganan_baru','perpanjang_baru'))],}" />
-                                        <field name="warna"         attrs="{'readonly': ['|',('jenis_transaksi','not in',('langganan_baru')),('state', '!=', 'open')], 'required': [('jenis_transaksi','in', ('langganan_baru','perpanjang_baru'))],}" />
+                                        <field name="cara_bayar"    attrs="{'readonly': ['|',('jenis_transaksi','=','stop')], 'invisible': [('jenis_transaksi','=', False)], 'required': [('jenis_transaksi','in', ['langganan_baru','perpanjang','perpanjang_baru'])],}" />
+                                        <field name="nopol"         attrs="{'readonly': ['|',('jenis_transaksi','!=','langganan_baru')], 'required': [('jenis_transaksi','in', ('langganan_baru','perpanjang_baru'))],}" />
+                                        <field name="jenis_mobil"   attrs="{'readonly': ['|',('jenis_transaksi','=','stop')], 'required': [('jenis_transaksi','in', ('langganan_baru','perpanjang_baru','perpanjang'))],}" />
+                                        <field name="jenis_member"  attrs="{'readonly': ['|',('jenis_transaksi','!=','langganan_baru')], 'required': [('jenis_transaksi','in', ('langganan_baru','perpanjang_baru'))],}" />
+                                        <field name="merk"          attrs="{'readonly': ['|',('jenis_transaksi','not in',('langganan_baru'))], 'required': [('jenis_transaksi','in', ('langganan_baru','perpanjang_baru'))],}" />
+                                        <field name="tipe"          attrs="{'readonly': ['|',('jenis_transaksi','not in',('langganan_baru'))], 'required': [('jenis_transaksi','in', ('langganan_baru','perpanjang_baru'))],}" />
+                                        <field name="tahun"         attrs="{'readonly': ['|',('jenis_transaksi','not in',('langganan_baru'))], 'required': [('jenis_transaksi','in', ('langganan_baru','perpanjang_baru'))],}" />
+                                        <field name="warna"         attrs="{'readonly': ['|',('jenis_transaksi','not in',('langganan_baru'))], 'required': [('jenis_transaksi','in', ('langganan_baru','perpanjang_baru'))],}" />
                                         <field name="ganti_nopol_pb"    attrs="{'invisible': [('jenis_transaksi','not in',('perpanjang_baru',''))],}"/>
                                         <field name="new_nopol_pb"         attrs="{'required': [('ganti_nopol_pb','=', True), ],   'invisible': [('ganti_nopol_pb','=',False)]}" />
                                         <field name="new_jenis_mobil_pb"   attrs="{'required': [('ganti_nopol_pb','=', True), ],   'invisible': [('ganti_nopol_pb','=',False)]}" />
@@ -100,7 +100,7 @@
                                         <field name="new_warna_pb"         attrs="{'required': [('ganti_nopol_pb','=', True), ],   'invisible': [('ganti_nopol_pb','=',False)]}" />
                                     </group>
 
-                                    <field name="keterangan" attrs="{'readonly': [('state', '!=', 'open')]}" />
+                                    <field name="keterangan" />
 
                                 </group>
                             </page>
@@ -124,7 +124,7 @@
                                         <field name="new_tahun" attrs="{'required': [('ganti_nopol','=', True), ]}" />
                                         <field name="new_warna" attrs="{'required': [('ganti_nopol','=', True), ]}" />
                                     </group>
-                                        <field name="ket_nopol" attrs="{'required': [('ganti_nopol','=', True), ]}" />
+                                        <field name="ket_nopol" />
                                     <group>
                                         <field name="harga_ganti_nopol"/>
                                     </group>
@@ -132,8 +132,8 @@
                             </page>
                             <page string="KARTU PARKIR" attrs="{'invisible': [('kartu_hilang','!=', True), ]}" >
                                 <group>
-                                    <field name="old_no_kartu" />
                                     <field name="old_no_urut" />
+                                    <field name="old_no_kartu" />
                                 </group>
                                 <group>
                                     <group string="Change">
@@ -222,48 +222,75 @@
             </field>
         </record>
 
+        <!--<record id="view_group_access_manager_tree" model="ir.ui.view">-->
+            <!--<field name="name">Request Transaction Stiker</field>-->
+            <!--<field name="model">request.transstiker</field>-->
+            <!--<field name="inherit_id" ref="request_transaction_stiker_tree_view"/>-->
+            <!--<field name="groups_id" eval="[(6,0,[ref('paymentmodule.group_fo_manager')])]"/>-->
+            <!--<field name="arch" type="xml">-->
+                <!--<xpath expr="//tree" position="attributes">-->
+                    <!--<attribute name="create">false</attribute>-->
+                    <!--<attribute name="edit">false</attribute>-->
+                    <!--<attribute name="delete">false</attribute>-->
+                <!--</xpath>-->
+            <!--</field>-->
+        <!--</record>-->
 
-        <record id="view_group_access_manager_tree" model="ir.ui.view">
-            <field name="name">Request Transaction Stiker</field>
-            <field name="model">request.transstiker</field>
-            <field name="inherit_id" ref="request_transaction_stiker_tree_view"/>
-            <field name="groups_id" eval="[(6,0,[ref('paymentmodule.group_fo_manager')])]"/>
-            <field name="arch" type="xml">
-                <xpath expr="//tree" position="attributes">
-                    <attribute name="create">false</attribute>
-                    <attribute name="edit">false</attribute>
-                    <attribute name="delete">false</attribute>
-                </xpath>
-            </field>
-        </record>
+        <!--<record id="view_group_access_manager_form" model="ir.ui.view">-->
+            <!--<field name="name">Request Transaction Stiker</field>-->
+            <!--<field name="model">request.transstiker</field>-->
+            <!--<field name="inherit_id" ref="request_transaction_form_view"/>-->
+            <!--<field name="groups_id" eval="[(6,0,[ref('paymentmodule.group_fo_manager')])]"/>-->
+            <!--<field name="arch" type="xml">-->
+                <!--<xpath expr="//form" position="attributes">-->
+                    <!--<attribute name="create">false</attribute>-->
+                    <!--<attribute name="edit">false</attribute>-->
+                    <!--<attribute name="delete">false</attribute>-->
+                <!--</xpath>-->
+            <!--</field>-->
+        <!--</record>-->
 
-        <record id="view_group_access_manager_form" model="ir.ui.view">
-            <field name="name">Request Transaction Stiker</field>
-            <field name="model">request.transstiker</field>
-            <field name="inherit_id" ref="request_transaction_form_view"/>
-            <field name="groups_id" eval="[(6,0,[ref('paymentmodule.group_fo_manager')])]"/>
-            <field name="arch" type="xml">
-                <xpath expr="//form" position="attributes">
-                    <attribute name="create">false</attribute>
-                    <attribute name="edit">false</attribute>
-                    <attribute name="delete">false</attribute>
-                </xpath>
-            </field>
-        </record>
+        <!--<record id="view_group_access_root_tree" model="ir.ui.view">-->
+            <!--<field name="name">Request Transaction Stiker Root Tree</field>-->
+            <!--<field name="model">request.transstiker</field>-->
+            <!--<field name="inherit_id" ref="request_transaction_stiker_tree_view"/>-->
+            <!--<field name="groups_id" eval="[(6,0,[ref('paymentmodule.group_fo_root')])]"/>-->
+            <!--<field name="arch" type="xml">-->
+                <!--<xpath expr="//tree" position="attributes">-->
+                    <!--<attribute name="create">True</attribute>-->
+                    <!--<attribute name="edit">True</attribute>-->
+                    <!--<attribute name="delete">True</attribute>-->
+                <!--</xpath>-->
+            <!--</field>-->
+        <!--</record>-->
 
-         <record id="view_group_access_manager_tree" model="ir.ui.view">
-            <field name="name">Request Transaction Stiker</field>
-            <field name="model">request.transstiker</field>
-            <field name="inherit_id" ref="request_transaction_stiker_tree_view"/>
-            <field name="groups_id" eval="[(6,0,[ref('paymentmodule.group_fo_user')])]"/>
-            <field name="arch" type="xml">
-                <xpath expr="//tree" position="attributes">
-                    <attribute name="create">true</attribute>
-                    <attribute name="edit">false</attribute>
-                    <attribute name="delete">false</attribute>
-                </xpath>
-            </field>
-         </record>
+        <!--<record id="view_group_access_root_form" model="ir.ui.view">-->
+            <!--<field name="name">Request Transaction Stiker Root Form</field>-->
+            <!--<field name="model">request.transstiker</field>-->
+            <!--<field name="inherit_id" ref="request_transaction_form_view"/>-->
+            <!--<field name="groups_id" eval="[(6,0,[ref('paymentmodule.group_fo_root')])]"/>-->
+            <!--<field name="arch" type="xml">-->
+                <!--<xpath expr="//form" position="attributes">-->
+                    <!--<attribute name="create">True</attribute>-->
+                    <!--<attribute name="edit">True</attribute>-->
+                    <!--<attribute name="delete">True</attribute>-->
+                <!--</xpath>-->
+            <!--</field>-->
+        <!--</record>-->
+
+         <!--<record id="view_group_access_manager_tree" model="ir.ui.view">-->
+            <!--<field name="name">Request Transaction Stiker</field>-->
+            <!--<field name="model">request.transstiker</field>-->
+            <!--<field name="inherit_id" ref="request_transaction_stiker_tree_view"/>-->
+            <!--<field name="groups_id" eval="[(6,0,[ref('paymentmodule.group_fo_user')])]"/>-->
+            <!--<field name="arch" type="xml">-->
+                <!--<xpath expr="//tree" position="attributes">-->
+                    <!--<attribute name="create">true</attribute>-->
+                    <!--<attribute name="edit">false</attribute>-->
+                    <!--<attribute name="delete">false</attribute>-->
+                <!--</xpath>-->
+            <!--</field>-->
+         <!--</record>-->
 
         <!--<record id="view_group_access_manager_form" model="ir.ui.view">-->
             <!--<field name="name">Request Transaction Stiker</field>-->
@@ -278,8 +305,6 @@
                 <!--</xpath>-->
             <!--</field>-->
         <!--</record>-->
-
-
 
         <!-- END REQUEST TRANSACTION STIKER -->
 

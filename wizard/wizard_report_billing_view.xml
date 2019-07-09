@@ -6,10 +6,19 @@
         <field name="arch" type="xml">
             <form string="Report Monthly Billing Form">
                 <group>
+                    <field name="report_printed" invisible="1"/>
                     <field name="billing_periode_ids" options="{'no_quick_create':True,'no_create_edit':True,'no_open': True,}"/>
                 </group>
+                <group attrs="{'invisible':[('report_printed','=',False)]}">
+                    <separator string="Report done" colspan="4"/>
+                    <group>
+                        <field name="report_filename"/>
+                        <field name="report_file" readonly="1" filename="report_filename"/>
+                    </group>
+                </group>
                 <footer>
-                    <button name="generate_report" string="Print" type="object" class="btn-primary"/>
+                    <button name="generate_report" string="Print" type="object" class="btn-primary"/> or
+                    <button name="generate_report_excel" string="Print to Excel" type="object" class="btn-primary"/>
                     <button string="Cancel" class="btn-default" special="cancel" />
                 </footer>
             </form>

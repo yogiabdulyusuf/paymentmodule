@@ -12,7 +12,18 @@ _logger = logging.getLogger(__name__)
 
 class BillingPeriode(models.Model):
     _name = 'billing.periode'
-    _rec_name = 'billing_id'
+    _rec_name = 'billing_month'
+
+    @api.multi
+    def name_get(self):
+        months = ["Unknown","January","Febuary","March","April","May","June","July","August","September","October","November","December"]
+        result = []
+        for record in self:
+            month = record.billing_month
+            year = record.billing_year
+            name = months[month] + ' - ( ' + str(year) + ' )'
+            result.append((record.id, name))
+        return result
 
     def last_day_of_month(self, year, month):
         return datetime.strptime(str(year) + '-' + str(month + 1).zfill(2) + '-01', '%Y-%m-%d') + relativedelta(days=-1)

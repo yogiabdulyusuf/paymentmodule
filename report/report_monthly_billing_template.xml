@@ -12,6 +12,7 @@
                         <table  class="table table-condensed">
 
                             <thead><tr>
+                                <th>NO #</th>
                                 <th>UNIT #</th>
                                 <th>DATE</th>
                                 <th>DESCRIPTION</th>
@@ -19,13 +20,16 @@
                             </tr></thead>
                             <tbody>
                                 <t t-set="total_harga" t-value="0" />
+                                <t t-set="nomor" t-value="1" />
 
                                 <tr t-foreach='monthlybilling' t-as='line'>
+                                    <td><t t-esc="nomor" /></td>
                                     <td><t t-esc="line['unitno']" /></td>
                                     <td><t t-esc="line['date_trans']" /></td>
                                     <td><t t-esc="line['description']" /></td>
                                     <td class="text-right"><t t-esc="line['amount']" /></td>
                                     <t t-set="total_harga" t-value="total_harga + line['amount']"/>
+                                    <t t-set="nomor" t-value="nomor + 1"/>
                                 </tr>
                                 <tr>
                                     <td></td>
