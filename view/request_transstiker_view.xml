@@ -123,8 +123,10 @@
                                         <field name="new_tipe" attrs="{'required': [('ganti_nopol','=', True), ]}" />
                                         <field name="new_tahun" attrs="{'required': [('ganti_nopol','=', True), ]}" />
                                         <field name="new_warna" attrs="{'required': [('ganti_nopol','=', True), ]}" />
+                                        <field name="new_jenis_member" attrs="{'readonly': [('ganti_nopol','=', True), ]}" />
                                     </group>
                                         <field name="ket_nopol" />
+                                        <field name="nopol_lama" />
                                     <group>
                                         <field name="harga_ganti_nopol"/>
                                     </group>
@@ -132,8 +134,8 @@
                             </page>
                             <page string="KARTU PARKIR" attrs="{'invisible': [('kartu_hilang','!=', True), ]}" >
                                 <group>
-                                    <field name="old_no_urut" />
                                     <field name="old_no_kartu" />
+                                    <field name="old_no_urut" />
                                 </group>
                                 <group>
                                     <group string="Change">

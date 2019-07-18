@@ -2,7 +2,7 @@ from odoo import api, fields, models
 from datetime import datetime, timedelta, date
 from odoo.exceptions import ValidationError, Warning
 from dateutil.relativedelta import *
-
+import json
 import logging
 
 _logger = logging.getLogger(__name__)
@@ -75,26 +75,61 @@ class RequestTransStiker(models.Model):
             self.old_no_kartu = ""
             self.old_no_urut = ""
 
+    @api.onchange('new_nopol')
+    def validation_ganti_nopol(self):
+        base_external_dbsource_obj = self.env['base.external.dbsource']
+        postgresconn = base_external_dbsource_obj.sudo().browse(1)
+        postgresconn.connection_open()
+        _logger.info("Connection Open")
+        # Kondisi pengecekan stiker
+        strSQL = """SELECT notrans FROM detail_transaksi_stiker WHERE nopol='{}'""".format(
+            self.new_nopol)
+        detail_trans_stiker = postgresconn.execute(query=strSQL, metadata=False)
+        _logger.info(detail_trans_stiker)
 
-    @api.onchange('stiker_id','ganti_nopol','new_nopol')
+        if detail_trans_stiker:
+            for row in detail_trans_stiker:
+                no_trans = row[0]
+                raise ValidationError(
+                    "Nopol anda sudah terdaftar di Stiker# : " + no_trans + ", Jika transaksi di lanjutkan maka mobil akan di pindahkan ke Stiker#: " + self.stiker_id.notrans + " dan data lama mobil yang ada di Stiker#: " + self.stiker_id.notrans + " akan di hapus")
+
+    @api.onchange('stiker_id', 'ganti_nopol')
     def calculate_harga_ganti_nopol(self):
         if self.ganti_nopol == True:
 
             if self.new_nopol:
-                # Process perpanjang to Server Database Parkir and update trans_id
+
                 base_external_dbsource_obj = self.env['base.external.dbsource']
                 postgresconn = base_external_dbsource_obj.sudo().browse(1)
                 postgresconn.connection_open()
                 _logger.info("Connection Open")
+                # Kondisi pengecekan stiker
+                strSQL = """SELECT notrans FROM detail_transaksi_stiker WHERE nopol='{}'""".format(
+                    self.new_nopol)
+                detail_trans_stiker = postgresconn.execute(query=strSQL, metadata=False)
+                _logger.info(detail_trans_stiker)
 
-                # Kondisi pengecekan NOPOL
-                strSQL = """SELECT notrans FROM detail_transaksi_stiker WHERE nopol='{}'""".format(self.new_nopol)
-                nopolcheck = postgresconn.execute(query=strSQL, metadata=False)
-                _logger.info(nopolcheck)
+                if detail_trans_stiker:
+                    for row in detail_trans_stiker:
+                        no_trans = row[0]
+                        # Kondisi pengecekan stiker
+                        strSQL = """SELECT no_card FROM card_member WHERE notrans='{}'""".format(no_trans)
+                        cardmember = postgresconn.execute(query=strSQL, metadata=False)
+                        _logger.info(cardmember)
 
-                if nopolcheck:
-                    for record in nopolcheck:
-                        raise ValidationError("Nopol ini sudah ada dengan Stiker# : " + record[0] + " , Jika nopol ini ingin rubah ke UNIT# lain atau STIKER# lain silahkan menggunakan system lama. Terima kasih..")
+                        for record in cardmember:
+                            no_card = record[0]
+                            # Kondisi pengecekan stiker
+                            strSQL = """SELECT no_pol FROM transaksi_parkir WHERE no_pol='{}'""".format(no_card)
+                            trans_parkir = postgresconn.execute(query=strSQL, metadata=False)
+                            _logger.info(trans_parkir)
+
+                            if trans_parkir:
+                                for row in trans_parkir:
+                                    raise ValidationError(
+                                        "Mobil anda masih di dalam dengan NOPOL : " + self.new_nopol + ", Stiker : " + no_trans + ", No Card : " +
+                                        row[
+                                            0] + " , Silahkan mobil anda di keluarkan terlebih dahulu !!")
 
             ganti_nopol_id = self.env.user.company_id.ganti_nopol_ids
             ganti_nopol_dua_id = self.env.user.company_id.ganti_nopol_dua_ids
@@ -115,17 +150,27 @@ class RequestTransStiker(models.Model):
 
             if check_no_id == "1":
                 self.harga_ganti_nopol = ganti_nopol_id
+                self.new_jenis_member = "1st"
             elif check_no_id == "2":
                 self.harga_ganti_nopol = ganti_nopol_dua_id
+                self.new_jenis_member = "2nd"
             elif check_no_id == "3":
                 self.harga_ganti_nopol = ganti_nopol_tiga_id
+                self.new_jenis_member = "3rd"
             elif check_no_id == "4":
                 self.harga_ganti_nopol = ganti_nopol_empat_id
+                self.new_jenis_member = "4th"
+
+            # AMBIL DATA STIKER DARI TRANS STIKER
+            for data_detail in self.stiker_id:
+                self.nopol = data_detail.detail_ids.nopol
+                self.merk = data_detail.detail_ids.merk
+                self.tipe = data_detail.detail_ids.tipe
+                self.tahun = data_detail.detail_ids.tahun
+                self.warna = data_detail.detail_ids.warna
 
         else:
             self.harga_ganti_nopol = 0
-
-
 
     @api.onchange('baru','jenis_transaksi','stiker_id')
     def _get_stiker(self):
@@ -172,7 +217,20 @@ class RequestTransStiker(models.Model):
                         for row in trans_parkir:
                             if row[0]:
                                 raise ValidationError(
-                                    "Mobil anda masih di dalam, Stiker : " + stikers + ", No Card : " + row[0] + "")
+                                    "Mobil anda masih di dalam, Stiker : " + stikers + ", Nopol : " + row[0] + "")
+
+                    if self.new_nopol_pb:
+
+                        strSQL = """SELECT notrans FROM detail_transaksi_stiker_tes WHERE nopol='{}'""".format(
+                            self.new_nopol_pb)
+                        detail_trans_stiker = postgresconn.execute(query=strSQL, metadata=False)
+                        _logger.info(detail_trans_stiker)
+
+                        if detail_trans_stiker:
+                            for row in detail_trans_stiker:
+                                no_trans = row[0]
+                                raise ValidationError(
+                                    "Mobil dengan NOPOL " + self.new_nopol_pb + " ini sudah terdaftar di Stiker# : " + no_trans + "")
 
                     # AMBIL DATA STIKER DARI TRANS STIKER
                     for data_detail in self.stiker_id:
@@ -697,6 +755,379 @@ class RequestTransStiker(models.Model):
         self.tahun = ""
         self.warna = ""
 
+    @api.one
+    def proses_check_ganti_nopol(self):
+        base_external_dbsource_obj = self.env['base.external.dbsource']
+        postgresconn = base_external_dbsource_obj.sudo().browse(1)
+        postgresconn.connection_open()
+        _logger.info("Connection Open")
+
+        for trans in self:
+            no_trans = trans.stiker_id.notrans
+            # Kondisi pengecekan stiker
+            strSQL = """SELECT no_card FROM card_member WHERE notrans='{}'""".format(no_trans)
+            cardmember = postgresconn.execute(query=strSQL, metadata=False)
+            _logger.info(cardmember)
+
+            for record in cardmember:
+                no_card = record[0]
+                # Kondisi pengecekan stiker
+                strSQL = """SELECT no_pol FROM transaksi_parkir WHERE no_pol='{}'""".format(no_card)
+                trans_parkir = postgresconn.execute(query=strSQL, metadata=False)
+                _logger.info(trans_parkir)
+
+                if trans_parkir:
+                    for row in trans_parkir:
+                        raise ValidationError(
+                            "Mobil anda masih di dalam dengan NOPOL : " + trans.stiker_id.detail_ids.nopol + ", Stiker : " + no_trans + ", No Card : " +
+                            row[
+                                0] + ". Silahkan mobil anda di keluarkan terlebih dahulu !!")
+
+        # CHECK NOPOL DI STIKER LAMA
+        strSQL = """SELECT nopol,notrans FROM detail_transaksi_stiker WHERE nopol='{}'""".format(
+            trans.new_nopol)
+        nopolcheck = postgresconn.execute(query=strSQL, metadata=False)
+        _logger.info(nopolcheck)
+
+        # KONDISI DIMANA NOPOL SUDAH ADA INGIN PINDAH STIKER ATAU UNIT
+        if nopolcheck:
+            for ids in nopolcheck:
+                nopol = ids[0]
+                no_trans = ids[1]
+                # Kondisi pengecekan stiker
+                strSQL = """SELECT no_card FROM card_member WHERE notrans='{}'""".format(no_trans)
+                cardmember = postgresconn.execute(query=strSQL, metadata=False)
+                _logger.info(cardmember)
+
+                for record in cardmember:
+                    no_card = record[0]
+                    # Kondisi pengecekan stiker
+                    strSQL = """SELECT no_pol FROM transaksi_parkir WHERE no_pol='{}'""".format(no_card)
+                    trans_parkir = postgresconn.execute(query=strSQL, metadata=False)
+                    _logger.info(trans_parkir)
+
+                    if trans_parkir:
+                        for row in trans_parkir:
+                            raise ValidationError(
+                                "Mobil yang ada di Stiker# : " + no_trans + ", ini masih di dalam dengan NOPOL : " + nopol + ", No Card : " +
+                                row[0] + ". Silahkan mobil anda di keluarkan terlebih dahulu !!")
+
+    @api.one
+    def proses_ganti_nopol(self):
+
+        base_external_dbsource_obj = self.env['base.external.dbsource']
+        postgresconn = base_external_dbsource_obj.sudo().browse(1)
+        postgresconn.connection_open()
+        _logger.info("Connection Open")
+
+        for trans in self:
+
+            # CHECK NOPOL DI STIKER LAMA
+            strSQL = """SELECT nopol,notrans FROM detail_transaksi_stiker WHERE nopol='{}'""".format(
+                trans.new_nopol)
+            nopolcheck = postgresconn.execute(query=strSQL, metadata=False)
+            _logger.info(nopolcheck)
+
+            # KONDISI DIMANA NOPOL SUDAH ADA INGIN PINDAH STIKER ATAU UNIT
+            if nopolcheck:
+
+                for transstiker_ids in self.stiker_id:
+                    trans_stiker_id_s = transstiker_ids.detail_ids.trans_stiker_id.id
+                    nopol_s = transstiker_ids.detail_ids.nopol
+                    jenis_mobil_s = transstiker_ids.detail_ids.jenis_mobil
+                    jenis_member_s = transstiker_ids.detail_ids.jenis_member
+                    merk_s = transstiker_ids.detail_ids.merk
+                    tipe_s = transstiker_ids.detail_ids.tipe
+                    tahun_s = transstiker_ids.detail_ids.tahun
+                    warna_s = transstiker_ids.detail_ids.warna
+                    notrans_s = transstiker_ids.detail_ids.notrans
+                    kategori_s = transstiker_ids.detail_ids.kategori
+                    akses_s = transstiker_ids.detail_ids.akses
+                    akses_out_s = transstiker_ids.detail_ids.akses_out
+                    status_s = transstiker_ids.detail_ids.status
+                    keterangan_s = transstiker_ids.detail_ids.keterangan
+
+                args = [('nopol', '=', trans.new_nopol)]
+                res = self.env['detail.transstiker'].sudo().search(args)
+
+                for list in res:
+                    trans_stiker_id_l = list.trans_stiker_id.id
+                    nopol_l = list.nopol
+                    jenis_mobil_l = list.jenis_mobil
+                    jenis_member_l = list.jenis_member
+                    merk_l = list.merk
+                    tipe_l = list.tipe
+                    tahun_l = list.tahun
+                    warna_l = list.warna
+                    notrans_l = list.notrans
+                    kategori_l = list.kategori
+                    akses_l = list.akses
+                    akses_out_l = list.akses_out
+                    status_l = list.status
+                    keterangan_l = list.keterangan
+
+                # SIMPAN DATA NOPOL LAMA
+                valus = {}
+                valus.update({'trans_stiker_id_s': trans_stiker_id_s})
+                valus.update({'nopol_s': nopol_s})  # Data Nopol pada Stiker# yang saat ini di pilih
+                valus.update({'jenis_mobil_s': jenis_mobil_s})
+                valus.update({'jenis_member_s': jenis_member_s})
+                valus.update({'merk_s': merk_s})
+                valus.update({'tipe_s': tipe_s})
+                valus.update({'tahun_s': tahun_s})
+                valus.update({'warna_s': warna_s})
+                valus.update({'notrans_s': notrans_s})
+                valus.update({'kategori_s': kategori_s})
+                valus.update({'akses_s': akses_s})
+                valus.update({'status_s': status_s})
+                valus.update({'akses_out_s': akses_out_s})
+                valus.update({'keterangan_s': keterangan_s})
+                valus.update({'trans_stiker_id_l': trans_stiker_id_l})
+                valus.update({'nopol_l': nopol_l})  # Data Nopol pada Stiker# lama yanng ingin di hapus
+                valus.update({'jenis_mobil_l': jenis_mobil_l})
+                valus.update({'jenis_member_l': jenis_member_l})
+                valus.update({'merk_l': merk_l})
+                valus.update({'tipe_l': tipe_l})
+                valus.update({'tahun_l': tahun_l})
+                valus.update({'warna_l': warna_l})
+                valus.update({'notrans_l': notrans_l})
+                valus.update({'kategori_l': kategori_l})
+                valus.update({'akses_l': akses_l})
+                valus.update({'status_l': status_l})
+                valus.update({'akses_out_l': akses_out_l})
+                valus.update({'keterangan_l': keterangan_l})
+
+                # Convert datas to json
+                str_bck_nopol = json.dumps(valus)
+                datas = {}
+                datas.update({'nopol_lama': str(str_bck_nopol)})
+                super(RequestTransStiker, self).write(datas)
+
+                for record in nopolcheck:
+                    nopol = record[0]
+                    # DELETE NOPOL PADA STIKER LAMA
+                    strSQL = """DELETE FROM detail_transaksi_stiker WHERE nopol='{}'""".format(nopol)
+                    delete_nopol = postgresconn.execute_general(strSQL)
+                    _logger.info(delete_nopol)
+                # delete nopol pada odoo
+                args = [('nopol', '=', nopol)]
+                self.env['detail.transstiker'].sudo().search(args).unlink()
+
+                # CHECK NOPOL DI STIKER YANG DI PILIH SAAT INI
+                strSQL = """SELECT nopol FROM detail_transaksi_stiker WHERE notrans='{}'""".format(
+                    trans.stiker_id.notrans)
+                nopolcheck_utama = postgresconn.execute(query=strSQL, metadata=False)
+                _logger.info(nopolcheck_utama)
+
+                if nopolcheck_utama:
+                    for record in nopolcheck_utama:
+                        nopol = record[0]
+                        # DELETE NOPOL DI STIKER YANG DI PILIH SAAT INI
+                        strSQL = """DELETE FROM detail_transaksi_stiker WHERE nopol='{}'""".format(nopol)
+                        delete_nopol = postgresconn.execute_general(strSQL)
+                        _logger.info(delete_nopol)
+
+                    _logger.info('Insert Detail Trans Stiker')
+                    strSQL = """INSERT INTO detail_transaksi_stiker """ \
+                             """(notrans, nopol, jenis_mobil, kategori, jenis_member, akses, akses_out, status, merk, tipe,""" \
+                             """tahun, warna, keterangan)""" \
+                             """ VALUES """ \
+                             """('{}', '{}', '{}', 0, '{}', NULL, NULL, 1, '{}', '{}', '{}',""" \
+                             """'{}', '{}')""".format(
+                        trans.stiker_id.notrans, trans.new_nopol, trans.new_jenis_mobil, trans.new_jenis_member,
+                        trans.new_merk,
+                        trans.new_tipe, trans.new_tahun, trans.new_warna, trans.ket_nopol)
+
+                    insert_nopol = postgresconn.execute_general(strSQL)
+                    _logger.info(insert_nopol)
+
+                    args = [('notrans', '=', trans.stiker_id.notrans)]
+                    res = self.env['detail.transstiker'].sudo().search(args)
+                    vals = {}
+                    vals.update({'nopol': trans.new_nopol})
+                    vals.update({'jenis_mobil': trans.new_jenis_mobil})
+                    vals.update({'merk': trans.new_merk})
+                    vals.update({'tipe': trans.new_tipe})
+                    vals.update({'tahun': trans.new_tahun})
+                    vals.update({'warna': trans.new_warna})
+                    res.write(vals)
+
+                else:
+
+                    _logger.info('Insert Detail Trans Stiker')
+                    strSQL = """INSERT INTO detail_transaksi_stiker """ \
+                             """(notrans, nopol, jenis_mobil, kategori, jenis_member, akses, akses_out, status, merk, tipe,""" \
+                             """tahun, warna, keterangan)""" \
+                             """ VALUES """ \
+                             """('{}', '{}', '{}', 0, '{}', NULL, NULL, 1, '{}', '{}', '{}',""" \
+                             """'{}', '{}')""".format(
+                        trans.stiker_id.notrans, trans.new_nopol, trans.new_jenis_mobil, trans.new_jenis_member,
+                        trans.new_merk,
+                        trans.new_tipe, trans.new_tahun, trans.new_warna, trans.ket_nopol)
+
+                    insert_nopol = postgresconn.execute_general(strSQL)
+                    _logger.info(insert_nopol)
+
+                    res = self.env['detail.transstiker']
+                    args = [('notrans', '=', trans.stiker_id.notrans)]
+                    str_id = self.env['trans.stiker'].sudo().search(args)
+
+                    vals = {}
+                    vals.update({'trans_stiker_id': str_id.id})
+                    vals.update({'notrans': trans.stiker_id.notrans})
+                    vals.update({'nopol': trans.new_nopol})
+                    vals.update({'jenis_mobil': trans.new_jenis_mobil})
+                    vals.update({'jenis_member': trans.new_jenis_member})
+                    vals.update({'merk': trans.new_merk})
+                    vals.update({'tipe': trans.new_tipe})
+                    vals.update({'tahun': trans.new_tahun})
+                    vals.update({'warna': trans.new_warna})
+                    res.sudo().create(vals)
+
+
+            else:
+
+                for transstiker_ids in self.stiker_id:
+                    trans_stiker_id_s = transstiker_ids.detail_ids.trans_stiker_id.id
+                    nopol_s = transstiker_ids.detail_ids.nopol
+                    jenis_mobil_s = transstiker_ids.detail_ids.jenis_mobil
+                    jenis_member_s = transstiker_ids.detail_ids.jenis_member
+                    merk_s = transstiker_ids.detail_ids.merk
+                    tipe_s = transstiker_ids.detail_ids.tipe
+                    tahun_s = transstiker_ids.detail_ids.tahun
+                    warna_s = transstiker_ids.detail_ids.warna
+                    notrans_s = transstiker_ids.detail_ids.notrans
+                    kategori_s = transstiker_ids.detail_ids.kategori
+                    akses_s = transstiker_ids.detail_ids.akses
+                    akses_out_s = transstiker_ids.detail_ids.akses_out
+                    status_s = transstiker_ids.detail_ids.status
+                    keterangan_s = transstiker_ids.detail_ids.keterangan
+
+                # SIMPAN DATA NOPOL LAMA
+                valus = {}
+                valus.update({'trans_stiker_id_s': trans_stiker_id_s})
+                valus.update({'nopol_s': nopol_s})  # Data Nopol pada Stiker# yang saat ini di pilih
+                valus.update({'jenis_mobil_s': jenis_mobil_s})
+                valus.update({'jenis_member_s': jenis_member_s})
+                valus.update({'merk_s': merk_s})
+                valus.update({'tipe_s': tipe_s})
+                valus.update({'tahun_s': tahun_s})
+                valus.update({'warna_s': warna_s})
+                valus.update({'notrans_s': notrans_s})
+                valus.update({'kategori_s': kategori_s})
+                valus.update({'akses_s': akses_s})
+                valus.update({'status_s': status_s})
+                valus.update({'akses_out_s': akses_out_s})
+                valus.update({'keterangan_s': keterangan_s})
+
+                args = [('nopol', '=', trans.new_nopol)]
+                detail_trans_ids = self.env['detail.transstiker'].sudo().search(args)
+
+                if detail_trans_ids:
+                    for list in detail_trans_ids:
+                        trans_stiker_id_l = list.trans_stiker_id.id
+                        nopol_l = list.nopol
+                        jenis_mobil_l = list.jenis_mobil
+                        jenis_member_l = list.jenis_member
+                        merk_l = list.merk
+                        tipe_l = list.tipe
+                        tahun_l = list.tahun
+                        warna_l = list.warna
+                        notrans_l = list.notrans
+                        kategori_l = list.kategori
+                        akses_l = list.akses
+                        akses_out_l = list.akses_out
+                        status_l = list.status
+                        keterangan_l = list.keterangan
+
+                    valus.update({'trans_stiker_id_l': trans_stiker_id_l})
+                    valus.update({'nopol_l': nopol_l})  # Data Nopol pada Stiker# lama yanng ingin di hapus
+                    valus.update({'jenis_mobil_l': jenis_mobil_l})
+                    valus.update({'jenis_member_l': jenis_member_l})
+                    valus.update({'merk_l': merk_l})
+                    valus.update({'tipe_l': tipe_l})
+                    valus.update({'tahun_l': tahun_l})
+                    valus.update({'warna_l': warna_l})
+                    valus.update({'notrans_l': notrans_l})
+                    valus.update({'kategori_l': kategori_l})
+                    valus.update({'akses_l': akses_l})
+                    valus.update({'status_l': status_l})
+                    valus.update({'akses_out_l': akses_out_l})
+                    valus.update({'keterangan_l': keterangan_l})
+
+                # Convert datas to json
+                str_bck_nopol = json.dumps(valus)
+                datas = {}
+                datas.update({'nopol_lama': str(str_bck_nopol)})
+                super(RequestTransStiker, self).write(datas)
+
+
+                # CHECK NOPOL DI STIKER YANG DI PILIH SAAT INI
+                strSQL = """SELECT nopol,notrans FROM detail_transaksi_stiker WHERE notrans='{}'""".format(
+                    trans.stiker_id.notrans)
+                nopolcheck_utama = postgresconn.execute(query=strSQL, metadata=False)
+                _logger.info(nopolcheck_utama)
+
+                if nopolcheck_utama:
+                    for record in nopolcheck_utama:
+                        nopol = record[0]
+
+                        # Insert Data Trans Stiker with Odoo to Database Server Parkir
+                        _logger.info('Update NOPOL')
+                        strSQLUpdate_nopol = """UPDATE detail_transaksi_stiker """ \
+                                             """ SET """ \
+                                             """nopol='{}', jenis_mobil='{}', merk='{}', tipe='{}',""" \
+                                             """tahun='{}', warna='{}'""" \
+                                             """ WHERE """ \
+                                             """nopol='{}'""".format(trans.new_nopol, trans.new_jenis_mobil,
+                                                                     trans.new_merk,
+                                                                     trans.new_tipe, trans.new_tahun, trans.new_warna,
+                                                                     nopol)
+                        postgresconn.execute_general(strSQLUpdate_nopol)
+
+                    args = [('notrans', '=', trans.stiker_id.notrans)]
+                    res = self.env['detail.transstiker'].sudo().search(args)
+                    vals = {}
+                    vals.update({'nopol': trans.new_nopol})
+                    vals.update({'jenis_mobil': trans.new_jenis_mobil})
+                    vals.update({'merk': trans.new_merk})
+                    vals.update({'tipe': trans.new_tipe})
+                    vals.update({'tahun': trans.new_tahun})
+                    vals.update({'warna': trans.new_warna})
+                    vals.update({'keterangan': trans.ket_nopol})
+                    res.write(vals)
+
+                else:
+                    _logger.info('Insert Detail Trans Stiker')
+                    strSQL = """INSERT INTO detail_transaksi_stiker """ \
+                             """(notrans, nopol, jenis_mobil, kategori, jenis_member, akses, akses_out, status, merk, tipe,""" \
+                             """tahun, warna, keterangan)""" \
+                             """ VALUES """ \
+                             """('{}', '{}', '{}', 0, '{}', NULL, NULL, 1, '{}', '{}', '{}',""" \
+                             """'{}', '{}')""".format(
+                        trans.stiker_id.notrans, trans.new_nopol, trans.new_jenis_mobil, trans.new_jenis_member,
+                        trans.new_merk,
+                        trans.new_tipe, trans.new_tahun, trans.new_warna, trans.ket_nopol)
+
+                    insert_nopol = postgresconn.execute_general(strSQL)
+                    _logger.info(insert_nopol)
+
+                    res = self.env['detail.transstiker']
+                    args = [('notrans', '=', trans.stiker_id.notrans)]
+                    str_id = self.env['trans.stiker'].sudo().search(args)
+
+                    vals = {}
+                    vals.update({'trans_stiker_id': str_id.id})
+                    vals.update({'notrans': trans.stiker_id.notrans})
+                    vals.update({'nopol': trans.new_nopol})
+                    vals.update({'jenis_mobil': trans.new_jenis_mobil})
+                    vals.update({'jenis_member': trans.new_jenis_member})
+                    vals.update({'merk': trans.new_merk})
+                    vals.update({'tipe': trans.new_tipe})
+                    vals.update({'tahun': trans.new_tahun})
+                    vals.update({'warna': trans.new_warna})
+                    vals.update({'keterangan': trans.ket_nopol})
+                    res.sudo().create(vals)
 
     # BUTTON DONE PAYMENT
     @api.one
@@ -729,47 +1160,91 @@ class RequestTransStiker(models.Model):
                     res = self.env['trans.stiker'].search(args).sudo().write({'akhir': v.akhir})
 
                 if v.jenis_transaksi == "perpanjang_baru":
+                    base_external_dbsource_obj = self.env['base.external.dbsource']
+                    postgresconn = base_external_dbsource_obj.sudo().browse(1)
+                    postgresconn.connection_open()
+                    _logger.info('Connection Open')
 
-                    if self.ganti_nopol_pb == True:
-                        base_external_dbsource_obj = self.env['base.external.dbsource']
-                        postgresconn = base_external_dbsource_obj.sudo().browse(1)
-                        postgresconn.connection_open()
-                        _logger.info('Update NOPOL')
-                        strSQLUpdate_nopol = """UPDATE detail_transaksi_stiker """ \
-                                             """ SET """ \
-                                             """nopol='{}', jenis_mobil='{}', merk='{}', tipe='{}',""" \
-                                             """tahun='{}', warna='{}'""" \
-                                             """ WHERE """ \
-                                             """notrans='{}'""".format(self.new_nopol_pb, self.new_jenis_mobil_pb, self.new_merk_pb,
-                                                                       self.new_tipe_pb, self.new_tahun_pb, self.new_warna_pb,
-                                                                       self.stiker_id.notrans)
-                        postgresconn.execute_general(strSQLUpdate_nopol)
+                    # CHECK NOPOL DI STIKER YANG DI PILIH SAAT INI
+                    strSQL = """SELECT nopol FROM detail_transaksi_stiker WHERE notrans='{}'""".format(
+                        self.stiker_id.notrans)
+                    nopolcheck_utama = postgresconn.execute(query=strSQL, metadata=False)
+                    _logger.info(nopolcheck_utama)
 
-                        # UPDATE TO TRANS STIKER ODOO
-                        args = [('trans_stiker_id', '=', v.stiker_id.id)]
-                        self.env['detail.transstiker'].search(args).write({
-                            'nopol': self.new_nopol_pb,
-                            'jenis_mobil': self.new_jenis_mobil_pb,
-                            'merk': self.new_merk_pb,
-                            'tipe': self.new_tipe_pb,
-                            'tahun': self.new_tahun_pb,
-                            'warna': self.new_warna_pb,
-                        })
+                    if nopolcheck_utama:
 
-                        tglakhir = datetime.strptime(v.akhir, "%Y-%m-%d %H:%M:%S") + relativedelta(hours=7)
+                        for record in nopolcheck_utama:
+                            nopol = record[0]
 
-                        # Insert Data Trans Stiker with Odoo to Database Server Parkir
-                        _logger.info('Update Data Trans Stiker')
-                        strSQLUpdate_akhir = """UPDATE transaksi_stiker """ \
-                                             """ SET akhir='{}'""" \
-                                             """ WHERE """ \
-                                             """notrans='{}'""".format(tglakhir, v.no_id)
+                            _logger.info('Update NOPOL')
+                            strSQLUpdate_nopol = """UPDATE detail_transaksi_stiker """ \
+                                                 """ SET """ \
+                                                 """nopol='{}', jenis_mobil='{}', merk='{}', tipe='{}',""" \
+                                                 """tahun='{}', warna='{}'""" \
+                                                 """ WHERE """ \
+                                                 """nopol='{}'""".format(v.new_nopol_pb, v.new_jenis_mobil_pb,
+                                                                         v.new_merk_pb,
+                                                                         v.new_tipe_pb, v.new_tahun_pb, v.new_warna_pb,
+                                                                         nopol)
+                            update_nopol = postgresconn.execute_general(strSQLUpdate_nopol)
+                            _logger.info(update_nopol)
 
-                        postgresconn.execute_general(strSQLUpdate_akhir)
+                            args = [('notrans', '=', v.stiker_id.notrans)]
+                            res = self.env['detail.transstiker'].sudo().search(args)
+                            vals = {}
+                            vals.update({'nopol': v.new_nopol_pb})
+                            vals.update({'jenis_mobil': v.new_jenis_mobil_pb})
+                            vals.update({'merk': v.new_merk_pb})
+                            vals.update({'tipe': v.new_tipe_pb})
+                            vals.update({'tahun': v.new_tahun_pb})
+                            vals.update({'warna': v.new_warna_pb})
+                            res.write(vals)
+                    else:
+
+                        _logger.info('Insert Detail Trans Stiker')
+                        strSQL = """INSERT INTO detail_transaksi_stiker """ \
+                                 """(notrans, nopol, jenis_mobil, kategori, jenis_member, akses, akses_out, status, merk, tipe,""" \
+                                 """tahun, warna)""" \
+                                 """ VALUES """ \
+                                 """('{}', '{}', '{}', 0, '{}', NULL, NULL, 1, '{}', '{}', '{}',""" \
+                                 """'{}')""".format(
+                            v.stiker_id.notrans, v.new_nopol_pb, v.new_jenis_mobil_pb, v.jenis_member,
+                            v.new_merk_pb, v.new_tipe_pb, v.new_tahun_pb, v.new_warna_pb)
+
+                        insert_nopol = postgresconn.execute_general(strSQL)
+                        _logger.info(insert_nopol)
+
+                        res = self.env['detail.transstiker']
+                        args = [('notrans', '=', v.stiker_id.notrans)]
+                        str_id = self.env['trans.stiker'].sudo().search(args)
+
+                        vals = {}
+                        vals.update({'trans_stiker_id': str_id.id})
+                        vals.update({'notrans': v.stiker_id.notrans})
+                        vals.update({'nopol': v.new_nopol_pb})
+                        vals.update({'jenis_mobil': v.new_jenis_mobil_pb})
+                        vals.update({'jenis_member': v.jenis_member})
+                        vals.update({'merk': v.new_merk_pb})
+                        vals.update({'tipe': v.new_tipe_pb})
+                        vals.update({'tahun': v.new_tahun_pb})
+                        vals.update({'warna': v.new_warna_pb})
+                        res.sudo().create(vals)
+
+                    tglakhir = datetime.strptime(v.akhir, "%Y-%m-%d %H:%M:%S") + relativedelta(hours=7)
+
+                    # Insert Data Trans Stiker with Odoo to Database Server Parkir
+                    _logger.info('Update Data Trans Stiker')
+                    strSQLUpdate_akhir = """UPDATE transaksi_stiker """ \
+                                         """ SET akhir='{}'""" \
+                                         """ WHERE """ \
+                                         """notrans='{}'""".format(tglakhir, v.no_id)
+
+                    postgresconn.execute_general(strSQLUpdate_akhir)
 
                     # UPDATE TO TRANS STIKER ODOO
                     args = [('id', '=', v.stiker_id.id)]
                     self.env['trans.stiker'].search(args).sudo().write({'akhir': v.akhir})
+
 
                 if v.jenis_transaksi == "langganan_baru":
 
@@ -1056,36 +1531,8 @@ class RequestTransStiker(models.Model):
                     res = self.env['trans.stiker'].search(args).sudo().write({'akhir': v.akhir})
 
             if v.ganti_nopol == True:
-
-                # Process perpanjang to Server Database Parkir and update trans_id
-                base_external_dbsource_obj = self.env['base.external.dbsource']
-                postgresconn = base_external_dbsource_obj.sudo().browse(1)
-                postgresconn.connection_open()
-                _logger.info("Connection Open")
-                _logger.info("Sync Stasiun Kerja")
-
-                # Insert Data Trans Stiker with Odoo to Database Server Parkir
-                _logger.info('Update NOPOL')
-                strSQLUpdate_nopol = """UPDATE detail_transaksi_stiker """ \
-                                     """ SET """ \
-                                     """nopol='{}', jenis_mobil='{}', merk='{}', tipe='{}',""" \
-                                     """tahun='{}', warna='{}'""" \
-                                     """ WHERE """ \
-                                     """notrans='{}'""".format(v.new_nopol, v.new_jenis_mobil, v.new_merk,
-                                                               v.new_tipe, v.new_tahun, v.new_warna,
-                                                               v.stiker_id.notrans)
-                postgresconn.execute_general(strSQLUpdate_nopol)
-
-                args = [('notrans', '=', self.stiker_id.notrans)]
-                res = self.env['detail.transstiker'].search(args)
-                vals = {}
-                vals.update({'nopol': v.new_nopol})
-                vals.update({'jenis_mobil': v.new_jenis_mobil})
-                vals.update({'merk': v.new_merk})
-                vals.update({'tipe': v.new_tipe})
-                vals.update({'tahun': v.new_tahun})
-                vals.update({'warna': v.new_warna})
-                res.write(vals)
+                # Proses Ganti Nopol
+                self.proses_ganti_nopol()
 
             if v.kartu_hilang == True:
                 # Process perpanjang to Server Database Parkir and update trans_id
@@ -1165,7 +1612,7 @@ class RequestTransStiker(models.Model):
 
                 # UPDATE TO TRANS STIKER ODOO
                 args = [('id', '=', self.stiker_id.id)]
-                res = self.env['trans.stiker'].search(args).write({'awal':self.awal_old, 'akhir': self.akhir_old})
+                self.env['trans.stiker'].search(args).sudo().write({'awal':self.awal_old, 'akhir': self.akhir_old})
 
                 state = "cancel"
 
@@ -1208,11 +1655,11 @@ class RequestTransStiker(models.Model):
                     vals.update({'tipe': self.tipe})
                     vals.update({'tahun': self.tahun})
                     vals.update({'warna': self.warna})
-                    res.write(vals)
+                    res.sudo().write(vals)
 
                 # UPDATE TO TRANS STIKER ODOO
                 args = [('id', '=', self.stiker_id.id)]
-                self.env['trans.stiker'].search(args).write({'awal':self.awal_old, 'akhir': self.akhir_old})
+                self.env['trans.stiker'].search(args).sudo().write({'awal':self.awal_old, 'akhir': self.akhir_old})
 
                 state = "cancel"
 
@@ -1281,52 +1728,91 @@ class RequestTransStiker(models.Model):
 
                 # UPDATE TO TRANS STIKER ODOO
                 args = [('id', '=', self.stiker_id.id)]
-                self.env['trans.stiker'].search(args).write({'akhir': self.akhir_old})
+                self.env['trans.stiker'].search(args).sudo().write({'akhir': self.akhir_old})
 
                 state = "cancel"
 
         if self.ganti_nopol == True:
-            nopol = self.nopol
-            jenis_mobil = self.jenis_mobil
-            merk = self.merk
-            tipe = self.tipe
-            tahun = self.tahun
-            warna = self.warna
-            stiker = self.stiker_id.notrans
-
             # Process perpanjang to Server Database Parkir and update trans_id
             base_external_dbsource_obj = self.env['base.external.dbsource']
             postgresconn = base_external_dbsource_obj.sudo().browse(1)
             postgresconn.connection_open()
             _logger.info("Connection Open")
-            _logger.info("Sync Stasiun Kerja")
 
-            # Insert Data Trans Stiker with Odoo to Database Server Parkir
-            _logger.info('Update NOPOL')
-            strSQLUpdate_nopol = """UPDATE detail_transaksi_stiker """ \
-                                 """ SET """ \
-                                 """nopol='{}', jenis_mobil='{}', merk='{}', tipe='{}',""" \
-                                 """tahun='{}', warna='{}'""" \
-                                 """ WHERE """ \
-                                 """notrans='{}'""".format(nopol, jenis_mobil, merk, tipe,
-                                                           tahun, warna, stiker)
+            # Ambil data json backup nopol
+            datas = json.loads(self.nopol_lama)
 
-            postgresconn.execute_general(strSQLUpdate_nopol)
+            if datas["nopol_l"]:
+                _logger.info('Insert Detail Trans Stiker')
+                strSQL = """INSERT INTO detail_transaksi_stiker """ \
+                         """(notrans, nopol, jenis_mobil, kategori, jenis_member, akses, akses_out, status, merk, tipe,""" \
+                         """tahun, warna, keterangan)""" \
+                         """ VALUES """ \
+                         """('{}', '{}', '{}', 0, '{}', NULL, NULL, 1, '{}', '{}', '{}',""" \
+                         """'{}', '{}')""".format(
+                    datas["notrans_l"], datas["nopol_l"], datas["jenis_mobil_l"], datas["jenis_member_l"],
+                    datas["merk_l"],
+                    datas["tipe_l"], datas["tahun_l"], datas["warna_l"], datas["keterangan_l"])
 
-            args = [('notrans', '=', stiker)]
-            res = self.env['detail.transstiker'].search(args)
-            vals = {}
-            vals.update({'nopol': self.nopol})
-            vals.update({'jenis_mobil': self.jenis_mobil})
-            vals.update({'merk': self.merk})
-            vals.update({'tipe': self.tipe})
-            vals.update({'tahun': self.tahun})
-            vals.update({'warna': self.warna})
-            res.write(vals)
+                postgresconn.execute_general(strSQL)
 
-            datas = {}
-            datas.update({'state = "cancel'})
-            super(RequestTransStiker, self).write(datas)
+                res = self.env['detail.transstiker']
+                vals = {}
+                vals.update({'trans_stiker_id': datas["trans_stiker_id_l"]})
+                vals.update({'notrans': datas["notrans_l"]})
+                vals.update({'nopol': datas["nopol_l"]})
+                vals.update({'jenis_mobil': datas["jenis_mobil_l"]})
+                vals.update({'adm': self.adm.name})
+                vals.update({'kategori': datas["kategori_l"]})
+                vals.update({'jenis_member': datas["jenis_member_l"]})
+                vals.update({'akses': datas["akses_l"]})
+                vals.update({'akses_out': datas["akses_out_l"]})
+                vals.update({'status': datas["status_l"]})
+                vals.update({'merk': datas["merk_l"]})
+                vals.update({'tipe': datas["tipe_l"]})
+                vals.update({'tahun': datas["tahun_l"]})
+                vals.update({'warna': datas["warna_l"]})
+                vals.update({'keterangan': datas["keterangan_l"]})
+                res.sudo().create(vals)
+                _logger.info("Detail Create Backup Nopol Lama")
+
+            if datas["nopol_s"]:
+                # Insert Data Trans Stiker with Odoo to Database Server Parkir
+                _logger.info('Update NOPOL')
+                strSQLUpdate_nopol = """UPDATE detail_transaksi_stiker """ \
+                                     """ SET """ \
+                                     """nopol='{}', jenis_mobil='{}', jenis_member='{}', merk='{}', tipe='{}',""" \
+                                     """tahun='{}', warna='{}'""" \
+                                     """ WHERE """ \
+                                     """notrans='{}'""".format(datas["nopol_s"], datas["jenis_mobil_s"],
+                                                               datas["jenis_member_s"], datas["merk_s"],
+                                                               datas["tipe_s"],
+                                                               datas["tahun_s"], datas["warna_s"],
+                                                               self.stiker_id.notrans)
+
+                postgresconn.execute_general(strSQLUpdate_nopol)
+
+                args = [('trans_stiker_id', '=', datas["trans_stiker_id_s"])]
+                res = self.env['detail.transstiker'].search(args)
+                vals = {}
+                vals.update({'notrans': datas["notrans_s"]})
+                vals.update({'nopol': datas["nopol_s"]})
+                vals.update({'jenis_mobil': datas["jenis_mobil_s"]})
+                vals.update({'adm': self.adm.name})
+                vals.update({'kategori': datas["kategori_s"]})
+                vals.update({'jenis_member': datas["jenis_member_s"]})
+                vals.update({'akses': datas["akses_s"]})
+                vals.update({'akses_out': datas["akses_out_s"]})
+                vals.update({'status': datas["status_s"]})
+                vals.update({'merk': datas["merk_s"]})
+                vals.update({'tipe': datas["tipe_s"]})
+                vals.update({'tahun': datas["tahun_s"]})
+                vals.update({'warna': datas["warna_s"]})
+                vals.update({'keterangan': datas["keterangan_s"]})
+                res.sudo().write(vals)
+                _logger.info("Detail Create Backup Nopol Saat ini")
+
+            state = "cancel"
 
         if self.kartu_hilang == True:
             # Process perpanjang to Server Database Parkir and update trans_id
@@ -1347,10 +1833,11 @@ class RequestTransStiker(models.Model):
 
             postgresconn.execute_general(strSQLUpdate_cardmember)
 
-            datas = {}
-            datas.update({'state': 'cancel'})
-            super(RequestTransStiker, self).write(datas)
+            state = "cancel"
 
+        datas = {}
+        datas.update({'state': state})
+        super(RequestTransStiker, self).write(datas)
 
         self.message_post("Request for Cancel - Approve")
 
@@ -1375,44 +1862,8 @@ class RequestTransStiker(models.Model):
                 check_row = self.stiker_id.notrans[4]
 
                 if check_row == "1":
-                    base_external_dbsource_obj = self.env['base.external.dbsource']
-                    postgresconn = base_external_dbsource_obj.sudo().browse(1)
-                    postgresconn.connection_open()
-                    _logger.info("Connection Open")
-                    _logger.info("Sync Stasiun Kerja")
-
-                    # Insert Data Trans Stiker with Odoo to Database Server Parkir
-                    _logger.info('Update NOPOL')
-                    strSQLUpdate_nopol = """UPDATE detail_transaksi_stiker_tes """ \
-                                         """ SET """ \
-                                         """nopol='{}', jenis_mobil='{}', merk='{}', tipe='{}',""" \
-                                         """tahun='{}', warna='{}'""" \
-                                         """ WHERE """ \
-                                         """notrans='{}'""".format(trans.new_nopol, trans.new_jenis_mobil,
-                                                                   trans.new_merk,
-                                                                   trans.new_tipe, trans.new_tahun, trans.new_warna,
-                                                                   trans.stiker_id.notrans)
-                    postgresconn.execute_general(strSQLUpdate_nopol)
-
-                    args = [('notrans', '=', trans.stiker_id.notrans)]
-                    res = self.env['detail.transstiker'].sudo().search(args)
-                    vals = {}
-                    vals.update({'nopol': trans.new_nopol})
-                    vals.update({'jenis_mobil': trans.new_jenis_mobil})
-                    vals.update({'merk': trans.new_merk})
-                    vals.update({'tipe': trans.new_tipe})
-                    vals.update({'tahun': trans.new_tahun})
-                    vals.update({'warna': trans.new_warna})
-                    res.write(vals)
-
-                    # AMBIL DATA STIKER DARI TRANS STIKER
-                    for data_detail in self.stiker_id:
-                        self.nopol = data_detail.detail_ids.nopol
-                        self.jenis_mobil = data_detail.detail_ids.jenis_mobil
-                        self.merk = data_detail.detail_ids.merk
-                        self.tipe = data_detail.detail_ids.tipe
-                        self.tahun = data_detail.detail_ids.tahun
-                        self.warna = data_detail.detail_ids.warna
+                    # Call proses ganti nopol
+                    self.proses_ganti_nopol()
 
                     state = "done"
 
@@ -1422,13 +1873,12 @@ class RequestTransStiker(models.Model):
                 postgresconn = base_external_dbsource_obj.sudo().browse(1)
                 postgresconn.connection_open()
                 _logger.info("Connection Open")
-                _logger.info("Sync Stasiun Kerja")
 
                 tglakhir = datetime.strptime(trans.akhir, "%Y-%m-%d %H:%M:%S") + relativedelta(hours=7)
 
                 # Insert Data Trans Stiker with Odoo to Database Server Parkir
                 _logger.info('Update Data Trans Stiker')
-                strSQLUpdate_akhir = """UPDATE transaksi_stiker_tes """ \
+                strSQLUpdate_akhir = """UPDATE transaksi_stiker """ \
                                      """ SET akhir='{}', cara_bayar='{}'""" \
                                      """ WHERE """ \
                                      """notrans='{}'""".format(tglakhir, 0, trans.stiker_id.notrans)
@@ -1437,7 +1887,7 @@ class RequestTransStiker(models.Model):
 
                 # UPDATE TO TRANS STIKER ODOO
                 args = [('id', '=', trans.stiker_id.id)]
-                res = self.env['trans.stiker'].search(args).sudo().write({'akhir': trans.akhir})
+                self.env['trans.stiker'].search(args).sudo().write({'akhir': trans.akhir})
 
                 state = "done"
 
@@ -1549,6 +1999,9 @@ class RequestTransStiker(models.Model):
     new_jenis_mobil = fields.Selection(string="Jenis Kendaraan",
                                     selection=[('M', 'MOBIL (M)'), ('S', 'MOTOR (S)'), ],
                                     required=False, readonly=False)
+    new_jenis_member = fields.Selection(string="Mobil ke",
+                                        selection=[('1st', '1st'), ('2nd', '2nd'), ('3rd', '3rd'), ('4th', '4th'), ],
+                                        required=False, readonly=False)
     new_merk = fields.Char(string="Merk Mobil", required=False, readonly=False)
     new_tipe = fields.Char(string="Tipe Mobil", required=False, readonly=False)
     new_tahun = fields.Char(string="Tahun", required=False, readonly=False)
@@ -1562,6 +2015,7 @@ class RequestTransStiker(models.Model):
     new_tahun_pb = fields.Char(string="Tahun", required=False, readonly=False)
     new_warna_pb = fields.Char(string="Warna", required=False, readonly=False)
     ket_nopol = fields.Text(string="Keterangan", required=False, readonly=False)
+    nopol_lama = fields.Text(string="Data lama NOPOL", required=False, readonly=True)
     state = fields.Selection(string="State",
                              selection=[('open', 'Open'), ('confirm', 'Confirm'),('payment', 'Waiting for Payment'),
                                         ('request_cancel', 'Request for Cancel'), ('cancel', 'Cancel'),

@@ -117,8 +117,16 @@ class WizardReportRequestDetails(models.TransientModel):
                 worksheet.write(row, 2, order['name'])
                 worksheet.write(row, 3, order['tanggal'])
                 worksheet.write(row, 4, order['cara_bayar'])
-                worksheet.write(row, 5, order['start_date'])
-                worksheet.write(row, 6, order['end_date'])
+                if order['start_date']:
+                    startdate = order['start_date']
+                else:
+                    startdate = ''
+                worksheet.write(row, 5, startdate)
+                if order['end_date']:
+                    enddate = order['end_date']
+                else:
+                    enddate = ''
+                worksheet.write(row, 6, enddate)
                 worksheet.write(row, 7, order['duration'])
                 worksheet.write(row, 8, order['nopol'])
                 worksheet.write(row, 9, order['state'])
