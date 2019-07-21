@@ -4,9 +4,7 @@
     <list default="true" id="7d06e309-00d6-43d7-ab4f-0f81211e74d1" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/model/request_transstiker.py" beforeDir="false" afterPath="$PROJECT_DIR$/model/request_transstiker.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/security/ir.model.access.csv" beforeDir="false" afterPath="$PROJECT_DIR$/security/ir.model.access.csv" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/view/request_transstiker_view.xml" beforeDir="false" afterPath="$PROJECT_DIR$/view/request_transstiker_view.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wizard/wizard_report_request_details.py" beforeDir="false" afterPath="$PROJECT_DIR$/wizard/wizard_report_request_details.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -18,7 +16,7 @@
     <session id="557566045">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="33" />
+          <entry key="project.closed" value="34" />
           <entry key="project.open.time.0" value="4" />
           <entry key="project.open.time.1" value="2" />
           <entry key="project.open.time.10" value="1" />
@@ -26,7 +24,7 @@
           <entry key="project.open.time.15" value="1" />
           <entry key="project.open.time.19" value="1" />
           <entry key="project.open.time.2" value="1" />
-          <entry key="project.open.time.21" value="1" />
+          <entry key="project.open.time.21" value="2" />
           <entry key="project.open.time.22" value="2" />
           <entry key="project.open.time.24" value="3" />
           <entry key="project.open.time.25" value="3" />
@@ -41,38 +39,38 @@
           <entry key="project.open.time.6" value="1" />
           <entry key="project.open.time.7" value="1" />
           <entry key="project.open.time.8" value="1" />
-          <entry key="project.opened" value="37" />
+          <entry key="project.opened" value="38" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="csv" value="408" />
-          <entry key="py" value="25003" />
+          <entry key="py" value="25022" />
           <entry key="txt" value="67" />
-          <entry key="xml" value="5371" />
+          <entry key="xml" value="5372" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="CSV" value="196" />
           <entry key="PLAIN_TEXT" value="279" />
-          <entry key="Python" value="25003" />
-          <entry key="XML" value="5371" />
+          <entry key="Python" value="25022" />
+          <entry key="XML" value="5372" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
           <entry key="csv" value="16" />
-          <entry key="py" value="178" />
-          <entry key="xml" value="118" />
+          <entry key="py" value="180" />
+          <entry key="xml" value="120" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
           <entry key="CSV" value="8" />
           <entry key="PLAIN_TEXT" value="8" />
-          <entry key="Python" value="178" />
-          <entry key="XML" value="118" />
+          <entry key="Python" value="180" />
+          <entry key="XML" value="120" />
         </counts>
       </usages-collector>
     </session>
@@ -81,7 +79,38 @@
     <favorites_list name="paymentmodule" />
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300" />
+    <leaf>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/view/billing_view.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="217">
+              <caret line="27" column="31" lean-forward="true" selection-start-line="27" selection-start-column="31" selection-end-line="27" selection-end-column="31" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/view/request_transstiker_view.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="393">
+              <caret line="218" column="88" selection-start-line="218" selection-start-column="88" selection-end-line="218" selection-end-column="88" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/model/request_transstiker.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-3348">
+              <caret line="872" column="28" selection-start-line="872" selection-start-column="22" selection-end-line="872" selection-end-column="28" />
+              <folding>
+                <element signature="e#0#36#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -92,11 +121,9 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>and</find>
       <find>Can't edit record</find>
       <find>trans_payment</find>
       <find>generate_stiker_id</find>
-      <find>calculate_start_end_date</find>
       <find>INTO detail_transaksi_stiker</find>
       <find>transaksi_stiker</find>
       <find>UPDATE transaksi_stike</find>
@@ -122,6 +149,8 @@
       <find>proses_ganti_nopol</find>
       <find>approve</find>
       <find>proses</find>
+      <find>calculate_start_end_date</find>
+      <find>self.duration</find>
     </findStrings>
     <replaceStrings>
       <replace>awal</replace>
@@ -181,7 +210,6 @@
         <option value="$PROJECT_DIR$/wizard/wizard_report_billing.py" />
         <option value="$PROJECT_DIR$/report/report_monthly_billing_template.xml" />
         <option value="$PROJECT_DIR$/report/report_request_details.py" />
-        <option value="$PROJECT_DIR$/view/request_transstiker_view.xml" />
         <option value="D:/parkingconnector/models/parking_connector.py" />
         <option value="$PROJECT_DIR$/wizard/wizard_check_kartu.py" />
         <option value="D:/paymentmodule_dev/model/request_transstiker.py" />
@@ -192,8 +220,9 @@
         <option value="$PROJECT_DIR$/security/ir.model.access.csv" />
         <option value="D:/paymentmodule_dev/paymentmodule/view/request_transstiker_view.xml" />
         <option value="$PROJECT_DIR$/wizard/wizard_report_request_details.py" />
-        <option value="$PROJECT_DIR$/model/request_transstiker.py" />
         <option value="D:/paymentmodule_dev/paymentmodule/model/request_transstiker.py" />
+        <option value="$PROJECT_DIR$/view/request_transstiker_view.xml" />
+        <option value="$PROJECT_DIR$/model/request_transstiker.py" />
       </list>
     </option>
   </component>
@@ -208,7 +237,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -245,6 +273,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -498,13 +527,20 @@
       <option name="project" value="LOCAL" />
       <updated>1562670754859</updated>
     </task>
-    <option name="localTasksCounter" value="33" />
+    <task id="LOCAL-00033" summary="init update">
+      <created>1563414579234</created>
+      <option name="number" value="00033" />
+      <option name="presentableId" value="LOCAL-00033" />
+      <option name="project" value="LOCAL" />
+      <updated>1563414579234</updated>
+    </task>
+    <option name="localTasksCounter" value="34" />
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1616" height="876" extended-state="6" />
+    <frame x="-8" y="-8" width="1616" height="876" extended-state="7" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" type="SLIDING" visible="true" weight="0.22179975" />
+      <window_info content_ui="combo" id="Project" order="0" type="SLIDING" weight="0.22179975" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.24968314" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -632,13 +668,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/view/billing_view.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="867">
-          <caret line="57" lean-forward="true" selection-start-line="57" selection-end-line="57" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/report/__init__.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="17">
@@ -702,9 +731,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="102">
           <caret line="9" column="16" selection-end-line="1510" selection-end-column="60" />
-          <folding>
-            <element signature="e#0#36#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -789,29 +815,14 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="136">
           <caret line="8" lean-forward="true" selection-start-line="8" selection-end-line="8" />
-          <folding>
-            <element signature="e#0#39#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://D:/paymentmodule_dev/model/request_transstiker.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-10697">
-          <caret line="734" column="47" selection-start-line="734" selection-start-column="47" selection-end-line="734" selection-end-column="47" />
-          <folding>
-            <element signature="e#0#36#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://D:/paymentmodule_dev/model/request_transstiker.py" />
     <entry file="file://D:/paymentmodule_live/paymentmodule/model/request_transstiker.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="510">
           <caret line="30" column="72" selection-start-line="30" selection-start-column="72" selection-end-line="30" selection-end-column="72" />
-          <folding>
-            <element signature="e#0#36#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -819,9 +830,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="68">
           <caret line="4" column="25" lean-forward="true" selection-start-line="4" selection-start-column="25" selection-end-line="4" selection-end-column="25" />
-          <folding>
-            <element signature="e#0#36#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -850,19 +858,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="17">
           <caret line="5" lean-forward="true" selection-start-line="5" selection-end-line="6" />
-          <folding>
-            <element signature="e#0#39#0" expanded="true" />
-            <marker date="1562654761562" expanded="true" signature="1223:1229" ph="..." />
-            <marker date="1562654761562" expanded="true" signature="1223:1291" ph="..." />
-            <marker date="1562654761562" expanded="true" signature="1223:1359" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/view/request_transstiker_view.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1730">
-          <caret line="109" column="43" lean-forward="true" selection-start-line="109" selection-start-column="43" selection-end-line="109" selection-end-column="43" />
         </state>
       </provider>
     </entry>
@@ -892,9 +887,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="357">
           <caret line="54" lean-forward="true" selection-start-line="42" selection-start-column="8" selection-end-line="54" />
-          <folding>
-            <element signature="e#0#39#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -946,25 +938,34 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/model/request_transstiker.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="5746">
-          <caret line="1022" column="41" selection-start-line="1022" selection-start-column="41" selection-end-line="1022" selection-end-column="41" />
-          <folding>
-            <element signature="e#0#36#0" expanded="true" />
-            <element signature="e#37861#46765#0" />
-            <element signature="e#57645#58754#0" />
-            <element signature="e#61405#63161#0" />
-            <element signature="e#63198#64538#0" />
-            <element signature="e#84393#88945#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/report/report_monthly_billing_template.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="408">
           <caret line="45" column="29" lean-forward="true" selection-start-line="45" selection-start-column="29" selection-end-line="45" selection-end-column="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/view/request_transstiker_view.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="393">
+          <caret line="218" column="88" selection-start-line="218" selection-start-column="88" selection-end-line="218" selection-end-column="88" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/view/billing_view.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="217">
+          <caret line="27" column="31" lean-forward="true" selection-start-line="27" selection-start-column="31" selection-end-line="27" selection-end-column="31" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/model/request_transstiker.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-3348">
+          <caret line="872" column="28" selection-start-line="872" selection-start-column="22" selection-end-line="872" selection-end-column="28" />
+          <folding>
+            <element signature="e#0#36#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

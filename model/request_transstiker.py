@@ -77,21 +77,23 @@ class RequestTransStiker(models.Model):
 
     @api.onchange('new_nopol')
     def validation_ganti_nopol(self):
-        base_external_dbsource_obj = self.env['base.external.dbsource']
-        postgresconn = base_external_dbsource_obj.sudo().browse(1)
-        postgresconn.connection_open()
-        _logger.info("Connection Open")
-        # Kondisi pengecekan stiker
-        strSQL = """SELECT notrans FROM detail_transaksi_stiker WHERE nopol='{}'""".format(
-            self.new_nopol)
-        detail_trans_stiker = postgresconn.execute(query=strSQL, metadata=False)
-        _logger.info(detail_trans_stiker)
+        if self.new_nopol:
+            base_external_dbsource_obj = self.env['base.external.dbsource']
+            postgresconn = base_external_dbsource_obj.sudo().browse(1)
+            postgresconn.connection_open()
+            _logger.info("Connection Open")
+            # Kondisi pengecekan stiker
+            strSQL = """SELECT notrans FROM detail_transaksi_stiker WHERE nopol='{}'""".format(
+                self.new_nopol)
+            detail_trans_stiker = postgresconn.execute(query=strSQL, metadata=False)
+            _logger.info(detail_trans_stiker)
 
-        if detail_trans_stiker:
-            for row in detail_trans_stiker:
-                no_trans = row[0]
-                raise ValidationError(
-                    "Nopol anda sudah terdaftar di Stiker# : " + no_trans + ", Jika transaksi di lanjutkan maka mobil akan di pindahkan ke Stiker#: " + self.stiker_id.notrans + " dan data lama mobil yang ada di Stiker#: " + self.stiker_id.notrans + " akan di hapus")
+            if detail_trans_stiker:
+                for row in detail_trans_stiker:
+                    no_trans = row[0]
+                    raise ValidationError(
+                        "Nopol anda sudah terdaftar di Stiker# : " + no_trans + ", Jika transaksi di lanjutkan maka mobil akan di pindahkan ke Stiker#: " + self.stiker_id.notrans + " dan data lama mobil yang ada di Stiker#: " + self.stiker_id.notrans + " akan di hapus")
+
 
     @api.onchange('stiker_id', 'ganti_nopol')
     def calculate_harga_ganti_nopol(self):
@@ -316,23 +318,23 @@ class RequestTransStiker(models.Model):
                         elif check_row == "":
                             self.jenis_member = ""
 
-                    dt1 = datetime.strptime(str(self.akhir_old), '%Y-%m-%d %H:%M:%S')
-                    start_dt = date(dt1.year, dt1.month, dt1.day)
-                    dt2 = datetime.now()
-                    end_dt = date(dt2.year, dt2.month, dt2.day)
-
-
-                    if self.cara_bayar == "billing":
-                        jml = 0
-                        month = ""
-                        for dt in self.daterange(start_dt, end_dt):
-                            if dt.strftime("%m") == month:
-                                continue
-                            else:
-                                month = dt.strftime("%m")
-                                jml = jml + 1
-
-                        self.duration = jml
+                    # dt1 = datetime.strptime(str(self.akhir_old), '%Y-%m-%d %H:%M:%S')
+                    # start_dt = date(dt1.year, dt1.month, dt1.day)
+                    # dt2 = datetime.now()
+                    # end_dt = date(dt2.year, dt2.month, dt2.day)
+                    #
+                    #
+                    # if self.cara_bayar == "billing":
+                    #     jml = 0
+                    #     month = ""
+                    #     for dt in self.daterange(start_dt, end_dt):
+                    #         if dt.strftime("%m") == month:
+                    #             continue
+                    #         else:
+                    #             month = dt.strftime("%m")
+                    #             jml = jml + 1
+                    #
+                    #     self.duration = jml
 
                 else:
                     raise ValidationError("Stiker not defined,  please define Stiker!")
@@ -446,9 +448,9 @@ class RequestTransStiker(models.Model):
             str_start_date = str(tglawal.year) + "-" + str(tglawal.month).zfill(2) + "-" + str(tglawal.day).zfill(
                 2) + " 00:00:00"
             tglawal = datetime.strptime(str_start_date, "%Y-%m-%d %H:%M:%S") - relativedelta(hours=7)
-            self.awal = tglawal + relativedelta(days=1)
+            self.awal = tglawal
 
-            tglakhir = tglawal + relativedelta(months=self.duration, days=2)
+            tglakhir = tglawal + relativedelta(months=self.duration, days=1)
             str_end_date = str(tglakhir.year) + "-" + str(tglakhir.month).zfill(2) + "-" + str(tglakhir.day).zfill(
                 2) + " 23:59:59"
             self.akhir = datetime.strptime(str_end_date, "%Y-%m-%d %H:%M:%S") - relativedelta(hours=7)

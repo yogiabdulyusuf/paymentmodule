@@ -211,6 +211,7 @@
             <field name="model">request.transstiker</field>
             <field name="arch" type="xml">
                 <search string="Search Customer">
+                    <field name="notrans"/>
 				    <field name="unit_kerja"/>
                     <field name="stiker_id"/>
                     <field name="no_id"/>
