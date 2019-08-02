@@ -40,7 +40,7 @@ class RequestTransStiker(models.Model):
         res['domain'] = {'stiker_id':[('stasiun_kerja_id', '=', self.unit_kerja.id)]}
         return res
 
-    @api.onchange('jenis_transaksi','kartu_hilang','stiker_id')
+    @api.onchange('jenis_transaksi','kartu_hilang','stiker_id') #
     def _change_kartu_hilang(self):
         if self.kartu_hilang == True:
             base_external_dbsource_obj = self.env['base.external.dbsource']
@@ -223,7 +223,7 @@ class RequestTransStiker(models.Model):
 
                     if self.new_nopol_pb:
 
-                        strSQL = """SELECT notrans FROM detail_transaksi_stiker_tes WHERE nopol='{}'""".format(
+                        strSQL = """SELECT notrans FROM detail_transaksi_stiker WHERE nopol='{}'""".format(
                             self.new_nopol_pb)
                         detail_trans_stiker = postgresconn.execute(query=strSQL, metadata=False)
                         _logger.info(detail_trans_stiker)
@@ -253,24 +253,24 @@ class RequestTransStiker(models.Model):
                     else:
                         check_row = ''
 
-                    if self.stiker_id.notrans:
-                        check_motor = self.stiker_id.notrans[0]
-                    else:
-                        check_motor = ''
-
-                    if check_motor == "K" or check_motor == "k":
+                    # if self.stiker_id.notrans:
+                    #     check_motor = self.stiker_id.notrans[0]
+                    # else:
+                    #     check_motor = ''
+                    #
+                    # if check_motor == "K" or check_motor == "k":
+                    #     self.jenis_member = "1st"
+                    # else:
+                    if check_row == "1":
                         self.jenis_member = "1st"
-                    else:
-                        if check_row == "1":
-                            self.jenis_member = "1st"
-                        elif check_row == "2":
-                            self.jenis_member = "2nd"
-                        elif check_row == "3":
-                            self.jenis_member = "3rd"
-                        elif check_row == "4":
-                            self.jenis_member = "4th"
-                        elif check_row == "":
-                            self.jenis_member = ""
+                    elif check_row == "2":
+                        self.jenis_member = "2nd"
+                    elif check_row == "3":
+                        self.jenis_member = "3rd"
+                    elif check_row == "4":
+                        self.jenis_member = "4th"
+                    elif check_row == "":
+                        self.jenis_member = ""
 
                 else:
                     raise ValidationError("Stiker not defined,  please define Stiker!")
@@ -299,24 +299,24 @@ class RequestTransStiker(models.Model):
                     else:
                         check_row = ''
 
-                    if self.stiker_id.notrans:
-                        check_motor = self.stiker_id.notrans[0]
-                    else:
-                        check_motor = ''
-
-                    if check_motor == "K" or check_motor == "k":
+                    # if self.stiker_id.notrans:
+                    #     check_motor = self.stiker_id.notrans[0]
+                    # else:
+                    #     check_motor = ''
+                    #
+                    # if check_motor == "K" or check_motor == "k":
+                    #     self.jenis_member = "1st"
+                    # else:
+                    if check_row == "1":
                         self.jenis_member = "1st"
-                    else:
-                        if check_row == "1":
-                            self.jenis_member = "1st"
-                        elif check_row == "2":
-                            self.jenis_member = "2nd"
-                        elif check_row == "3":
-                            self.jenis_member = "3rd"
-                        elif check_row == "4":
-                            self.jenis_member = "4th"
-                        elif check_row == "":
-                            self.jenis_member = ""
+                    elif check_row == "2":
+                        self.jenis_member = "2nd"
+                    elif check_row == "3":
+                        self.jenis_member = "3rd"
+                    elif check_row == "4":
+                        self.jenis_member = "4th"
+                    elif check_row == "":
+                        self.jenis_member = ""
 
                     # dt1 = datetime.strptime(str(self.akhir_old), '%Y-%m-%d %H:%M:%S')
                     # start_dt = date(dt1.year, dt1.month, dt1.day)
@@ -370,24 +370,24 @@ class RequestTransStiker(models.Model):
                     else:
                         check_row = ''
 
-                    if self.stiker_id.notrans:
-                        check_motor = self.stiker_id.notrans[0]
-                    else:
-                        check_motor = ''
-
-                    if check_motor == "K" or check_motor == "k":
+                    # if self.stiker_id.notrans:
+                    #     check_motor = self.stiker_id.notrans[0]
+                    # else:
+                    #     check_motor = ''
+                    #
+                    # if check_motor == "K" or check_motor == "k":
+                    #     self.jenis_member = "1st"
+                    # else:
+                    if check_row == "1":
                         self.jenis_member = "1st"
-                    else:
-                        if check_row == "1":
-                            self.jenis_member = "1st"
-                        elif check_row == "2":
-                            self.jenis_member = "2nd"
-                        elif check_row == "3":
-                            self.jenis_member = "3rd"
-                        elif check_row == "4":
-                            self.jenis_member = "4th"
-                        elif check_row == "":
-                            self.jenis_member = ""
+                    elif check_row == "2":
+                        self.jenis_member = "2nd"
+                    elif check_row == "3":
+                        self.jenis_member = "3rd"
+                    elif check_row == "4":
+                        self.jenis_member = "4th"
+                    elif check_row == "":
+                        self.jenis_member = ""
 
                 else:
                     raise ValidationError("Stiker not defined,  please define Stiker!")
@@ -1159,7 +1159,7 @@ class RequestTransStiker(models.Model):
 
                     # UPDATE TO TRANS STIKER ODOO
                     args = [('id', '=', v.stiker_id.id)]
-                    res = self.env['trans.stiker'].search(args).sudo().write({'akhir': v.akhir})
+                    self.env['trans.stiker'].search(args).sudo().write({'akhir': v.akhir})
 
                 if v.jenis_transaksi == "perpanjang_baru":
                     base_external_dbsource_obj = self.env['base.external.dbsource']
@@ -1167,70 +1167,72 @@ class RequestTransStiker(models.Model):
                     postgresconn.connection_open()
                     _logger.info('Connection Open')
 
-                    # CHECK NOPOL DI STIKER YANG DI PILIH SAAT INI
-                    strSQL = """SELECT nopol FROM detail_transaksi_stiker WHERE notrans='{}'""".format(
-                        self.stiker_id.notrans)
-                    nopolcheck_utama = postgresconn.execute(query=strSQL, metadata=False)
-                    _logger.info(nopolcheck_utama)
+                    if self.ganti_nopol_pb:
 
-                    if nopolcheck_utama:
+                        # CHECK NOPOL DI STIKER YANG DI PILIH SAAT INI
+                        strSQL = """SELECT nopol FROM detail_transaksi_stiker WHERE notrans='{}'""".format(
+                            self.stiker_id.notrans)
+                        nopolcheck_utama = postgresconn.execute(query=strSQL, metadata=False)
+                        _logger.info(nopolcheck_utama)
 
-                        for record in nopolcheck_utama:
-                            nopol = record[0]
+                        if nopolcheck_utama:
 
-                            _logger.info('Update NOPOL')
-                            strSQLUpdate_nopol = """UPDATE detail_transaksi_stiker """ \
-                                                 """ SET """ \
-                                                 """nopol='{}', jenis_mobil='{}', merk='{}', tipe='{}',""" \
-                                                 """tahun='{}', warna='{}'""" \
-                                                 """ WHERE """ \
-                                                 """nopol='{}'""".format(v.new_nopol_pb, v.new_jenis_mobil_pb,
-                                                                         v.new_merk_pb,
-                                                                         v.new_tipe_pb, v.new_tahun_pb, v.new_warna_pb,
-                                                                         nopol)
-                            update_nopol = postgresconn.execute_general(strSQLUpdate_nopol)
-                            _logger.info(update_nopol)
+                            for record in nopolcheck_utama:
+                                nopol = record[0]
 
+                                _logger.info('Update NOPOL')
+                                strSQLUpdate_nopol = """UPDATE detail_transaksi_stiker """ \
+                                                     """ SET """ \
+                                                     """nopol='{}', jenis_mobil='{}', merk='{}', tipe='{}',""" \
+                                                     """tahun='{}', warna='{}'""" \
+                                                     """ WHERE """ \
+                                                     """nopol='{}'""".format(v.new_nopol_pb, v.new_jenis_mobil_pb,
+                                                                             v.new_merk_pb,
+                                                                             v.new_tipe_pb, v.new_tahun_pb, v.new_warna_pb,
+                                                                             nopol)
+                                update_nopol = postgresconn.execute_general(strSQLUpdate_nopol)
+                                _logger.info(update_nopol)
+
+                                args = [('notrans', '=', v.stiker_id.notrans)]
+                                res = self.env['detail.transstiker'].sudo().search(args)
+                                vals = {}
+                                vals.update({'nopol': v.new_nopol_pb})
+                                vals.update({'jenis_mobil': v.new_jenis_mobil_pb})
+                                vals.update({'merk': v.new_merk_pb})
+                                vals.update({'tipe': v.new_tipe_pb})
+                                vals.update({'tahun': v.new_tahun_pb})
+                                vals.update({'warna': v.new_warna_pb})
+                                res.write(vals)
+                        else:
+
+                            _logger.info('Insert Detail Trans Stiker')
+                            strSQL = """INSERT INTO detail_transaksi_stiker """ \
+                                     """(notrans, nopol, jenis_mobil, kategori, jenis_member, akses, akses_out, status, merk, tipe,""" \
+                                     """tahun, warna)""" \
+                                     """ VALUES """ \
+                                     """('{}', '{}', '{}', 0, '{}', NULL, NULL, 1, '{}', '{}', '{}',""" \
+                                     """'{}')""".format(
+                                v.stiker_id.notrans, v.new_nopol_pb, v.new_jenis_mobil_pb, v.jenis_member,
+                                v.new_merk_pb, v.new_tipe_pb, v.new_tahun_pb, v.new_warna_pb)
+
+                            insert_nopol = postgresconn.execute_general(strSQL)
+                            _logger.info(insert_nopol)
+
+                            res = self.env['detail.transstiker']
                             args = [('notrans', '=', v.stiker_id.notrans)]
-                            res = self.env['detail.transstiker'].sudo().search(args)
+                            str_id = self.env['trans.stiker'].sudo().search(args)
+
                             vals = {}
+                            vals.update({'trans_stiker_id': str_id.id})
+                            vals.update({'notrans': v.stiker_id.notrans})
                             vals.update({'nopol': v.new_nopol_pb})
                             vals.update({'jenis_mobil': v.new_jenis_mobil_pb})
+                            vals.update({'jenis_member': v.jenis_member})
                             vals.update({'merk': v.new_merk_pb})
                             vals.update({'tipe': v.new_tipe_pb})
                             vals.update({'tahun': v.new_tahun_pb})
                             vals.update({'warna': v.new_warna_pb})
-                            res.write(vals)
-                    else:
-
-                        _logger.info('Insert Detail Trans Stiker')
-                        strSQL = """INSERT INTO detail_transaksi_stiker """ \
-                                 """(notrans, nopol, jenis_mobil, kategori, jenis_member, akses, akses_out, status, merk, tipe,""" \
-                                 """tahun, warna)""" \
-                                 """ VALUES """ \
-                                 """('{}', '{}', '{}', 0, '{}', NULL, NULL, 1, '{}', '{}', '{}',""" \
-                                 """'{}')""".format(
-                            v.stiker_id.notrans, v.new_nopol_pb, v.new_jenis_mobil_pb, v.jenis_member,
-                            v.new_merk_pb, v.new_tipe_pb, v.new_tahun_pb, v.new_warna_pb)
-
-                        insert_nopol = postgresconn.execute_general(strSQL)
-                        _logger.info(insert_nopol)
-
-                        res = self.env['detail.transstiker']
-                        args = [('notrans', '=', v.stiker_id.notrans)]
-                        str_id = self.env['trans.stiker'].sudo().search(args)
-
-                        vals = {}
-                        vals.update({'trans_stiker_id': str_id.id})
-                        vals.update({'notrans': v.stiker_id.notrans})
-                        vals.update({'nopol': v.new_nopol_pb})
-                        vals.update({'jenis_mobil': v.new_jenis_mobil_pb})
-                        vals.update({'jenis_member': v.jenis_member})
-                        vals.update({'merk': v.new_merk_pb})
-                        vals.update({'tipe': v.new_tipe_pb})
-                        vals.update({'tahun': v.new_tahun_pb})
-                        vals.update({'warna': v.new_warna_pb})
-                        res.sudo().create(vals)
+                            res.sudo().create(vals)
 
                     tglakhir = datetime.strptime(v.akhir, "%Y-%m-%d %H:%M:%S") + relativedelta(hours=7)
 
@@ -1547,28 +1549,37 @@ class RequestTransStiker(models.Model):
                 tglakhir = datetime.strptime(tglakhir_str, "%Y-%m-%d %H:%M:%S")
                 DATE = tglakhir + relativedelta(hours=7)
 
-                RTS_stiker_id = self.no_id
-                RTS_adm = self.adm.name
+                RTS_adm = v.adm.name
 
-                if v.jenis_transaksi == "langganan_baru":
+                _logger.info('Get Card Member')
+                strSQL = """SELECT """ \
+                         """notrans """ \
+                         """FROM card_member WHERE notrans='{}'""".format(v.stiker_id.notrans)
+
+                select_card_member = postgresconn.execute(query=strSQL, metadata=False)
+
+                if select_card_member:
+                    for datas in select_card_member:
+                        # Insert Data Trans Stiker with Odoo to Database Server Parkir
+                        _logger.info('Update NOPOL')
+                        strSQL_cardmember = """UPDATE card_member """ \
+                                            """ SET """ \
+                                            """no_card='{}', no_urut='{}', tanggal='{}', adm='{}'""" \
+                                            """ WHERE """ \
+                                            """notrans='{}'""".format(v.no_kartu, v.no_urut, DATE, RTS_adm,
+                                                                      datas[0])
+
+                else:
+
                     # Insert Data Trans Stiker with Odoo to Database Server Parkir
                     _logger.info('INSERT CARD MEMBER')
                     strSQL_cardmember = """INSERT INTO card_member """ \
                                         """(notrans,no_card,no_urut,tanggal,adm)""" \
                                         """ VALUES """ \
-                                        """('{}','{}','{}','{}','{}')""".format(RTS_stiker_id, self.no_kartu,
-                                                                                self.no_urut,
+                                        """('{}','{}','{}','{}','{}')""".format(v.stiker_id.notrans, v.no_kartu,
+                                                                                v.no_urut,
                                                                                 DATE,
                                                                                 RTS_adm)
-                else:
-                    # Insert Data Trans Stiker with Odoo to Database Server Parkir
-                    _logger.info('Update NOPOL')
-                    strSQL_cardmember = """UPDATE card_member """ \
-                                        """ SET """ \
-                                        """no_card='{}', no_urut='{}', tanggal='{}', adm='{}'""" \
-                                        """ WHERE """ \
-                                        """notrans='{}'""".format(v.no_kartu, v.no_urut, DATE, RTS_adm,
-                                                                  self.stiker_id.notrans)
 
                 postgresconn.execute_general(strSQL_cardmember)
 
@@ -1869,7 +1880,7 @@ class RequestTransStiker(models.Model):
 
                     state = "done"
 
-            if trans.jenis_transaksi == 'stop':
+            if trans.jenis_transaksi == 'stop' and trans.amount == 0:
                 # Process perpanjang to Server Database Parkir and update trans_id
                 base_external_dbsource_obj = self.env['base.external.dbsource']
                 postgresconn = base_external_dbsource_obj.sudo().browse(1)

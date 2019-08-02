@@ -3,8 +3,13 @@
   <component name="ChangeListManager">
     <list default="true" id="7d06e309-00d6-43d7-ab4f-0f81211e74d1" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/model/billing.py" beforeDir="false" afterPath="$PROJECT_DIR$/model/billing.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/model/request_transstiker.py" beforeDir="false" afterPath="$PROJECT_DIR$/model/request_transstiker.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/view/request_transstiker_view.xml" beforeDir="false" afterPath="$PROJECT_DIR$/view/request_transstiker_view.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/security/ir.model.access.csv" beforeDir="false" afterPath="$PROJECT_DIR$/security/ir.model.access.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/view/billing_view.xml" beforeDir="false" afterPath="$PROJECT_DIR$/view/billing_view.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/view/top_menu.xml" beforeDir="false" afterPath="$PROJECT_DIR$/view/top_menu.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wizard/wizard_report_request_details.py" beforeDir="false" afterPath="$PROJECT_DIR$/wizard/wizard_report_request_details.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wizard/wizard_report_request_details_view.xml" beforeDir="false" afterPath="$PROJECT_DIR$/wizard/wizard_report_request_details_view.xml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -16,61 +21,64 @@
     <session id="557566045">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="34" />
+          <entry key="project.closed" value="42" />
           <entry key="project.open.time.0" value="4" />
           <entry key="project.open.time.1" value="2" />
           <entry key="project.open.time.10" value="1" />
           <entry key="project.open.time.12" value="1" />
           <entry key="project.open.time.15" value="1" />
-          <entry key="project.open.time.19" value="1" />
-          <entry key="project.open.time.2" value="1" />
+          <entry key="project.open.time.16" value="1" />
+          <entry key="project.open.time.19" value="2" />
+          <entry key="project.open.time.2" value="3" />
           <entry key="project.open.time.21" value="2" />
           <entry key="project.open.time.22" value="2" />
           <entry key="project.open.time.24" value="3" />
-          <entry key="project.open.time.25" value="3" />
+          <entry key="project.open.time.25" value="4" />
           <entry key="project.open.time.26" value="4" />
           <entry key="project.open.time.27" value="1" />
           <entry key="project.open.time.28" value="1" />
-          <entry key="project.open.time.3" value="2" />
+          <entry key="project.open.time.29" value="1" />
+          <entry key="project.open.time.3" value="3" />
+          <entry key="project.open.time.32" value="1" />
           <entry key="project.open.time.33" value="1" />
           <entry key="project.open.time.36" value="1" />
-          <entry key="project.open.time.4" value="3" />
+          <entry key="project.open.time.4" value="4" />
           <entry key="project.open.time.48" value="1" />
           <entry key="project.open.time.6" value="1" />
           <entry key="project.open.time.7" value="1" />
-          <entry key="project.open.time.8" value="1" />
-          <entry key="project.opened" value="38" />
+          <entry key="project.open.time.8" value="2" />
+          <entry key="project.opened" value="48" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="csv" value="408" />
-          <entry key="py" value="25022" />
+          <entry key="csv" value="410" />
+          <entry key="py" value="25511" />
           <entry key="txt" value="67" />
-          <entry key="xml" value="5372" />
+          <entry key="xml" value="5394" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="CSV" value="196" />
+          <entry key="CSV" value="198" />
           <entry key="PLAIN_TEXT" value="279" />
-          <entry key="Python" value="25022" />
-          <entry key="XML" value="5372" />
+          <entry key="Python" value="25511" />
+          <entry key="XML" value="5394" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
-          <entry key="csv" value="16" />
-          <entry key="py" value="180" />
-          <entry key="xml" value="120" />
+          <entry key="csv" value="18" />
+          <entry key="py" value="188" />
+          <entry key="xml" value="123" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="CSV" value="8" />
+          <entry key="CSV" value="10" />
           <entry key="PLAIN_TEXT" value="8" />
-          <entry key="Python" value="180" />
-          <entry key="XML" value="120" />
+          <entry key="Python" value="188" />
+          <entry key="XML" value="123" />
         </counts>
       </usages-collector>
     </session>
@@ -79,33 +87,54 @@
     <favorites_list name="paymentmodule" />
   </component>
   <component name="FileEditorManager">
-    <leaf>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/view/billing_view.xml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="217">
-              <caret line="27" column="31" lean-forward="true" selection-start-line="27" selection-start-column="31" selection-end-line="27" selection-end-column="31" />
+        <entry file="file://$PROJECT_DIR$/security/ir.model.access.csv">
+          <provider selected="true" editor-type-id="csv-text-editor">
+            <state relative-caret-position="238">
+              <caret line="14" column="85" selection-start-line="14" selection-start-column="85" selection-end-line="14" selection-end-column="85" />
             </state>
+          </provider>
+          <provider editor-type-id="csv-table-editor">
+            <state showInfoPanel="true" fixedHeaders="false" rowLines="3" />
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/view/request_transstiker_view.xml">
+        <entry file="file://$PROJECT_DIR$/model/billing.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="393">
-              <caret line="218" column="88" selection-start-line="218" selection-start-column="88" selection-end-line="218" selection-end-column="88" />
+            <state relative-caret-position="391">
+              <caret line="157" column="65" lean-forward="true" selection-start-line="157" selection-start-column="65" selection-end-line="157" selection-end-column="65" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/wizard/wizard_report_request_details.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="340">
+              <caret line="83" lean-forward="true" selection-start-line="83" selection-end-line="83" />
+              <folding>
+                <element signature="e#0#39#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/model/request_transstiker.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-3348">
-              <caret line="872" column="28" selection-start-line="872" selection-start-column="22" selection-end-line="872" selection-end-column="28" />
-              <folding>
-                <element signature="e#0#36#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="51">
+              <caret line="3" column="27" selection-start-line="3" selection-start-column="14" selection-end-line="3" selection-end-column="27" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/view/billing_view.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="323">
+              <caret line="19" column="54" lean-forward="true" selection-start-line="19" selection-start-column="54" selection-end-line="19" selection-end-column="54" />
             </state>
           </provider>
         </entry>
@@ -121,8 +150,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>Can't edit record</find>
-      <find>trans_payment</find>
       <find>generate_stiker_id</find>
       <find>INTO detail_transaksi_stiker</find>
       <find>transaksi_stiker</find>
@@ -136,14 +163,10 @@
       <find>unlink()</find>
       <find>v.</find>
       <find>transaksi_stiker_tes</find>
-      <find>detail_transaksi_stiker_tes</find>
-      <find>done_pay</find>
       <find>done_pa</find>
       <find>nopol_lama</find>
       <find>prose</find>
       <find>adm</find>
-      <find>confirm</find>
-      <find>_get</find>
       <find>done</find>
       <find>new_jenis</find>
       <find>proses_ganti_nopol</find>
@@ -151,6 +174,12 @@
       <find>proses</find>
       <find>calculate_start_end_date</find>
       <find>self.duration</find>
+      <find>confirm</find>
+      <find>_change_kartu_hilang</find>
+      <find>kartu_hilang</find>
+      <find>_get</find>
+      <find>done_pay</find>
+      <find>detail_transaksi_stiker_tes</find>
     </findStrings>
     <replaceStrings>
       <replace>awal</replace>
@@ -161,6 +190,7 @@
       <replace>transaksi_stiker</replace>
       <replace>INTO detail_transaksi_stiker_te</replace>
       <replace>UPDATE detail_transaksi_stiker_tes</replace>
+      <replace>detail_transaksi_stiker</replace>
     </replaceStrings>
     <dirStrings>
       <dir>D:\paymentmodule</dir>
@@ -189,11 +219,9 @@
         <option value="$PROJECT_DIR$/wizard/wizard_not_approve.py" />
         <option value="$PROJECT_DIR$/wizard/wizard_add_card_member_view.xml" />
         <option value="$PROJECT_DIR$/wizard/wizard_add_card_member.py" />
-        <option value="$PROJECT_DIR$/view/billing_view.xml" />
         <option value="$PROJECT_DIR$/report/__init__.py" />
         <option value="$PROJECT_DIR$/report/report_monthly_billing.xml" />
         <option value="$PROJECT_DIR$/report/report_monthly_billing.py" />
-        <option value="$PROJECT_DIR$/wizard/wizard_report_request_details_view.xml" />
         <option value="$PROJECT_DIR$/view/setting_view.xml" />
         <option value="$PROJECT_DIR$/view/stasiun_kerja_view.xml" />
         <option value="$PROJECT_DIR$/model/setting.py" />
@@ -202,7 +230,6 @@
         <option value="D:/paymentmodule_live/paymentmodule/model/request_transstiker.py" />
         <option value="$PROJECT_DIR$/report/report_request_stiker_template.xml" />
         <option value="$PROJECT_DIR$/security/payment_module_security.xml" />
-        <option value="$PROJECT_DIR$/model/billing.py" />
         <option value="$PROJECT_DIR$/report/report_requestdetails.xml" />
         <option value="$PROJECT_DIR$/model/trans_stiker.py" />
         <option value="$PROJECT_DIR$/view/trans_stiker_view.xml" />
@@ -213,23 +240,27 @@
         <option value="D:/parkingconnector/models/parking_connector.py" />
         <option value="$PROJECT_DIR$/wizard/wizard_check_kartu.py" />
         <option value="D:/paymentmodule_dev/model/request_transstiker.py" />
-        <option value="$PROJECT_DIR$/view/top_menu.xml" />
         <option value="$PROJECT_DIR$/wizard/__init__.py" />
         <option value="$PROJECT_DIR$/__manifest__.py" />
         <option value="$PROJECT_DIR$/wizard/wizard_check_kartu_view.xml" />
-        <option value="$PROJECT_DIR$/security/ir.model.access.csv" />
         <option value="D:/paymentmodule_dev/paymentmodule/view/request_transstiker_view.xml" />
-        <option value="$PROJECT_DIR$/wizard/wizard_report_request_details.py" />
         <option value="D:/paymentmodule_dev/paymentmodule/model/request_transstiker.py" />
         <option value="$PROJECT_DIR$/view/request_transstiker_view.xml" />
+        <option value="$PROJECT_DIR$/view/top_menu.xml" />
+        <option value="$PROJECT_DIR$/wizard/wizard_report_request_details_view.xml" />
+        <option value="$PROJECT_DIR$/security/ir.model.access.csv" />
+        <option value="$PROJECT_DIR$/view/billing_view.xml" />
+        <option value="$PROJECT_DIR$/model/billing.py" />
         <option value="$PROJECT_DIR$/model/request_transstiker.py" />
+        <option value="$PROJECT_DIR$/wizard/wizard_report_request_details.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="y" value="35" />
-    <option name="width" value="1024" />
-    <option name="height" value="698" />
+    <option name="x" value="-7" />
+    <option name="y" value="14" />
+    <option name="width" value="1587" />
+    <option name="height" value="802" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -237,6 +268,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -273,7 +305,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -534,11 +565,19 @@
       <option name="project" value="LOCAL" />
       <updated>1563414579234</updated>
     </task>
-    <option name="localTasksCounter" value="34" />
+    <task id="LOCAL-00034" summary="init update">
+      <created>1563679484739</created>
+      <option name="number" value="00034" />
+      <option name="presentableId" value="LOCAL-00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1563679484739</updated>
+    </task>
+    <option name="localTasksCounter" value="35" />
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1616" height="876" extended-state="7" />
+    <frame x="-8" y="-8" width="1616" height="876" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" type="SLIDING" weight="0.22179975" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.24968314" />
@@ -762,24 +801,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/model/billing.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="93" column="45" lean-forward="true" selection-start-line="93" selection-start-column="45" selection-end-line="93" selection-end-column="45" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/wizard/wizard_report_billing_view.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="136">
           <caret line="8" column="64" selection-start-line="8" selection-start-column="64" selection-end-line="8" selection-end-column="64" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wizard/wizard_report_request_details_view.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="8" column="25" selection-start-line="8" selection-start-column="20" selection-end-line="8" selection-end-column="64" />
         </state>
       </provider>
     </entry>
@@ -833,13 +858,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/view/top_menu.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="15" column="86" selection-start-line="15" selection-start-column="86" selection-end-line="15" selection-end-column="86" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/wizard/wizard_check_kartu_view.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="238">
@@ -861,32 +879,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/security/ir.model.access.csv">
-      <provider editor-type-id="csv-table-editor">
-        <state showInfoPanel="true" fixedHeaders="false" rowLines="3" />
-      </provider>
-      <provider selected="true" editor-type-id="csv-text-editor">
-        <state relative-caret-position="306">
-          <caret line="18" column="67" lean-forward="true" selection-start-line="18" selection-start-column="67" selection-end-line="18" selection-end-column="67" />
-        </state>
-      </provider>
-      <provider editor-type-id="text-editor">
-        <state relative-caret-position="221">
-          <caret line="13" column="85" lean-forward="true" selection-start-line="13" selection-start-column="85" selection-end-line="13" selection-end-column="85" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/view/trans_stiker_view.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1649">
           <caret line="97" column="49" lean-forward="true" selection-start-line="97" selection-start-column="49" selection-end-line="97" selection-end-column="49" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wizard/wizard_report_billing.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="357">
-          <caret line="54" lean-forward="true" selection-start-line="42" selection-start-column="8" selection-end-line="54" />
         </state>
       </provider>
     </entry>
@@ -908,13 +904,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="591">
           <caret line="45" column="14" selection-start-line="45" selection-start-column="4" selection-end-line="45" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wizard/wizard_report_request_details.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="323">
-          <caret line="117" column="57" lean-forward="true" selection-start-line="117" selection-start-column="57" selection-end-line="117" selection-end-column="57" />
         </state>
       </provider>
     </entry>
@@ -945,26 +934,76 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/view/top_menu.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="7" column="298" selection-start-line="7" selection-start-column="298" selection-end-line="7" selection-end-column="298" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/view/request_transstiker_view.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="393">
+        <state relative-caret-position="659">
           <caret line="218" column="88" selection-start-line="218" selection-start-column="88" selection-end-line="218" selection-end-column="88" />
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/wizard/wizard_report_request_details_view.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="391">
+          <caret line="23" column="111" lean-forward="true" selection-start-line="23" selection-start-column="111" selection-end-line="23" selection-end-column="111" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wizard/wizard_report_billing.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="357">
+          <caret line="54" selection-start-line="42" selection-start-column="8" selection-end-line="54" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/security/ir.model.access.csv">
+      <provider selected="true" editor-type-id="csv-text-editor">
+        <state relative-caret-position="238">
+          <caret line="14" column="85" selection-start-line="14" selection-start-column="85" selection-end-line="14" selection-end-column="85" />
+        </state>
+      </provider>
+      <provider editor-type-id="text-editor">
+        <state relative-caret-position="221">
+          <caret line="13" column="85" lean-forward="true" selection-start-line="13" selection-start-column="85" selection-end-line="13" selection-end-column="85" />
+        </state>
+      </provider>
+      <provider editor-type-id="csv-table-editor">
+        <state showInfoPanel="true" fixedHeaders="false" rowLines="3" />
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/view/billing_view.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="217">
-          <caret line="27" column="31" lean-forward="true" selection-start-line="27" selection-start-column="31" selection-end-line="27" selection-end-column="31" />
+        <state relative-caret-position="323">
+          <caret line="19" column="54" lean-forward="true" selection-start-line="19" selection-start-column="54" selection-end-line="19" selection-end-column="54" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/model/billing.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="391">
+          <caret line="157" column="65" lean-forward="true" selection-start-line="157" selection-start-column="65" selection-end-line="157" selection-end-column="65" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/model/request_transstiker.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-3348">
-          <caret line="872" column="28" selection-start-line="872" selection-start-column="22" selection-end-line="872" selection-end-column="28" />
+        <state relative-caret-position="51">
+          <caret line="3" column="27" selection-start-line="3" selection-start-column="14" selection-end-line="3" selection-end-column="27" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wizard/wizard_report_request_details.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="340">
+          <caret line="83" lean-forward="true" selection-start-line="83" selection-end-line="83" />
           <folding>
-            <element signature="e#0#36#0" expanded="true" />
+            <element signature="e#0#39#0" expanded="true" />
           </folding>
         </state>
       </provider>

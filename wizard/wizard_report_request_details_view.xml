@@ -10,6 +10,7 @@
                     <field name="start_date"/>
                     <field name="end_date"/>
                     <field name="billing_status"/>
+                    <field name="jenis_member"/>
                     <field name="transaction_status"/>
                 </group>
                 <group attrs="{'invisible':[('report_printed','=',False)]}">

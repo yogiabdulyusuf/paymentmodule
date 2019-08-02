@@ -119,7 +119,7 @@ class BillingPeriode(models.Model):
                     vals.update({'awal': start_date})
                     vals.update({'akhir': end_date})
                     vals.update({'jenis_langganan': line.jenis_member})
-                    billing_line_save = billing_line_obj.create(vals)
+                    billing_line_save = billing_line_obj.sudo().create(vals)
 
                     if not billing_line_save:
                         raise ValidationError("Error Creating Billing Periode Line")
@@ -131,6 +131,12 @@ class BillingPeriode(models.Model):
 
     @api.one
     def trans_generate(self):
+        self.trans_generate_line()
+
+    @api.one
+    def trans_reload_generate(self):
+        args = [('billing_periode', '=', self.id)]
+        self.env['billingperiode.line'].search(args).sudo().unlink()
         self.trans_generate_line()
 
     @api.one
@@ -164,9 +170,9 @@ class BillingPeriode(models.Model):
             raise ValidationError("Can't delete record")
         else:
             # delete cancel
-            args2 = [('billing_periode', '=', self.billing_id.id)]
-            self.env['billingperiode.line'].search(args2).unlink()
-        super(BillingPeriode,self).unlink()
+            args2 = [('billing_periode', '=', self.id)]
+            self.env['billingperiode.line'].search(args2).sudo().unlink()
+        super(BillingPeriode,self).sudo().unlink()
 
 
 class BillingPeriodeLine(models.Model):
