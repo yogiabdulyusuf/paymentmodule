@@ -2,7 +2,7 @@
 <odoo>
     <data>
 
-       <record id="form_billing_periode" model="ir.ui.view">
+        <record id="form_billing_periode" model="ir.ui.view">
            <field name="name">Form Billing Periode</field>
            <field name="model">billing.periode</field>
            <field name="arch" type="xml">
@@ -14,7 +14,7 @@
                         <button name="trans_generate_file" string="Export to CSV" type="object" class="oe_highlight" states="export" groups="paymentmodule.group_fo_billing"/>
                         <field name="state" widget="statusbar" statusbar_visible="open,generate,transfer,export,close"/>
                     </header>
-                   <sheet>
+                    <sheet>
                         <label for="billing_id" class="oe_edit_only" string="Billing ID" />
                         <h1>
                             <field name="billing_id"/>
@@ -40,16 +40,16 @@
                             </tree>
                         </field>
 
-                   </sheet>
+                    </sheet>
                </form>
            </field>
-       </record>
+        </record>
 
-        <record id="tree_billing_periode" model="ir.ui.view">
-            <field name="name">Tree Billing Periode</field>
+        <record id="billing_periode_tree" model="ir.ui.view">
+            <field name="name">Billing Periode Tree</field>
             <field name="model">billing.periode</field>
             <field name="arch" type="xml">
-                <tree string="tree_billing_periode">
+                <tree string="Billing Periode">
                     <field name="billing_id"/>
                     <field name="billing_year"/>
                     <field name="billing_month"/>

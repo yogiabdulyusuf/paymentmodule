@@ -286,7 +286,24 @@ class RequestTransStiker(models.Model):
                         self.telphone = data_detail.telphone
                         self.no_id = data_detail.no_id
                         self.awal_old = data_detail.awal
-                        self.akhir_old = data_detail.akhir
+
+                        # checktglakhir = datetime.strptime(data_detail.akhir, "%H:%M:%S")
+                        #
+                        # if str(checktglakhir) == "00:00:00":
+                        #     tglakhir = datetime.strptime(data_detail.akhir, "%Y-%m-%d %H:%M:%S")
+                        #     tglakhir = datetime(tglakhir.year, tglakhir.month, tglakhir.day, 23, 59, 59) + relativedelta(hours=17)
+                        # else:
+                        #     tglakhir = data_detail.akhir
+                        # tglakhir = datetime.strptime(data_detail.akhir, "%Y-%m-%d %H:%M:%S")
+                        # tglakhir = '-'.join(str(x) for x in (tglakhir.year, tglakhir.month, tglakhir.day))
+                        # _logger.info(tglakhir)
+                        tglakhir = datetime.strptime(data_detail.akhir, "%Y-%m-%d %H:%M:%S")
+                        _logger.info(tglakhir)
+                        if not (tglakhir.hour == 16 and tglakhir.minute == 59):
+                            tglakhir = datetime(tglakhir.year, tglakhir.month, tglakhir.day, 23, 59, 59) - relativedelta(hours=7) + relativedelta(days=1)
+
+                        _logger.info(tglakhir)
+                        self.akhir_old = tglakhir
                         self.nopol = data_detail.detail_ids.nopol
                         self.merk = data_detail.detail_ids.merk
                         self.tipe = data_detail.detail_ids.tipe
@@ -825,8 +842,7 @@ class RequestTransStiker(models.Model):
         for trans in self:
 
             # CHECK NOPOL DI STIKER LAMA
-            strSQL = """SELECT nopol,notrans FROM detail_transaksi_stiker WHERE nopol='{}'""".format(
-                trans.new_nopol)
+            strSQL = """SELECT nopol,notrans FROM detail_transaksi_stiker WHERE nopol='{}'""".format(trans.new_nopol)
             nopolcheck = postgresconn.execute(query=strSQL, metadata=False)
             _logger.info(nopolcheck)
 
@@ -1056,6 +1072,21 @@ class RequestTransStiker(models.Model):
                     valus.update({'status_l': status_l})
                     valus.update({'akses_out_l': akses_out_l})
                     valus.update({'keterangan_l': keterangan_l})
+                else:
+                    valus.update({'trans_stiker_id_l': False})
+                    valus.update({'nopol_l': False})  # Data Nopol pada Stiker# lama yanng ingin di hapus
+                    valus.update({'jenis_mobil_l': False})
+                    valus.update({'jenis_member_l': False})
+                    valus.update({'merk_l': False})
+                    valus.update({'tipe_l': False})
+                    valus.update({'tahun_l': False})
+                    valus.update({'warna_l': False})
+                    valus.update({'notrans_l': False})
+                    valus.update({'kategori_l': False})
+                    valus.update({'akses_l': False})
+                    valus.update({'status_l': False})
+                    valus.update({'akses_out_l': False})
+                    valus.update({'keterangan_l': False})
 
                 # Convert datas to json
                 str_bck_nopol = json.dumps(valus)
@@ -1302,16 +1333,17 @@ class RequestTransStiker(models.Model):
 
                     tglawal = datetime.strptime(self.awal, "%Y-%m-%d %H:%M:%S") + relativedelta(hours=7)
                     tglakhir = datetime.strptime(self.akhir, "%Y-%m-%d %H:%M:%S") + relativedelta(hours=7)
-
+                    tlp = "Tidak Bayar"
                     _logger.info('Insert Data Trans Stiker')
                     strSQL = """INSERT INTO transaksi_stiker """ \
-                                """(notrans, nama, alamat, telepon, jenis_transaksi, awal, harga, keterangan, tanggal, operator, akhir,""" \
-                                """maks, no_id, unit_kerja, no_induk, jenis_stiker, hari_ke, jenis_langganan, exit_pass, no_kuitansi, tgl_edited,""" \
-                                """tipe_exit_pass, seq_code, unitno, area, reserved, cara_bayar)""" \
-                                """ VALUES """ \
-                                """('{}', '{}', '{}', '{}', '{}', '{}', 0, '{}', '{}', '{}', '{}', 1,""" \
-                                """'{}', '{}', NULL, 0, NULL, '{}', 0, '{}', '{}', 1, 0, NULL, NULL, 0, '{}')""".format(
-                        self.no_id, self.name, self.alamat, self.telphone, jt, tglawal,self.keterangan, self.tanggal, self.adm.name,
+                             """(notrans, nama, alamat, telepon, jenis_transaksi, awal, harga, keterangan, tanggal, operator, akhir,""" \
+                             """maks, no_id, unit_kerja, no_induk, jenis_stiker, hari_ke, jenis_langganan, exit_pass, no_kuitansi, tgl_edited,""" \
+                             """tipe_exit_pass, seq_code, unitno, area, reserved, cara_bayar)""" \
+                             """ VALUES """ \
+                             """('{}', '{}', '{}', '{}', '{}', '{}', 0, '{}', '{}', '{}', '{}', 1,""" \
+                             """'{}', '{}', NULL, 0, NULL, '{}', 0, '{}', '{}', 1, 0, NULL, NULL, 0, '{}')""".format(
+                        self.no_id, self.name, self.alamat, tlp, jt, tglawal, self.keterangan, self.tanggal,
+                        self.adm.name,
                         tglakhir, self.no_id, self.unit_kerja.kode, j_member, self.no_id, DATE, cb)
 
                     ts1 = postgresconn.execute_general(strSQL)
@@ -1563,7 +1595,7 @@ class RequestTransStiker(models.Model):
                         # Insert Data Trans Stiker with Odoo to Database Server Parkir
                         _logger.info('Update NOPOL')
                         strSQL_cardmember = """UPDATE card_member """ \
-                                            """ SET """ \
+                                            """SET """ \
                                             """no_card='{}', no_urut='{}', tanggal='{}', adm='{}'""" \
                                             """ WHERE """ \
                                             """notrans='{}'""".format(v.no_kartu, v.no_urut, DATE, RTS_adm,
@@ -1755,7 +1787,7 @@ class RequestTransStiker(models.Model):
             # Ambil data json backup nopol
             datas = json.loads(self.nopol_lama)
 
-            if datas["nopol_l"]:
+            if datas["nopol_l"] != False:
                 _logger.info('Insert Detail Trans Stiker')
                 strSQL = """INSERT INTO detail_transaksi_stiker """ \
                          """(notrans, nopol, jenis_mobil, kategori, jenis_member, akses, akses_out, status, merk, tipe,""" \

@@ -99,13 +99,14 @@ class BillingPeriode(models.Model):
                     else:
                         str_start_date = str(self.billing_year) + "-" + str(self.billing_month).zfill(2) + "-" + str(last_day).zfill(2)
                     _logger.info(str_start_date)
-                    start_date = datetime.strptime(str_start_date,"%Y-%m-%d") + relativedelta(months=+1)
+                    start_date = datetime.strptime(str_start_date,"%Y-%m-%d") + relativedelta(months=+1, days=+1)
 
 
-                    duration = relativedelta(months=+1)
+
+                    # duration = relativedelta(months=+1)
                     #start_date = datetime.strptime(str(d_year) + '-' + str(d_month) + '-' + str(d_date) + ' 00:00:00' , "%Y-%m-%d %H:%M:%S")
                     str_start_date = start_date.strftime('%d/%m/%Y')
-                    end_date = start_date + duration
+                    end_date = start_date + relativedelta(months=+1)
                     str_end_date = end_date.strftime('%d/%m/%Y')
 
                     billing_line_obj = self.env['billingperiode.line']
@@ -152,7 +153,7 @@ class BillingPeriode(models.Model):
     billing_year = fields.Integer(string="Billing Year", required=False, )
     billing_month = fields.Integer(string="Billing Month", required=False, )
     generate_date_billing = fields.Date(string="Date Generate Billing", required=False, )
-    billing_csv_filename = fields.Char('File Name', readonly=True, default="billing.csv")
+    billing_csv_filename = fields.Char('File Name', readonly=True, default="Billing_Member.csv")
     billing_csv_file = fields.Binary('Billing File', readonly=True)
     line_ids = fields.One2many('billingperiode.line', 'billing_periode', 'Details', readonly=True)
     state = fields.Selection(string="", selection=[('open', 'Open'), ('generate', 'Waiting Generate'), ('transfer', 'Waiting Transfer'), ('export', 'Export Data'), ('close', 'Close'), ], required=False, default="open" )

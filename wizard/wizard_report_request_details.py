@@ -33,9 +33,35 @@ class WizardReportRequestDetails(models.TransientModel):
         """ Serialise the orders of the day information
         params: date_start, date_stop string representing the datetime of order
         """
+
+        # startdate = datetime.strptime(self.start_date, "%Y-%m-%d %H:%M:%S") - relativedelta(hours=7)
+        # startdate = datetime.strptime(self.start_date, "%Y-%m-%d %H:%M:%S.%f") - relativedelta(hours=7)
+        # enddate = datetime.strptime(self.end_date, "%Y-%m-%d %H:%M:%S") - relativedelta(hours=7)
+
+        _logger.info(self.start_date)
+
+        tglawal = datetime.strptime(self.start_date, "%Y-%m-%d").date()
+        str_start_date = str(tglawal.year) + "-" + str(tglawal.month).zfill(2) + "-" + str(tglawal.day).zfill(
+            2) + " 00:00:00"
+
+        _logger.info(str_start_date)
+        tglawal = datetime.strptime(str_start_date, "%Y-%m-%d %H:%M:%S") - relativedelta(hours=7)
+        tglawal = tglawal.strftime("%Y-%m-%d %H:%M:%S")
+
+        #=================================
+
+        tglakhir = datetime.strptime(self.end_date, "%Y-%m-%d").date()
+        _logger.info(tglakhir)
+        str_end_date = str(tglakhir.year) + "-" + str(tglakhir.month).zfill(2) + "-" + str(tglakhir.day).zfill(
+            2) + " 23:59:59"
+
+        # tglakhir =  str_end_date.strftime("%Y-%m-%d %H:%M:%S")
+
+        _logger.info(tglakhir)
+
         args = []
-        args.append((('tanggal', '>=', self.start_date)))
-        args.append((('tanggal', '<=', self.end_date)))
+        args.append((('tanggal', '>=', tglawal)))
+        args.append((('tanggal', '<=', str_end_date)))
 
         if self.billing_status == 'billing':
             args.append((('cara_bayar', '=', self.billing_status)))
