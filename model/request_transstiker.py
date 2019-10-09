@@ -375,12 +375,12 @@ class RequestTransStiker(models.Model):
                         self.tahun = data_detail.detail_ids.tahun
                         self.warna = data_detail.detail_ids.warna
 
-                    akhir = datetime.now()
-                    if self.jenis_transaksi == "stop":
-                        self.akhir = akhir
-                        self.cara_bayar = "non_billing"
+                    # akhir = datetime.now()
+                    # if self.jenis_transaksi == "stop":
+                    #     self.akhir = akhir
+                    #     self.cara_bayar = "non_billing"
 
-                    self.duration = 0
+                    self.duration = 2
 
                     if self.stiker_id.notrans:
                         check_row = self.stiker_id.notrans[4]
@@ -440,10 +440,11 @@ class RequestTransStiker(models.Model):
         elif self.jenis_transaksi == 'langganan_baru':
             tglawal = datetime.now()
             str_start_date = str(tglawal.year) + "-" + str(tglawal.month).zfill(2) + "-" + str(tglawal.day).zfill(2) + " 00:00:00"
-            tglawal = datetime.strptime(str_start_date, "%Y-%m-%d %H:%M:%S") - relativedelta(hours=7)
-            self.awal = tglawal
+            tglawal = datetime.strptime(str_start_date, "%Y-%m-%d %H:%M:%S")
+            cal_tglawal = tglawal - relativedelta(hours=7)
+            self.awal = cal_tglawal
 
-            tglakhir = tglawal + relativedelta(months=self.duration, days=1)
+            tglakhir = tglawal + relativedelta(months=self.duration)
             str_end_date = str(tglakhir.year) + "-" + str(tglakhir.month).zfill(2) + "-" + str(tglakhir.day).zfill(2) + " 23:59:59"
             self.akhir = datetime.strptime(str_end_date, "%Y-%m-%d %H:%M:%S") - relativedelta(hours=7)
 
@@ -451,10 +452,11 @@ class RequestTransStiker(models.Model):
             tglawal = datetime.now()
             str_start_date = str(tglawal.year) + "-" + str(tglawal.month).zfill(2) + "-" + str(tglawal.day).zfill(
                 2) + " 00:00:00"
-            tglawal = datetime.strptime(str_start_date, "%Y-%m-%d %H:%M:%S") - relativedelta(hours=7)
-            self.awal = tglawal
+            tglawal = datetime.strptime(str_start_date, "%Y-%m-%d %H:%M:%S")
+            cal_tglawal = tglawal - relativedelta(hours=7)
+            self.awal = cal_tglawal
 
-            tglakhir = tglawal + relativedelta(months=self.duration, days=1)
+            tglakhir = tglawal + relativedelta(months=self.duration)
             str_end_date = str(tglakhir.year) + "-" + str(tglakhir.month).zfill(2) + "-" + str(tglakhir.day).zfill(
                 2) + " 23:59:59"
             self.akhir = datetime.strptime(str_end_date, "%Y-%m-%d %H:%M:%S") - relativedelta(hours=7)
@@ -464,10 +466,25 @@ class RequestTransStiker(models.Model):
             tglawal = fields.Datetime.from_string(self.akhir_old)
             str_start_date = str(tglawal.year) + "-" + str(tglawal.month).zfill(2) + "-" + str(tglawal.day).zfill(
                 2) + " 00:00:00"
-            tglawal = datetime.strptime(str_start_date, "%Y-%m-%d %H:%M:%S") - relativedelta(hours=7)
-            self.awal = tglawal
+            tglawal = datetime.strptime(str_start_date, "%Y-%m-%d %H:%M:%S")
+            cal_tglawal = tglawal - relativedelta(hours=7)
+            self.awal = cal_tglawal
 
-            tglakhir = tglawal + relativedelta(months=self.duration, days=1)
+            tglakhir = tglawal + relativedelta(months=self.duration)
+            str_end_date = str(tglakhir.year) + "-" + str(tglakhir.month).zfill(2) + "-" + str(tglakhir.day).zfill(
+                2) + " 23:59:59"
+            self.akhir = datetime.strptime(str_end_date, "%Y-%m-%d %H:%M:%S") - relativedelta(hours=7)
+
+        elif self.jenis_transaksi == 'stop':
+            tglawal = fields.Datetime.from_string(self.akhir_old) + relativedelta(hours=7)
+            date_now = datetime.now()
+            tglawal = datetime(date_now.year, date_now.month, tglawal.day)
+            str_start_date = str(tglawal.year) + "-" + str(tglawal.month).zfill(2) + "-" + str(tglawal.day).zfill(
+                2) + " 00:00:00"
+            tglawal = datetime.strptime(str_start_date, "%Y-%m-%d %H:%M:%S")
+
+            self.awal = tglawal - relativedelta(hours=7)
+            tglakhir = tglawal + relativedelta(months=self.duration)
             str_end_date = str(tglakhir.year) + "-" + str(tglakhir.month).zfill(2) + "-" + str(tglakhir.day).zfill(
                 2) + " 23:59:59"
             self.akhir = datetime.strptime(str_end_date, "%Y-%m-%d %H:%M:%S") - relativedelta(hours=7)
@@ -2063,13 +2080,32 @@ class RequestTransStiker(models.Model):
     nopol_lama = fields.Text(string="Data lama NOPOL", required=False, readonly=True)
     state = fields.Selection(string="State",
                              selection=[('open', 'Open'), ('confirm', 'Confirm'),('payment', 'Waiting for Payment'),
-                                        ('request_cancel', 'Request for Cancel'), ('cancel', 'Cancel'),
+                                        ('request_cancel', 'Request for Cancel'), ('cancel', 'Cancel'), ('delete', 'Delete'),
                                         ('done', 'Done')],
                              required=False, default='open')
 
     @api.model
     def create(self, vals):
         vals['notrans'] = self.env['ir.sequence'].next_by_code('request.transstiker')
+
+        if vals.get('ganti_nopol') == True:
+            if 'new_nopol' in vals.keys():
+                string_new_nopol = vals.get('new_nopol')
+                vals['new_nopol'] = string_new_nopol.strip()
+
+        if vals.get('ganti_nopol_pb') == True:
+            if 'new_nopol_pb' in vals.keys():
+                string_new_nopol_pb = vals.get('new_nopol_pb')
+                vals['new_nopol_pb'] = string_new_nopol_pb.strip()
+
+        if vals.get('kartu_hilang') == True:
+            if 'no_urut' in vals.keys():
+                string_no_urut = vals.get('no_urut')
+                vals['no_urut'] = string_no_urut.strip()
+
+            if 'no_kartu' in vals.keys():
+                string_no_kartu = vals.get('no_kartu')
+                vals['no_kartu'] = string_no_kartu.strip()
 
         if 'duration' not in vals.keys():
             raise ValidationError("Duration empty")
@@ -2096,12 +2132,36 @@ class RequestTransStiker(models.Model):
            if status.state in ('done', 'cancel', 'request_cancel'):
                raise ValidationError("Can't delete record")
 
-        return super(RequestTransStiker, self).unlink()
+        vals = {}
+        vals.update({'state': 'delete'})
+        _logger.info("Delete Transaction Stiker : " + str(self.stiker_id.notrans) + ", ID# : " + str(
+            self.notrans) + ", Date delete : " + str(datetime.now()))
+        self.message_post("Delete transaction")
+        return super(RequestTransStiker, self).write(vals)
 
     @api.multi
     def write(self, vals):
         """Override default Odoo write function and extend."""
         # Do your custom logic here
+
+        if vals.get('ganti_nopol') == True:
+            if 'new_nopol' in vals.keys():
+                string_new_nopol = vals.get('new_nopol')
+                vals['new_nopol'] = string_new_nopol.strip()
+
+        if vals.get('ganti_nopol_pb') == True:
+            if 'new_nopol_pb' in vals.keys():
+                string_new_nopol_pb = vals.get('new_nopol_pb')
+                vals['new_nopol_pb'] = string_new_nopol_pb.strip()
+
+        if vals.get('kartu_hilang') == True:
+            if 'no_urut' in vals.keys():
+                string_no_urut = vals.get('no_urut')
+                vals['no_urut'] = string_no_urut.strip()
+
+            if 'no_kartu' in vals.keys():
+                string_no_kartu = vals.get('no_kartu')
+                vals['no_kartu'] = string_no_kartu.strip()
 
         #FO Access
         for trans in self:

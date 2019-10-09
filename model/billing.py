@@ -32,7 +32,8 @@ class BillingPeriode(models.Model):
     def trans_generate_file(self):
         output = StringIO.StringIO()
         output.write("unitno,date_trans,description,amount\r\n")
-        for source in self.line_ids:
+        billing_periode_line_ids = self.env['billingperiode.line'].search([('billing_periode', '=', self.id) ])
+        for source in billing_periode_line_ids:
             # for source in self.stock_inventory_source_ids:
             _logger.info(source)
             content = "{},{},{},{}\r\n".format(
@@ -54,7 +55,7 @@ class BillingPeriode(models.Model):
         akhir = date_akhir + relativedelta(months=+2)
 
         for row in res:
-            arg = [('no_id', '=', row.no_id), ('jenis_member', '!=', '1st') ]
+            arg = [('no_id', '=', row.no_id), ('jenis_member', '!=', '1st'), ('state', '=', 'done') ]
             list = self.env['request.transstiker'].search(arg, order='notrans desc')
             #_logger.info(line_check.no_id)
 
@@ -92,22 +93,61 @@ class BillingPeriode(models.Model):
                         val_harga = jenis_member_st_ids
 
                     #_logger.info(line.no_id)
-                    tgl = fields.Datetime.from_string(line.akhir)
-                    last_day = self.last_day_of_month(self.billing_year, self.billing_month).day
-                    if last_day > tgl.day:
-                        str_start_date = str(self.billing_year) + "-" + str(self.billing_month).zfill(2) + "-" + str(tgl.day).zfill(2)
-                    else:
-                        str_start_date = str(self.billing_year) + "-" + str(self.billing_month).zfill(2) + "-" + str(last_day).zfill(2)
-                    _logger.info(str_start_date)
-                    start_date = datetime.strptime(str_start_date,"%Y-%m-%d") + relativedelta(months=+1, days=+1)
+                    # tgl = datetime.strptime(line.akhir, "%Y-%m-%d %H:%M:%S")
+                    #
+                    # _logger.info(line.unit_kerja.kode)
+                    # _logger.info(str(tgl))
+                    #
+                    # if not (tgl.hour == 16 and tgl.minute == 59):
+                    #     tgl = tgl - relativedelta(hours=7) + relativedelta(days=1)
+                    #     _logger.info('Masuk List IF : ' + str(tgl))
+                    #
+                    # last_day = self.last_day_of_month(self.billing_year, self.billing_month).day
+                    #
+                    # if last_day > tgl.day:
+                    #     str_start_date = str(self.billing_year) + "-" + str(self.billing_month).zfill(2) + "-" + str(tgl.day).zfill(2)
+                    # else:
+                    #     str_start_date = str(self.billing_year) + "-" + str(self.billing_month).zfill(2) + "-" + str(last_day).zfill(2)
+                    #
+                    # start_date = datetime.strptime(str_start_date, "%Y-%m-%d") + relativedelta(months=1)
+                    #
+                    # _logger.info(line.unit_kerja.kode)
+                    # _logger.info(str_start_date)
+                    #
+                    # # duration = relativedelta(months=+1)
+                    # #start_date = datetime.strptime(str(d_year) + '-' + str(d_month) + '-' + str(d_date) + ' 00:00:00' , "%Y-%m-%d %H:%M:%S")
+                    # str_start_date = start_date.strftime('%d/%m/%Y')
+                    # end_date = start_date + relativedelta(months=+1)
+                    # str_end_date = end_date.strftime('%d/%m/%Y')
 
+                    ## ==============================
 
+                    # tglawal = fields.Datetime.from_string(line.akhir)
+                    # str_start_date = str(self.billing_year) + "-" + str(self.billing_month).zfill(2) + "-" + str(
+                    #     tglawal.day).zfill(
+                    #     2) + " 00:00:00"
 
-                    # duration = relativedelta(months=+1)
-                    #start_date = datetime.strptime(str(d_year) + '-' + str(d_month) + '-' + str(d_date) + ' 00:00:00' , "%Y-%m-%d %H:%M:%S")
-                    str_start_date = start_date.strftime('%d/%m/%Y')
-                    end_date = start_date + relativedelta(months=+1)
-                    str_end_date = end_date.strftime('%d/%m/%Y')
+                    now = fields.Datetime.from_string(line.akhir)
+                    _logger.info(str(line.unit_kerja.kode))
+                    _logger.info(str(now))
+                    if not (now.hour == 16 and now.minute == 59):
+                        now = now + relativedelta(hours=7)
+                        _logger.info('Masuk List IF : ' + str(now))
+                    _logger.info(str(now))
+                    today = datetime(self.billing_year, self.billing_month, now.day)
+                    _logger.info(str(today))
+                    startdate = today + relativedelta(months=1)
+                    _logger.info("startdate = " + str(startdate))
+
+                    startdates = startdate.date()
+                    _logger.info("startdates = " + str(startdates))
+                    str_start_date = startdates.strftime('%d/%m/%Y')
+
+                    enddate = today + relativedelta(months=2)
+                    _logger.info("enddate = " + str(enddate))
+                    enddates = enddate.date()
+                    _logger.info("enddates = " + str(enddates))
+                    str_end_date = enddates.strftime('%d/%m/%Y')
 
                     billing_line_obj = self.env['billingperiode.line']
                     vals = {}
@@ -117,8 +157,8 @@ class BillingPeriode(models.Model):
                     vals.update(
                         {'description': 'Contribution A ( ' + line.jenis_member + ' ) periode ' + str_start_date + ' - ' + str_end_date})
                     vals.update({'amount': val_harga})
-                    vals.update({'awal': start_date})
-                    vals.update({'akhir': end_date})
+                    vals.update({'awal': startdate})
+                    vals.update({'akhir': enddate})
                     vals.update({'jenis_langganan': line.jenis_member})
                     billing_line_save = billing_line_obj.sudo().create(vals)
 
