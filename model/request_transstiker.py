@@ -569,18 +569,18 @@ class RequestTransStiker(models.Model):
                         DATE = datetime.now()   # tgl saat ini
 
                         if tgl < DATE:
-
+                            # ambil tanggal akhir expired
                             dt1 = datetime.strptime(str(self.akhir_old), '%Y-%m-%d %H:%M:%S')
                             start_dt = date(dt1.year, dt1.month, dt1.day)
+
+                            # ambil tanggal today
                             dt2 = datetime.now()
                             end_dt = date(dt2.year, dt2.month, dt2.day)
+
                             jml = 0
-                            month = ""
-                            for dt in self.env['request.transstiker'].daterange(start_dt, end_dt):
-                                if dt.strftime("%m") == month:
-                                    continue
-                                else:
-                                    month = dt.strftime("%m")
+                            for dt in self.daterange(start_dt, end_dt):
+                                # menentukan pertanggal 1 berdasarkan narik billing
+                                if dt.day == 1:
                                     jml = jml + 1
 
                             hasil = int(jenis_member_nd_ids) * jml
@@ -614,18 +614,17 @@ class RequestTransStiker(models.Model):
                         DATE = datetime.now()  # tgl saat ini
 
                         if tgl < DATE:
-
+                            # ambil tanggal akhir expired
                             dt1 = datetime.strptime(str(self.akhir_old), '%Y-%m-%d %H:%M:%S')
                             start_dt = date(dt1.year, dt1.month, dt1.day)
+
+                            # ambil tanggal today
                             dt2 = datetime.now()
                             end_dt = date(dt2.year, dt2.month, dt2.day)
+
                             jml = 0
-                            month = ""
-                            for dt in self.env['request.transstiker'].daterange(start_dt, end_dt):
-                                if dt.strftime("%m") == month:
-                                    continue
-                                else:
-                                    month = dt.strftime("%m")
+                            for dt in self.daterange(start_dt, end_dt):
+                                if dt.day == 1:
                                     jml = jml + 1
 
                             hasil = int(jenis_member_rd_ids) * jml
@@ -657,18 +656,17 @@ class RequestTransStiker(models.Model):
                         DATE = datetime.now()  # tgl saat ini
 
                         if tgl < DATE:
-
+                            # ambil tanggal akhir expired
                             dt1 = datetime.strptime(str(self.akhir_old), '%Y-%m-%d %H:%M:%S')
                             start_dt = date(dt1.year, dt1.month, dt1.day)
+
+                            # ambil tanggal today
                             dt2 = datetime.now()
                             end_dt = date(dt2.year, dt2.month, dt2.day)
+
                             jml = 0
-                            month = ""
-                            for dt in self.env['request.transstiker'].daterange(start_dt, end_dt):
-                                if dt.strftime("%m") == month:
-                                    continue
-                                else:
-                                    month = dt.strftime("%m")
+                            for dt in self.daterange(start_dt, end_dt):
+                                if dt.day == 1:
                                     jml = jml + 1
 
                             hasil = int(jenis_member_th_ids) * jml

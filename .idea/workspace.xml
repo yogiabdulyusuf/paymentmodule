@@ -3,9 +3,11 @@
   <component name="ChangeListManager">
     <list default="true" id="7d06e309-00d6-43d7-ab4f-0f81211e74d1" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/model/billing.py" beforeDir="false" afterPath="$PROJECT_DIR$/model/billing.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/__manifest__.py" beforeDir="false" afterPath="$PROJECT_DIR$/__manifest__.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/model/request_transstiker.py" beforeDir="false" afterPath="$PROJECT_DIR$/model/request_transstiker.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/view/request_transstiker_view.xml" beforeDir="false" afterPath="$PROJECT_DIR$/view/request_transstiker_view.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/view/top_menu.xml" beforeDir="false" afterPath="$PROJECT_DIR$/view/top_menu.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wizard/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/wizard/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wizard/wizard_report_request_details.py" beforeDir="false" afterPath="$PROJECT_DIR$/wizard/wizard_report_request_details.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -83,34 +85,41 @@
     <session id="1609919354">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="4" />
+          <entry key="project.closed" value="5" />
           <entry key="project.open.time.14" value="1" />
           <entry key="project.open.time.2" value="1" />
           <entry key="project.open.time.26" value="1" />
           <entry key="project.open.time.27" value="1" />
           <entry key="project.open.time.33" value="1" />
           <entry key="project.open.time.6" value="1" />
-          <entry key="project.opened" value="6" />
+          <entry key="project.open.time.9" value="1" />
+          <entry key="project.opened" value="7" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
-          <entry key="py" value="14" />
+          <entry key="py" value="22" />
+          <entry key="xml" value="2" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="Python" value="14" />
+          <entry key="Python" value="22" />
+          <entry key="XML" value="2" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="py" value="788" />
+          <entry key="py" value="1033" />
+          <entry key="txt" value="12" />
+          <entry key="xml" value="54" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="Python" value="788" />
+          <entry key="PLAIN_TEXT" value="12" />
+          <entry key="Python" value="1033" />
+          <entry key="XML" value="54" />
         </counts>
       </usages-collector>
     </session>
@@ -120,16 +129,25 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/model/request_transstiker.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="249">
-              <caret line="376" lean-forward="true" selection-start-line="376" selection-end-line="376" />
+            <state relative-caret-position="82">
+              <caret line="1754" column="51" selection-start-line="1754" selection-start-column="51" selection-end-line="1754" selection-end-column="51" />
               <folding>
                 <element signature="e#0#36#0" expanded="true" />
                 <element signature="e#8736#12709#0" />
-                <marker date="1570584272996" expanded="true" signature="111390:111437" ph="..." />
+                <marker date="1570589521215" expanded="true" signature="111123:111170" ph="..." />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/wizard/wizard_report_request_details.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="833">
+              <caret line="64" lean-forward="true" selection-start-line="64" selection-end-line="64" />
             </state>
           </provider>
         </entry>
@@ -137,8 +155,41 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/model/billing.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="619">
+            <state relative-caret-position="1933">
               <caret line="160" column="49" selection-start-line="160" selection-start-column="42" selection-end-line="160" selection-end-column="49" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../rdm/jakc_redemption_trans/model/jakc_redemption_trans.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="563">
+              <caret line="2336" column="28" lean-forward="true" selection-start-line="2315" selection-start-column="8" selection-end-line="2336" selection-end-column="28" />
+              <folding>
+                <element signature="e#0#36#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/wizard/wizard_report_request_transaction.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="561">
+              <caret line="81" lean-forward="true" selection-start-line="81" selection-end-line="81" />
+              <folding>
+                <element signature="e#0#39#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/wizard/wizard_report_request_transaction_view.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="510">
+              <caret line="30" column="13" lean-forward="true" selection-start-line="30" selection-start-column="13" selection-end-line="30" selection-end-column="13" />
             </state>
           </provider>
         </entry>
@@ -154,7 +205,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>JENIS MOBIL : &quot; + self.jeni</find>
       <find>unlink()</find>
       <find>v.</find>
       <find>transaksi_stiker_tes</find>
@@ -184,6 +234,7 @@
       <find>done_pay</find>
       <find>done_pa</find>
       <find>calculate_start_end_date</find>
+      <find>calculate_harga_kontribusi</find>
     </findStrings>
     <replaceStrings>
       <replace>awal</replace>
@@ -206,8 +257,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/report/report_request_details_template.xml" />
-        <option value="$PROJECT_DIR$/report/report_request_details.xml" />
         <option value="$PROJECT_DIR$/__init__.py" />
         <option value="$PROJECT_DIR$/security/groups.xml" />
         <option value="$PROJECT_DIR$/view/payment_module_view.xml" />
@@ -241,29 +290,32 @@
         <option value="D:/parkingconnector/models/parking_connector.py" />
         <option value="$PROJECT_DIR$/wizard/wizard_check_kartu.py" />
         <option value="D:/paymentmodule_dev/model/request_transstiker.py" />
-        <option value="$PROJECT_DIR$/wizard/__init__.py" />
-        <option value="$PROJECT_DIR$/__manifest__.py" />
         <option value="$PROJECT_DIR$/wizard/wizard_check_kartu_view.xml" />
         <option value="D:/paymentmodule_dev/paymentmodule/view/request_transstiker_view.xml" />
         <option value="D:/paymentmodule_dev/paymentmodule/model/request_transstiker.py" />
-        <option value="$PROJECT_DIR$/view/top_menu.xml" />
         <option value="$PROJECT_DIR$/wizard/wizard_report_request_details_view.xml" />
         <option value="$PROJECT_DIR$/security/ir.model.access.csv" />
         <option value="$PROJECT_DIR$/view/billing_view.xml" />
-        <option value="$PROJECT_DIR$/wizard/wizard_report_request_details.py" />
         <option value="$PROJECT_DIR$/view/request_transstiker_view.xml" />
         <option value="$PROJECT_DIR$/../request_transstiker.py" />
         <option value="$PROJECT_DIR$/../paymentmodule_dev/paymentmodule/model/billing.py" />
         <option value="$PROJECT_DIR$/model/billing.py" />
         <option value="$PROJECT_DIR$/../paymentmodule_dev/paymentmodule/model/request_transstiker.py" />
         <option value="$PROJECT_DIR$/model/request_transstiker.py" />
+        <option value="$PROJECT_DIR$/wizard/wizard_report_request_details.py" />
+        <option value="$PROJECT_DIR$/wizard/wizard_report_request_transaction_view.xml" />
+        <option value="$PROJECT_DIR$/wizard/__init__.py" />
+        <option value="$PROJECT_DIR$/__manifest__.py" />
+        <option value="$PROJECT_DIR$/view/top_menu.xml" />
+        <option value="$PROJECT_DIR$/wizard/wizard_report_request_transaction.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="y" value="35" />
+    <option name="x" value="5" />
+    <option name="y" value="33" />
     <option name="width" value="1600" />
-    <option name="height" value="802" />
+    <option name="height" value="801" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -589,13 +641,21 @@
       <option name="project" value="LOCAL" />
       <updated>1567482905016</updated>
     </task>
-    <option name="localTasksCounter" value="37" />
+    <task id="LOCAL-00037" summary="update stop billing">
+      <created>1570584684675</created>
+      <option name="number" value="00037" />
+      <option name="presentableId" value="LOCAL-00037" />
+      <option name="project" value="LOCAL" />
+      <updated>1570584684676</updated>
+    </task>
+    <option name="localTasksCounter" value="38" />
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="35" width="1600" height="802" extended-state="0" />
+    <frame x="5" y="33" width="1600" height="801" extended-state="1" />
+    <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" internal_type="SLIDING" order="0" type="SLIDING" visible="true" weight="0.22151089" />
+      <window_info content_ui="combo" id="Project" internal_type="SLIDING" order="0" type="SLIDING" weight="0.22151089" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.24968314" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -635,7 +695,8 @@
     <MESSAGE value="init update" />
     <MESSAGE value="init update tgl 02-Agus-2019" />
     <MESSAGE value="update tgl akhir tidak sinkron pada stiker" />
-    <option name="LAST_COMMIT_MESSAGE" value="update tgl akhir tidak sinkron pada stiker" />
+    <MESSAGE value="update stop billing" />
+    <option name="LAST_COMMIT_MESSAGE" value="update stop billing" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -667,22 +728,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/model/request_transstiker.py</url>
-          <line>1060</line>
+          <line>1058</line>
           <option name="timeStamp" value="31" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://D:/Project-0034-10.0/jakc_jewerly/models/product.py" />
-    <entry file="file://D:/Project-0034-10.0/jakc_jewerly/views/product_view.xml" />
-    <entry file="file://$PROJECT_DIR$/wizard/wizard_not_approve.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="408">
-          <caret line="26" column="26" lean-forward="true" selection-start-line="26" selection-start-column="26" selection-end-line="26" selection-end-column="26" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/wizard/wizard_not_approve_view.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="34">
@@ -817,24 +869,10 @@
     <entry file="file://D:/parkingconnector/models/parking_connector.py" />
     <entry file="file://D:/paymentmodule_dev/model/request_transstiker.py" />
     <entry file="file://D:/paymentmodule_live/paymentmodule/model/request_transstiker.py" />
-    <entry file="file://$PROJECT_DIR$/wizard/__init__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="4" column="25" lean-forward="true" selection-start-line="4" selection-start-column="25" selection-end-line="4" selection-end-column="25" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/wizard/wizard_check_kartu_view.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="238">
           <caret line="14" column="25" lean-forward="true" selection-start-line="14" selection-start-column="25" selection-end-line="14" selection-end-column="25" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/__manifest__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="438">
-          <caret line="36" column="56" lean-forward="true" selection-start-line="36" selection-start-column="56" selection-end-line="36" selection-end-column="56" />
         </state>
       </provider>
     </entry>
@@ -875,13 +913,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/view/top_menu.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="7" column="298" selection-start-line="7" selection-start-column="298" selection-end-line="7" selection-end-column="298" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/wizard/wizard_report_request_details_view.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="391">
@@ -890,24 +921,17 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/security/ir.model.access.csv">
+      <provider editor-type-id="csv-table-editor">
+        <state showInfoPanel="true" fixedHeaders="false" rowLines="3" />
+      </provider>
       <provider editor-type-id="text-editor">
         <state relative-caret-position="221">
           <caret line="13" column="85" lean-forward="true" selection-start-line="13" selection-start-column="85" selection-end-line="13" selection-end-column="85" />
         </state>
       </provider>
-      <provider editor-type-id="csv-table-editor">
-        <state showInfoPanel="true" fixedHeaders="false" rowLines="3" />
-      </provider>
       <provider selected="true" editor-type-id="csv-text-editor">
         <state relative-caret-position="143">
           <caret line="9" column="61" lean-forward="true" selection-start-line="9" selection-start-column="61" selection-end-line="9" selection-end-column="61" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wizard/wizard_report_request_details.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="374">
-          <caret line="47" column="70" selection-start-line="47" selection-start-column="62" selection-end-line="47" selection-end-column="70" />
         </state>
       </provider>
     </entry>
@@ -960,28 +984,86 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/model/billing.py">
+    <entry file="file://$PROJECT_DIR$/../paymentmodule_dev/paymentmodule/model/request_transstiker.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="619">
-          <caret line="160" column="49" selection-start-line="160" selection-start-column="42" selection-end-line="160" selection-end-column="49" />
+        <state relative-caret-position="7497">
+          <caret line="446" column="22" selection-start-line="446" selection-start-column="22" selection-end-line="446" selection-end-column="65" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../paymentmodule_dev/paymentmodule/model/request_transstiker.py">
+    <entry file="file://$PROJECT_DIR$/wizard/__init__.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="237">
-          <caret line="461" column="68" lean-forward="true" selection-start-line="458" selection-start-column="8" selection-end-line="470" selection-end-column="102" />
+        <state relative-caret-position="85">
+          <caret line="5" column="25" lean-forward="true" selection-start-line="5" selection-start-column="25" selection-end-line="5" selection-end-column="25" />
+          <folding>
+            <element signature="e#0#36#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/view/top_menu.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="15" column="65" lean-forward="true" selection-start-line="15" selection-start-column="65" selection-end-line="15" selection-end-column="65" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/__manifest__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="234">
+          <caret line="24" column="37" lean-forward="true" selection-start-line="24" selection-start-column="37" selection-end-line="24" selection-end-column="37" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/model/request_transstiker.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="249">
-          <caret line="376" lean-forward="true" selection-start-line="376" selection-end-line="376" />
+        <state relative-caret-position="82">
+          <caret line="1754" column="51" selection-start-line="1754" selection-start-column="51" selection-end-line="1754" selection-end-column="51" />
           <folding>
             <element signature="e#0#36#0" expanded="true" />
             <element signature="e#8736#12709#0" />
-            <marker date="1570584272996" expanded="true" signature="111390:111437" ph="..." />
+            <marker date="1570589521215" expanded="true" signature="111123:111170" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wizard/wizard_report_request_details.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="833">
+          <caret line="64" lean-forward="true" selection-start-line="64" selection-end-line="64" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/model/billing.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1933">
+          <caret line="160" column="49" selection-start-line="160" selection-start-column="42" selection-end-line="160" selection-end-column="49" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../rdm/jakc_redemption_trans/model/jakc_redemption_trans.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="563">
+          <caret line="2336" column="28" lean-forward="true" selection-start-line="2315" selection-start-column="8" selection-end-line="2336" selection-end-column="28" />
+          <folding>
+            <element signature="e#0#36#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wizard/wizard_report_request_transaction_view.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="510">
+          <caret line="30" column="13" lean-forward="true" selection-start-line="30" selection-start-column="13" selection-end-line="30" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wizard/wizard_report_request_transaction.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="561">
+          <caret line="81" lean-forward="true" selection-start-line="81" selection-end-line="81" />
+          <folding>
+            <element signature="e#0#39#0" expanded="true" />
           </folding>
         </state>
       </provider>

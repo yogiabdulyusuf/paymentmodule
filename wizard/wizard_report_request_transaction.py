@@ -25,7 +25,7 @@ except ImportError:
 
 
 class WizardReportRequestDetails(models.TransientModel):
-    _name = 'wizard.report.request.details'
+    _name = 'wizard.report.request.transaction'
     _description = 'Open Sale Details Report'
 
     @api.model
@@ -79,6 +79,9 @@ class WizardReportRequestDetails(models.TransientModel):
             args.append((('jenis_member', '=', self.jenis_member)))
         elif self.jenis_member == '2nd':
             args.append((('jenis_member', '!=', '1st')))
+
+        if self.jenis_transaksi:
+            args.append((('jenis_transaksi', '=', self.jenis_transaksi)))
 
 
 
@@ -137,6 +140,11 @@ class WizardReportRequestDetails(models.TransientModel):
 
     start_date = fields.Date(required=True, )
     end_date = fields.Date(required=True, )
+    jenis_transaksi = fields.Selection(string="Jenis Transaksi",
+                                       selection=[('langganan_baru', 'LANGGANAN BARU'),
+                                                  ('perpanjang_baru', 'PERPANJANG BARU'), ('perpanjang', 'PERPANJANG'),
+                                                  ('stop', 'STOP BILLING'), ],
+                                       required=False, readonly=False)
     billing_status = fields.Selection(string="Billing Status", selection=[('billing', 'Billing'), ('non_billing', 'Non Billing'), ('billing_non_billing', 'Billing & Non Billing'), ], required=False, default='billing')
     transaction_status = fields.Selection(string="Transaction Status", selection=[('done', 'Done'),('payment', 'Waiting for Payment'),('cancel', 'Cancel')], required=False, default='done')
     jenis_member = fields.Selection(string="Mobil ke", selection=[('1st', '1st'), ('2nd', '>= 2nd') ], required=False, readonly=False)
@@ -207,7 +215,7 @@ class WizardReportRequestDetails(models.TransientModel):
             return {
                 'view_mode': 'form',
                 'res_id': wizard.id,
-                'res_model': 'wizard.report.request.details',
+                'res_model': 'wizard.report.request.transaction',
                 'view_type': 'form',
                 'type': 'ir.actions.act_window',
                 'context': self.env.context,

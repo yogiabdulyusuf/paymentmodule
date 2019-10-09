@@ -35,6 +35,7 @@ Payment Module
 		"report/report_monthly_billing.xml",
 		"report/report_monthly_billing_template.xml",
 		"wizard/wizard_report_request_details_view.xml",
+		"wizard/wizard_report_request_transaction_view.xml",
 		"wizard/wizard_add_card_member_view.xml",
 		"wizard/wizard_not_approve_view.xml",
 		"wizard/wizard_report_billing_view.xml",

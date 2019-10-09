@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_wizard_report_request_transaction" model="ir.ui.view">
+        <field name="name">Report Transaction</field>
+        <field name="model">wizard.report.request.transaction</field>
+        <field name="arch" type="xml">
+            <form string="Request Details">
+                <group>
+                    <field name="report_printed" invisible="1"/>
+                    <field name="start_date"/>
+                    <field name="end_date"/>
+                    <field name="jenis_transaksi"/>
+                    <field name="billing_status"/>
+                    <field name="jenis_member"/>
+                    <field name="transaction_status"/>
+                </group>
+                <group attrs="{'invisible':[('report_printed','=',False)]}">
+                    <separator string="Report done" colspan="4"/>
+                    <group>
+                        <field name="report_filename"/>
+                        <field name="report_file" readonly="1" filename="report_filename"/>
+                    </group>
+                </group>
+                <footer>
+                    <button name="generate_report" string="Print to PDF" type="object" class="btn-primary"/> or
+                    <button name="generate_report_excel" string="Print to Excel" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-default" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="act_wizard_request_transaction" model="ir.actions.act_window">
+        <field name="name">act.wizard.report.request.transaction.form</field>
+        <field name="res_model">wizard.report.request.transaction</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_wizard_report_request_transaction"/>
+        <field name="target">new</field>
+    </record>
+
+</odoo>

@@ -12,7 +12,8 @@
 		<menuitem	id="menu_detail_billing_periode"	name="Detail Billing" parent="payment_menu_group"	action="act_detail_billing" groups="paymentmodule.group_fo_billing"/>
 
 	<menuitem id="report_menu_group" parent="payment_menu_root" name="Report"  sequence="2" groups="paymentmodule.group_fo_user,paymentmodule.group_fo_billing,paymentmodule.group_fo_manager"/>
-		<menuitem	id="menu_wizard_request_stiker"	name="Monthly Transaction" parent="report_menu_group"	action="act_wizard_request_stiker" groups="paymentmodule.group_fo_user,paymentmodule.group_fo_billing,paymentmodule.group_fo_manager"/>
+		<menuitem	id="menu_wizard_request_transaction"	name="Transaction" parent="report_menu_group"	action="act_wizard_request_transaction" groups="paymentmodule.group_fo_user,paymentmodule.group_fo_manager"/>
+		<menuitem	id="menu_wizard_request_stiker"	name="Monthly Transaction" parent="report_menu_group"	action="act_wizard_request_stiker" groups="paymentmodule.group_fo_billing,paymentmodule.group_fo_manager"/>
 		<menuitem	id="menu_wizard_report_billing"	name="Monthly Billing" parent="report_menu_group"	action="act_wizard_report_monthly_billing" groups="paymentmodule.group_fo_user,paymentmodule.group_fo_billing"/>
 
 </odoo>
