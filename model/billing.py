@@ -28,6 +28,15 @@ class BillingPeriode(models.Model):
     def last_day_of_month(self, year, month):
         return datetime.strptime(str(year) + '-' + str(month + 1).zfill(2) + '-01', '%Y-%m-%d') + relativedelta(days=-1)
 
+    def check_date(self, year, month, day):
+        correctDate = None
+        try:
+            newDate = datetime(year, month, day)
+            correctDate = True
+        except ValueError:
+            correctDate = False
+        return correctDate
+
     @api.one
     def trans_generate_file(self):
         output = StringIO.StringIO()
@@ -134,17 +143,31 @@ class BillingPeriode(models.Model):
                         now = now + relativedelta(hours=7)
                         _logger.info('Masuk List IF : ' + str(now))
                     _logger.info(str(now))
-                    today = datetime(self.billing_year, self.billing_month, now.day)
-                    _logger.info(str(today))
-                    startdate = today + relativedelta(months=1)
+
+                    month = self.billing_month + 1
+                    days = [28, 29, 30, 31]
+                    for x in days:
+                        if x == now.day:
+                            check = self.check_date(self.billing_year, month, now.day)
+                            if check:
+                                startdate = datetime(self.billing_year, month, now.day)  ## 2019-11-31
+                            else:
+                                startdate = datetime(self.billing_year, month+1, 1)
+                                startdate = startdate - relativedelta(days=1)
+                        else:
+                            startdate = datetime(self.billing_year, month, now.day) ## 2019-11-31
+
+                    # _logger.info(str(today))
+                    # startdate = today + relativedelta(months=1)
                     _logger.info("startdate = " + str(startdate))
 
                     startdates = startdate.date()
                     _logger.info("startdates = " + str(startdates))
                     str_start_date = startdates.strftime('%d/%m/%Y')
 
-                    enddate = today + relativedelta(months=2)
+                    enddate = startdate + relativedelta(months=1)
                     _logger.info("enddate = " + str(enddate))
+
                     enddates = enddate.date()
                     _logger.info("enddates = " + str(enddates))
                     str_end_date = enddates.strftime('%d/%m/%Y')

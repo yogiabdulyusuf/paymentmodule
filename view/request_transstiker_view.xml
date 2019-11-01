@@ -74,6 +74,7 @@
                                         <field name="telphone" attrs="{'readonly': ['|',('jenis_transaksi','!=','langganan_baru')], } "/>
                                         <field name="no_id" attrs="{'readonly': [('jenis_mobil', '!=', 'S')], 'required': [('jenis_mobil', '=', 'S')],}"/>
                                         <field name="duration" attrs="{'invisible': [('jenis_transaksi','not in',('langganan_baru','perpanjang','perpanjang_baru'))], 'required': [('jenis_transaksi','in', ['langganan_baru','perpanjang','perpanjang_baru'])]}" />
+                                        <field name="def_akhir" />
                                         <field name="awal" />
                                         <field name="akhir" />
                                         <field name="val_harga"/>

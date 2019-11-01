@@ -429,8 +429,8 @@ class RequestTransStiker(models.Model):
 
 
     # END DATE UPDATe
-    @api.onchange('duration','jenis_transaksi','stiker_id','jenis_mobil')
-    @api.depends('stiker_id','name','duration','jenis_mobil')
+    @api.onchange('duration','jenis_transaksi','stiker_id','jenis_mobil','def_akhir')
+    @api.depends('stiker_id','name','duration','jenis_mobil','def_akhir')
     def calculate_start_end_date(self):
 
         # Pengecekan jika field duration & start_date tidak diisi, maka field end_date akan di update sama seperti field start_date
@@ -444,7 +444,14 @@ class RequestTransStiker(models.Model):
             cal_tglawal = tglawal - relativedelta(hours=7)
             self.awal = cal_tglawal
 
+            if self.def_akhir:
+                if self.cara_bayar == 'billing':
+                    self.duration = 300
+                else:
+                    raise ValidationError("Cara Pembayaran Harus Billing")
+
             tglakhir = tglawal + relativedelta(months=self.duration)
+
             str_end_date = str(tglakhir.year) + "-" + str(tglakhir.month).zfill(2) + "-" + str(tglakhir.day).zfill(2) + " 23:59:59"
             self.akhir = datetime.strptime(str_end_date, "%Y-%m-%d %H:%M:%S") - relativedelta(hours=7)
 
@@ -456,7 +463,14 @@ class RequestTransStiker(models.Model):
             cal_tglawal = tglawal - relativedelta(hours=7)
             self.awal = cal_tglawal
 
+            if self.def_akhir:
+                if self.cara_bayar == 'billing':
+                    self.duration = 300
+                else:
+                    raise ValidationError("Cara Pembayaran Harus Billing")
+
             tglakhir = tglawal + relativedelta(months=self.duration)
+
             str_end_date = str(tglakhir.year) + "-" + str(tglakhir.month).zfill(2) + "-" + str(tglakhir.day).zfill(
                 2) + " 23:59:59"
             self.akhir = datetime.strptime(str_end_date, "%Y-%m-%d %H:%M:%S") - relativedelta(hours=7)
@@ -470,30 +484,43 @@ class RequestTransStiker(models.Model):
             cal_tglawal = tglawal - relativedelta(hours=7)
             self.awal = cal_tglawal
 
+            if self.def_akhir:
+                if self.cara_bayar == 'billing':
+                    self.duration = 300
+                else:
+                    raise ValidationError("Cara Pembayaran Harus Billing")
+
             tglakhir = tglawal + relativedelta(months=self.duration)
+
             str_end_date = str(tglakhir.year) + "-" + str(tglakhir.month).zfill(2) + "-" + str(tglakhir.day).zfill(
                 2) + " 23:59:59"
             self.akhir = datetime.strptime(str_end_date, "%Y-%m-%d %H:%M:%S") - relativedelta(hours=7)
 
         elif self.jenis_transaksi == 'stop':
-            tglawal = fields.Datetime.from_string(self.akhir_old) + relativedelta(hours=7)
             date_now = datetime.now()
-            tglawal = datetime(date_now.year, date_now.month, tglawal.day)
-            str_start_date = str(tglawal.year) + "-" + str(tglawal.month).zfill(2) + "-" + str(tglawal.day).zfill(
-                2) + " 00:00:00"
-            tglawal = datetime.strptime(str_start_date, "%Y-%m-%d %H:%M:%S")
+            tglawal = fields.Datetime.from_string(self.akhir_old) + relativedelta(hours=7)
+            deposit_date = tglawal - relativedelta(months=2)
 
-            self.awal = tglawal - relativedelta(hours=7)
-            tglakhir = tglawal + relativedelta(months=self.duration)
-            str_end_date = str(tglakhir.year) + "-" + str(tglakhir.month).zfill(2) + "-" + str(tglakhir.day).zfill(
-                2) + " 23:59:59"
-            self.akhir = datetime.strptime(str_end_date, "%Y-%m-%d %H:%M:%S") - relativedelta(hours=7)
+            if date_now < tglawal:
+                if date_now < tglawal and date_now > deposit_date:
+                    raise ValidationError("Can't stop billing because customer has a deposit")
+                else:
 
-            # start_date = fields.Datetime.from_string(self.akhir_old)
-            # # Mengupdate field end_date dari perhitungan variabel start ditambah variabel duration
-            # if start_date:
-            #     self.awal = start_date
-            #     self.akhir = start_date + relativedelta(months=self.duration)
+                    tglawal = datetime(date_now.year, date_now.month, tglawal.day)
+                    str_start_date = str(tglawal.year) + "-" + str(tglawal.month).zfill(2) + "-" + str(
+                        tglawal.day).zfill(
+                        2) + " 00:00:00"
+                    tglawal = datetime.strptime(str_start_date, "%Y-%m-%d %H:%M:%S")
+
+                    self.awal = tglawal - relativedelta(hours=7)
+                    tglakhir = tglawal + relativedelta(months=self.duration)
+                    str_end_date = str(tglakhir.year) + "-" + str(tglakhir.month).zfill(2) + "-" + str(
+                        tglakhir.day).zfill(
+                        2) + " 23:59:59"
+                    self.akhir = datetime.strptime(str_end_date, "%Y-%m-%d %H:%M:%S") - relativedelta(hours=7)
+
+            else:
+                raise ValidationError("Can't stop billing because billing expired")
 
 
     @api.onchange('beli_stiker')
@@ -530,7 +557,7 @@ class RequestTransStiker(models.Model):
 
     @api.onchange('baru','cara_bayar','jenis_transaksi','stiker_id','duration','jenis_mobil','jenis_member')
     def calculate_harga_kontribusi(self):
-
+        self.calculate_start_end_date()
         if self.baru == True:
 
             jenis_member_st_ids = self.env.user.company_id.jenis_member_st
@@ -1915,6 +1942,7 @@ class RequestTransStiker(models.Model):
 
             state = "payment"
             if trans.baru == True and trans.amount == 0:
+                self.trans_done_payment()
                 state = "done"
 
             if trans.ganti_nopol == True and trans.amount == 0:
@@ -2021,6 +2049,7 @@ class RequestTransStiker(models.Model):
                                        selection=[('langganan_baru', 'LANGGANAN BARU'), ('perpanjang_baru', 'PERPANJANG BARU'), ('perpanjang', 'PERPANJANG'),
                                                   ('stop', 'STOP BILLING'), ],
                                        required=False, readonly=False)
+    def_akhir = fields.Boolean(string="Duration Billing", default=False)
     keterangan = fields.Text(string="Keterangan", required=False, readonly=False)
     cara_bayar = fields.Selection(string="Cara Pembayaran",
                                   selection=[('billing', 'Billing'), ('non_billing', 'Non Billing'), ],
