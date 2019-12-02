@@ -4,8 +4,6 @@
     <list default="true" id="7d06e309-00d6-43d7-ab4f-0f81211e74d1" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/model/billing.py" beforeDir="false" afterPath="$PROJECT_DIR$/model/billing.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/model/request_transstiker.py" beforeDir="false" afterPath="$PROJECT_DIR$/model/request_transstiker.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/view/request_transstiker_view.xml" beforeDir="false" afterPath="$PROJECT_DIR$/view/request_transstiker_view.xml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -83,18 +81,20 @@
     <session id="1609919354">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="10" />
+          <entry key="project.closed" value="13" />
           <entry key="project.open.time.0" value="3" />
           <entry key="project.open.time.14" value="1" />
           <entry key="project.open.time.2" value="1" />
+          <entry key="project.open.time.21" value="1" />
           <entry key="project.open.time.23" value="1" />
-          <entry key="project.open.time.26" value="1" />
+          <entry key="project.open.time.24" value="1" />
+          <entry key="project.open.time.26" value="2" />
           <entry key="project.open.time.27" value="1" />
           <entry key="project.open.time.29" value="1" />
           <entry key="project.open.time.33" value="1" />
           <entry key="project.open.time.6" value="1" />
           <entry key="project.open.time.9" value="1" />
-          <entry key="project.opened" value="12" />
+          <entry key="project.opened" value="15" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -111,15 +111,15 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="py" value="1469" />
-          <entry key="txt" value="25" />
+          <entry key="py" value="1517" />
+          <entry key="txt" value="32" />
           <entry key="xml" value="66" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="PLAIN_TEXT" value="25" />
-          <entry key="Python" value="1469" />
+          <entry key="PLAIN_TEXT" value="32" />
+          <entry key="Python" value="1517" />
           <entry key="XML" value="66" />
         </counts>
       </usages-collector>
@@ -129,12 +129,12 @@
     <favorites_list name="paymentmodule" />
   </component>
   <component name="FileEditorManager">
-    <leaf>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/model/billing.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="408">
-              <caret line="167" column="64" selection-start-line="167" selection-start-column="64" selection-end-line="167" selection-end-column="64" />
+            <state relative-caret-position="-164">
+              <caret line="144" column="42" lean-forward="true" selection-start-line="144" selection-start-column="42" selection-end-line="144" selection-end-column="42" />
             </state>
           </provider>
         </entry>
@@ -142,11 +142,12 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/model/request_transstiker.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="289">
-              <caret line="686" column="61" selection-start-line="686" selection-start-column="61" selection-end-line="686" selection-end-column="61" />
+            <state relative-caret-position="-470">
+              <caret line="1415" column="63" lean-forward="true" selection-start-line="1415" selection-start-column="63" selection-end-line="1415" selection-end-column="63" />
               <folding>
                 <element signature="e#0#36#0" expanded="true" />
                 <element signature="e#8736#12709#0" />
+                <element signature="e#40488#48828#0" />
                 <marker date="1571285948703" expanded="true" signature="112142:112189" ph="..." />
               </folding>
             </state>
@@ -164,7 +165,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>prose</find>
       <find>adm</find>
       <find>new_jenis</find>
       <find>proses</find>
@@ -176,7 +176,6 @@
       <find>add</find>
       <find>self.ganti_nopol == True</find>
       <find>approve</find>
-      <find>proses_ganti_nopol</find>
       <find>re</find>
       <find>strf</find>
       <find>days</find>
@@ -194,6 +193,8 @@
       <find>calculate_start_end_date</find>
       <find>calculate_harga_kontribusi()</find>
       <find>calculate_harga_kontribusi</find>
+      <find>proses_ganti_nopol</find>
+      <find>trans_stiker_id_l</find>
     </findStrings>
     <replaceStrings>
       <replace>awal</replace>
@@ -282,6 +283,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -318,7 +320,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -614,7 +615,14 @@
       <option name="project" value="LOCAL" />
       <updated>1570618343999</updated>
     </task>
-    <option name="localTasksCounter" value="39" />
+    <task id="LOCAL-00039" summary="update update billing">
+      <created>1572594578317</created>
+      <option name="number" value="00039" />
+      <option name="presentableId" value="LOCAL-00039" />
+      <option name="project" value="LOCAL" />
+      <updated>1572594578317</updated>
+    </task>
+    <option name="localTasksCounter" value="40" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -663,7 +671,8 @@
     <MESSAGE value="update tgl akhir tidak sinkron pada stiker" />
     <MESSAGE value="update stop billing" />
     <MESSAGE value="update update report" />
-    <option name="LAST_COMMIT_MESSAGE" value="update update report" />
+    <MESSAGE value="update update billing" />
+    <option name="LAST_COMMIT_MESSAGE" value="update update billing" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -702,11 +711,6 @@
           <url>file://$PROJECT_DIR$/model/request_transstiker.py</url>
           <line>1943</line>
           <option name="timeStamp" value="32" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/model/billing.py</url>
-          <line>157</line>
-          <option name="timeStamp" value="33" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
@@ -1019,11 +1023,12 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/model/request_transstiker.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="289">
-          <caret line="686" column="61" selection-start-line="686" selection-start-column="61" selection-end-line="686" selection-end-column="61" />
+        <state relative-caret-position="-470">
+          <caret line="1415" column="63" lean-forward="true" selection-start-line="1415" selection-start-column="63" selection-end-line="1415" selection-end-column="63" />
           <folding>
             <element signature="e#0#36#0" expanded="true" />
             <element signature="e#8736#12709#0" />
+            <element signature="e#40488#48828#0" />
             <marker date="1571285948703" expanded="true" signature="112142:112189" ph="..." />
           </folding>
         </state>
@@ -1031,8 +1036,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/model/billing.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="408">
-          <caret line="167" column="64" selection-start-line="167" selection-start-column="64" selection-end-line="167" selection-end-column="64" />
+        <state relative-caret-position="-164">
+          <caret line="144" column="42" lean-forward="true" selection-start-line="144" selection-start-column="42" selection-end-line="144" selection-end-column="42" />
         </state>
       </provider>
     </entry>

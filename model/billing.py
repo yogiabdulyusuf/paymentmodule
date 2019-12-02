@@ -145,17 +145,23 @@ class BillingPeriode(models.Model):
                     _logger.info(str(now))
 
                     month = self.billing_month + 1
+                    year = self.billing_year
+
+                    if month > 12:
+                        month = 1
+                        year = self.billing_year + 1
+
                     days = [28, 29, 30, 31]
                     for x in days:
                         if x == now.day:
-                            check = self.check_date(self.billing_year, month, now.day)
+                            check = self.check_date(year, month, now.day)
                             if check:
-                                startdate = datetime(self.billing_year, month, now.day)  ## 2019-11-31
+                                startdate = datetime(year, month, now.day)  ## 2019-11-31
                             else:
-                                startdate = datetime(self.billing_year, month+1, 1)
+                                startdate = datetime(year, month+1, 1)
                                 startdate = startdate - relativedelta(days=1)
                         else:
-                            startdate = datetime(self.billing_year, month, now.day) ## 2019-11-31
+                            startdate = datetime(year, month, now.day) ## 2019-11-31
 
                     # _logger.info(str(today))
                     # startdate = today + relativedelta(months=1)
