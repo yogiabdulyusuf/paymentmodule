@@ -139,6 +139,7 @@ class BillingPeriode(models.Model):
                     now = fields.Datetime.from_string(line.akhir)
                     _logger.info(str(line.unit_kerja.kode))
                     _logger.info(str(now))
+
                     if not (now.hour == 16 and now.minute == 59):
                         now = now + relativedelta(hours=7)
                         _logger.info('Masuk List IF : ' + str(now))
@@ -151,17 +152,28 @@ class BillingPeriode(models.Model):
                         month = 1
                         year = self.billing_year + 1
 
-                    days = [28, 29, 30, 31]
-                    for x in days:
-                        if x == now.day:
-                            check = self.check_date(year, month, now.day)
-                            if check:
-                                startdate = datetime(year, month, now.day)  ## 2019-11-31
-                            else:
-                                startdate = datetime(year, month+1, 1)
-                                startdate = startdate - relativedelta(days=1)
-                        else:
-                            startdate = datetime(year, month, now.day) ## 2019-11-31
+                    # if now.day in [28,29,30,31]:
+                    #     startdate = datetime(year, month + 1, 1)
+                    #     _logger.info("startdate = " + str(startdate))
+                    #     startdate = startdate - relativedelta(days=1)  # 2020 1 31
+                    #     _logger.info("startdate = " + str(startdate))
+                    # else:
+                    #     startdate = datetime(year, month, now.day)
+
+                    startdate = datetime(year, month + 1, 1)
+                    _logger.info("startdate = " + str(startdate))
+                    startdate = startdate - relativedelta(days=1)
+
+                    if now.day > startdate.day:
+
+                        startdate = startdate
+                        # startdate = datetime(year, month + 1, 1)
+                        # _logger.info("startdate = " + str(startdate))
+                        # startdate = startdate - relativedelta(days=1)  # 2020 1 31
+                        # _logger.info("startdate = " + str(startdate))
+                    else:
+                        startdate = datetime(year, month, now.day)
+
 
                     # _logger.info(str(today))
                     # startdate = today + relativedelta(months=1)
@@ -171,8 +183,19 @@ class BillingPeriode(models.Model):
                     _logger.info("startdates = " + str(startdates))
                     str_start_date = startdates.strftime('%d/%m/%Y')
 
-                    enddate = startdate + relativedelta(months=1)
-                    _logger.info("enddate = " + str(enddate))
+                    # enddate = startdate + relativedelta(months=1)
+                    # _logger.info("enddate = " + str(enddate))
+
+                    enddate = datetime(year, month + 2, 1)
+                    _logger.info("startdate = " + str(startdate))
+                    enddate = startdate - relativedelta(days=1)
+
+                    if now.day > enddate.day:
+
+                        enddate = enddate
+
+                    else:
+                        enddate = datetime(year, month, now.day)
 
                     enddates = enddate.date()
                     _logger.info("enddates = " + str(enddates))
