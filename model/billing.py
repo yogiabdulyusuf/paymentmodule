@@ -187,15 +187,16 @@ class BillingPeriode(models.Model):
                     # _logger.info("enddate = " + str(enddate))
 
                     enddate = datetime(year, month + 2, 1)
-                    _logger.info("startdate = " + str(startdate))
-                    enddate = startdate - relativedelta(days=1)
+                    _logger.info("enddate = " + str(enddate))
+                    enddate = enddate - relativedelta(days=1)
 
                     if now.day > enddate.day:
 
                         enddate = enddate
 
                     else:
-                        enddate = datetime(year, month, now.day)
+                        enddate = datetime(year, month+1, now.day)
+                        _logger.info("enddate = " + str(enddate))
 
                     enddates = enddate.date()
                     _logger.info("enddates = " + str(enddates))

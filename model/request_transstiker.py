@@ -1626,34 +1626,33 @@ class RequestTransStiker(models.Model):
                 RTS_adm = v.adm.name
 
                 _logger.info('Get Card Member')
-                strSQL = """SELECT """ \
-                         """notrans """ \
-                         """FROM card_member WHERE notrans='{}'""".format(v.stiker_id.notrans)
+                strSQL = """DELETE FROM card_member WHERE notrans='{}'""".format(v.stiker_id.notrans)
 
-                select_card_member = postgresconn.execute(query=strSQL, metadata=False)
+                postgresconn.execute_general(strSQL)
+                # postgresconn.execute(query=strSQL, metadata=False)
 
-                if select_card_member:
-                    for datas in select_card_member:
-                        # Insert Data Trans Stiker with Odoo to Database Server Parkir
-                        _logger.info('Update NOPOL')
-                        strSQL_cardmember = """UPDATE card_member """ \
-                                            """SET """ \
-                                            """no_card='{}', no_urut='{}', tanggal='{}', adm='{}'""" \
-                                            """ WHERE """ \
-                                            """notrans='{}'""".format(v.no_kartu, v.no_urut, DATE, RTS_adm,
-                                                                      datas[0])
+                # if select_card_member:
+                #     for datas in select_card_member:
+                #         # Insert Data Trans Stiker with Odoo to Database Server Parkir
+                #         _logger.info('Update NOPOL')
+                #         strSQL_cardmember = """UPDATE card_member """ \
+                #                             """SET """ \
+                #                             """no_card='{}', no_urut='{}', tanggal='{}', adm='{}'""" \
+                #                             """ WHERE """ \
+                #                             """notrans='{}'""".format(v.no_kartu, v.no_urut, DATE, RTS_adm,
+                #                                                       datas[0])
+                #
+                # else:
 
-                else:
-
-                    # Insert Data Trans Stiker with Odoo to Database Server Parkir
-                    _logger.info('INSERT CARD MEMBER')
-                    strSQL_cardmember = """INSERT INTO card_member """ \
-                                        """(notrans,no_card,no_urut,tanggal,adm)""" \
-                                        """ VALUES """ \
-                                        """('{}','{}','{}','{}','{}')""".format(v.stiker_id.notrans, v.no_kartu,
-                                                                                v.no_urut,
-                                                                                DATE,
-                                                                                RTS_adm)
+                # Insert Data Trans Stiker with Odoo to Database Server Parkir
+                _logger.info('INSERT CARD MEMBER')
+                strSQL_cardmember = """INSERT INTO card_member """ \
+                                    """(notrans,no_card,no_urut,tanggal,adm)""" \
+                                    """ VALUES """ \
+                                    """('{}','{}','{}','{}','{}')""".format(v.stiker_id.notrans, v.no_kartu,
+                                                                            v.no_urut,
+                                                                            DATE,
+                                                                            RTS_adm)
 
                 postgresconn.execute_general(strSQL_cardmember)
 

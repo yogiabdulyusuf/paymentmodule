@@ -4,6 +4,7 @@
     <list default="true" id="7d06e309-00d6-43d7-ab4f-0f81211e74d1" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/model/billing.py" beforeDir="false" afterPath="$PROJECT_DIR$/model/billing.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/model/request_transstiker.py" beforeDir="false" afterPath="$PROJECT_DIR$/model/request_transstiker.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -81,7 +82,7 @@
     <session id="1609919354">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="19" />
+          <entry key="project.closed" value="20" />
           <entry key="project.open.time.0" value="3" />
           <entry key="project.open.time.14" value="1" />
           <entry key="project.open.time.2" value="1" />
@@ -91,13 +92,13 @@
           <entry key="project.open.time.25" value="1" />
           <entry key="project.open.time.26" value="4" />
           <entry key="project.open.time.27" value="2" />
-          <entry key="project.open.time.29" value="1" />
+          <entry key="project.open.time.29" value="2" />
           <entry key="project.open.time.32" value="1" />
           <entry key="project.open.time.33" value="1" />
           <entry key="project.open.time.4" value="1" />
           <entry key="project.open.time.6" value="1" />
           <entry key="project.open.time.9" value="1" />
-          <entry key="project.opened" value="22" />
+          <entry key="project.opened" value="23" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -114,7 +115,7 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="py" value="1805" />
+          <entry key="py" value="1817" />
           <entry key="txt" value="32" />
           <entry key="xml" value="66" />
         </counts>
@@ -122,7 +123,7 @@
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="PLAIN_TEXT" value="32" />
-          <entry key="Python" value="1805" />
+          <entry key="Python" value="1817" />
           <entry key="XML" value="66" />
         </counts>
       </usages-collector>
@@ -133,25 +134,25 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/model/billing.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="315">
-              <caret line="179" column="65" lean-forward="true" selection-start-line="179" selection-start-column="65" selection-end-line="181" selection-end-column="24" />
+            <state relative-caret-position="298">
+              <caret line="199" selection-start-line="199" selection-end-line="199" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/model/request_transstiker.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="25313">
-              <caret line="1723" column="80" selection-start-line="1723" selection-start-column="80" selection-end-line="1723" selection-end-column="80" />
+            <state relative-caret-position="146">
+              <caret line="1634" column="54" lean-forward="true" selection-start-line="1634" selection-start-column="54" selection-end-line="1634" selection-end-column="54" />
               <folding>
                 <element signature="e#0#36#0" expanded="true" />
                 <element signature="e#8736#12709#0" />
                 <element signature="e#40488#48828#0" />
-                <marker date="1571285948703" expanded="true" signature="112142:112189" ph="..." />
+                <marker date="1583136120207" expanded="true" signature="112103:112150" ph="..." />
               </folding>
             </state>
           </provider>
@@ -168,7 +169,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>adm</find>
       <find>new_jenis</find>
       <find>proses</find>
       <find>self.duration</find>
@@ -198,6 +198,7 @@
       <find>calculate_harga_kontribusi</find>
       <find>proses_ganti_nopol</find>
       <find>trans_stiker_id_l</find>
+      <find>done_payment</find>
     </findStrings>
     <replaceStrings>
       <replace>awal</replace>
@@ -269,14 +270,14 @@
         <option value="$PROJECT_DIR$/../paymentmodule_dev/paymentmodule/view/request_transstiker_view.xml" />
         <option value="$PROJECT_DIR$/view/request_transstiker_view.xml" />
         <option value="$PROJECT_DIR$/../paymentmodule_dev/paymentmodule/model/request_transstiker.py" />
-        <option value="$PROJECT_DIR$/model/request_transstiker.py" />
         <option value="$PROJECT_DIR$/model/billing.py" />
+        <option value="$PROJECT_DIR$/model/request_transstiker.py" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-2" />
-    <option name="y" value="34" />
+  <component name="ProjectFrameBounds">
+    <option name="x" value="55" />
+    <option name="y" value="192" />
     <option name="width" value="1600" />
     <option name="height" value="801" />
   </component>
@@ -286,8 +287,18 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="paymentmodule" type="b2602c69:ProjectViewProjectNode" />
+              <item name="paymentmodule" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
       <pane id="Scope" />
-      <pane id="ProjectPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -597,13 +608,20 @@
       <option name="project" value="LOCAL" />
       <updated>1575260381219</updated>
     </task>
-    <option name="localTasksCounter" value="41" />
+    <task id="LOCAL-00041" summary="update billing">
+      <created>1579476968416</created>
+      <option name="number" value="00041" />
+      <option name="presentableId" value="LOCAL-00041" />
+      <option name="project" value="LOCAL" />
+      <updated>1579476968416</updated>
+    </task>
+    <option name="localTasksCounter" value="42" />
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1616" height="886" extended-state="6" />
+    <frame x="55" y="192" width="1600" height="801" extended-state="0" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" internal_type="SLIDING" order="0" type="SLIDING" visible="true" weight="0.2192649" />
+      <window_info active="true" content_ui="combo" id="Project" internal_type="SLIDING" order="0" type="SLIDING" visible="true" weight="0.21895006" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.24968314" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -684,7 +702,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/model/request_transstiker.py</url>
-          <line>1943</line>
+          <line>1942</line>
           <option name="timeStamp" value="32" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
@@ -1003,20 +1021,20 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/model/billing.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="315">
-          <caret line="179" column="65" lean-forward="true" selection-start-line="179" selection-start-column="65" selection-end-line="181" selection-end-column="24" />
+        <state relative-caret-position="298">
+          <caret line="199" selection-start-line="199" selection-end-line="199" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/model/request_transstiker.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="25313">
-          <caret line="1723" column="80" selection-start-line="1723" selection-start-column="80" selection-end-line="1723" selection-end-column="80" />
+        <state relative-caret-position="146">
+          <caret line="1634" column="54" lean-forward="true" selection-start-line="1634" selection-start-column="54" selection-end-line="1634" selection-end-column="54" />
           <folding>
             <element signature="e#0#36#0" expanded="true" />
             <element signature="e#8736#12709#0" />
             <element signature="e#40488#48828#0" />
-            <marker date="1571285948703" expanded="true" signature="112142:112189" ph="..." />
+            <marker date="1583136120207" expanded="true" signature="112103:112150" ph="..." />
           </folding>
         </state>
       </provider>
