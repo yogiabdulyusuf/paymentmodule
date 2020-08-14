@@ -594,6 +594,8 @@ class RequestTransStiker(models.Model):
 
                         tgl = fields.Datetime.from_string(self.akhir_old) # tgl akhir
                         DATE = datetime.now()   # tgl saat ini
+                        _logger.info('check tgl old : '+ str(tgl))
+                        _logger.info('check tgl sekarang : ' + str(DATE))
 
                         if tgl < DATE:
                             # ambil tanggal akhir expired
@@ -618,8 +620,18 @@ class RequestTransStiker(models.Model):
 
                             date1 = datetime.strptime(str(self.akhir_old), '%Y-%m-%d %H:%M:%S')
                             date2 = datetime.now()
+                            _logger.info('check tgl date1 : ' + str(date1))
+                            _logger.info('check tgl date2 : ' + str(date2))
                             r = relativedelta(date1, date2)
-                            sum_month = r.months
+                            _logger.info('check tgl date2 : ' + str(r))
+
+                            # Check year+1
+                            if r.years == 0:
+                                sum_month = r.months
+                            else:
+                                sum_month = r.years*12+r.months
+
+                            _logger.info('check month : ' + str(sum_month))
                             if sum_month == 0:
                                 self.val_harga = int(jenis_member_nd_ids) * 2
                             elif sum_month == 1:
@@ -662,7 +674,13 @@ class RequestTransStiker(models.Model):
                             date1 = datetime.strptime(str(self.akhir_old), '%Y-%m-%d %H:%M:%S')
                             date2 = datetime.now()
                             r = relativedelta(date1, date2)
-                            sum_month = r.months
+
+                            # Check year+1
+                            if r.years == 0:
+                                sum_month = r.months
+                            else:
+                                sum_month = r.years * 12 + r.months
+
                             if sum_month == 0:
                                 self.val_harga = int(jenis_member_rd_ids) * 2
                             elif sum_month == 1:
@@ -704,7 +722,13 @@ class RequestTransStiker(models.Model):
                             date1 = datetime.strptime(str(self.akhir_old), '%Y-%m-%d %H:%M:%S')
                             date2 = datetime.now()
                             r = relativedelta(date1, date2)
-                            sum_month = r.months
+
+                            # Check year+1
+                            if r.years == 0:
+                                sum_month = r.months
+                            else:
+                                sum_month = r.years * 12 + r.months
+
                             if sum_month == 0:
                                 self.val_harga = int(jenis_member_th_ids) * 2
                             elif sum_month == 1:
@@ -890,7 +914,7 @@ class RequestTransStiker(models.Model):
 
             # KONDISI DIMANA NOPOL SUDAH ADA INGIN PINDAH STIKER ATAU UNIT
             if nopolcheck:
-
+                # 72B2
                 for transstiker_ids in self.stiker_id:
                     trans_stiker_id_s = transstiker_ids.detail_ids.trans_stiker_id.id
                     nopol_s = transstiker_ids.detail_ids.nopol
@@ -907,11 +931,11 @@ class RequestTransStiker(models.Model):
                     status_s = transstiker_ids.detail_ids.status
                     keterangan_s = transstiker_ids.detail_ids.keterangan
 
-                args = [('nopol', '=', trans.new_nopol)]
+                args = [('nopol', '=', self.new_nopol)]
                 res = self.env['detail.transstiker'].sudo().search(args)
 
                 for list in res:
-                    trans_stiker_id_l = list.trans_stiker_id.id
+                    # trans_stiker_id_l = list.trans_stiker_id.id
                     nopol_l = list.nopol
                     jenis_mobil_l = list.jenis_mobil
                     jenis_member_l = list.jenis_member
@@ -942,20 +966,20 @@ class RequestTransStiker(models.Model):
                 valus.update({'status_s': status_s})
                 valus.update({'akses_out_s': akses_out_s})
                 valus.update({'keterangan_s': keterangan_s})
-                valus.update({'trans_stiker_id_l': trans_stiker_id_l})
-                valus.update({'nopol_l': nopol_l})  # Data Nopol pada Stiker# lama yanng ingin di hapus
-                valus.update({'jenis_mobil_l': jenis_mobil_l})
-                valus.update({'jenis_member_l': jenis_member_l})
-                valus.update({'merk_l': merk_l})
-                valus.update({'tipe_l': tipe_l})
-                valus.update({'tahun_l': tahun_l})
-                valus.update({'warna_l': warna_l})
-                valus.update({'notrans_l': notrans_l})
-                valus.update({'kategori_l': kategori_l})
-                valus.update({'akses_l': akses_l})
-                valus.update({'status_l': status_l})
-                valus.update({'akses_out_l': akses_out_l})
-                valus.update({'keterangan_l': keterangan_l})
+                # valus.update({'trans_stiker_id_l': trans_stiker_id_l})
+                # valus.update({'nopol_l': nopol_l})  # Data Nopol pada Stiker# lama yanng ingin di hapus
+                # valus.update({'jenis_mobil_l': jenis_mobil_l})
+                # valus.update({'jenis_member_l': jenis_member_l})
+                # valus.update({'merk_l': merk_l})
+                # valus.update({'tipe_l': tipe_l})
+                # valus.update({'tahun_l': tahun_l})
+                # valus.update({'warna_l': warna_l})
+                # valus.update({'notrans_l': notrans_l})
+                # valus.update({'kategori_l': kategori_l})
+                # valus.update({'akses_l': akses_l})
+                # valus.update({'status_l': status_l})
+                # valus.update({'akses_out_l': akses_out_l})
+                # valus.update({'keterangan_l': keterangan_l})
 
                 # Convert datas to json
                 str_bck_nopol = json.dumps(valus)
